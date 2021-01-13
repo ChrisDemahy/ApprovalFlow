@@ -1,4 +1,4 @@
-# Approval Flow README
+# Approval Flow Proposal
 
 ## Introduction
 
