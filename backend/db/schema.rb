@@ -10,15 +10,67 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_175127) do
+ActiveRecord::Schema.define(version: 2021_01_15_181456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authorizations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "step_id", null: false
+    t.string "status"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["step_id"], name: "index_authorizations_on_step_id"
+    t.index ["user_id"], name: "index_authorizations_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.string "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "oganization_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_oganization_users_on_organization_id"
+    t.index ["user_id"], name: "index_oganization_users_on_user_id"
+  end
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "workflow_id", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+    t.index ["workflow_id"], name: "index_projects_on_workflow_id"
+  end
+
+  create_table "steps", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.text "description"
+    t.bigint "workflow_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "authorization_id", null: false
+    t.bigint "step_id", null: false
+    t.index ["authorization_id"], name: "index_steps_on_authorization_id"
+    t.index ["step_id"], name: "index_steps_on_step_id"
+    t.index ["workflow_id"], name: "index_steps_on_workflow_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,5 +101,25 @@ ActiveRecord::Schema.define(version: 2021_01_14_175127) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "workflows", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_workflows_on_user_id"
+  end
+
+  add_foreign_key "authorizations", "steps"
+  add_foreign_key "authorizations", "users"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "oganization_users", "organizations"
+  add_foreign_key "oganization_users", "users"
+  add_foreign_key "projects", "users"
+  add_foreign_key "projects", "workflows"
+  add_foreign_key "steps", "authorizations"
+  add_foreign_key "steps", "steps"
+  add_foreign_key "steps", "workflows"
   add_foreign_key "users", "organizations"
+  add_foreign_key "workflows", "users"
 end
