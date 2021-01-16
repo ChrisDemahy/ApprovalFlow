@@ -1,6 +1,6 @@
-class CreateOganizationUsers < ActiveRecord::Migration[6.0]
+class CreateOrganizationUsers < ActiveRecord::Migration[6.0]
   def change
-    create_table :oganization_users do |t|
+    create_table :organization_users do |t|
       t.references :user, null: false, foreign_key: true
       t.references :organization, null: false, foreign_key: true
 

@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
+  resources :organization_users
   resources :notifications
   resources :authorizations
   resources :steps
   resources :workflows
   resources :projects
-  resources :oganization_users
     scope :api, defaults: { format: :json } do
         devise_for :users,
                    controllers: { sessions: :sessions },

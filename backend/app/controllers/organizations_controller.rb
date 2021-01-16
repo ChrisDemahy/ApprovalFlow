@@ -37,7 +37,6 @@ class OrganizationsController < ApplicationController
 
     # DELETE /organizations/1
     def destroy
-        byebug
         @organization.destroy
     end
 

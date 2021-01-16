@@ -8,7 +8,7 @@
 
 #  rails db:migrate
 
-rails g scaffold oganizationUser user:references organization:references &&
+rails g scaffold organizationUser user:references organization:references &&
 
 rails g scaffold Project user:references && # workflow:references 
 rails g scaffold Workflow name:string description:text User:references &&
@@ -26,7 +26,7 @@ rails g migration AddNextStepToStep Step:references
 
 #  rails destroy scaffold Organization name:string &&
 #  rails destroy scaffold User FirstName:string  Email:string Password:digest &&
-#  rails destroy scaffold OganizationUser User:references Organization:references &&
+ rails destroy scaffold oganizationUser User:references Organization:references &&
 
 #  rails destroy scaffold Project User:references && # workflow:references 
 #  rails destroy scaffold Workflow name:string description:text User:references &&

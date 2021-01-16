@@ -1,4 +1,4 @@
-class SessionsController < ApplicationController
+class SessionsController < Devise::SessionsController
     # Handles logging in users (Creating a session)
     def create
         user = User.find_by_email(sign_in_params[:email])

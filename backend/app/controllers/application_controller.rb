@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::API
+    # Helper methods for dealing with JWT tokens
+    include ActionController::HttpAuthentication::Token::ControllerMethods
+
     respond_to :json
     # Check for authentication
     before_action :authenticate_user
