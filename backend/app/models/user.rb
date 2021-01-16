@@ -1,4 +1,8 @@
 class User < ApplicationRecord
+    has_many :organization_users, dependent: :destroy
+    has_many :organizations, through: :organization_users
+    # has_many :projects
+    # has_many :workflows
     # Include default devise modules. Others available are:
     devise :database_authenticatable,
            :registerable,
@@ -11,6 +15,7 @@ class User < ApplicationRecord
            :trackable
     #  :omniauthable
 
+    # Validate Email
     validates :email,
               uniqueness: { case_sensitive: false },
               presence: true,

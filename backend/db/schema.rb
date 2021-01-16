@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_15_181456) do
+ActiveRecord::Schema.define(version: 2021_01_15_181455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "authorizations", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "step_id", null: false
+    t.bigint "user_id"
+    t.bigint "step_id"
     t.string "status"
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
@@ -66,10 +66,8 @@ ActiveRecord::Schema.define(version: 2021_01_15_181456) do
     t.bigint "workflow_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "authorization_id", null: false
-    t.bigint "step_id", null: false
+    t.bigint "authorization_id"
     t.index ["authorization_id"], name: "index_steps_on_authorization_id"
-    t.index ["step_id"], name: "index_steps_on_step_id"
     t.index ["workflow_id"], name: "index_steps_on_workflow_id"
   end
 
@@ -118,7 +116,6 @@ ActiveRecord::Schema.define(version: 2021_01_15_181456) do
   add_foreign_key "projects", "users"
   add_foreign_key "projects", "workflows"
   add_foreign_key "steps", "authorizations"
-  add_foreign_key "steps", "steps"
   add_foreign_key "steps", "workflows"
   add_foreign_key "users", "organizations"
   add_foreign_key "workflows", "users"
