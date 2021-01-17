@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 // Semantic UI Imports
 import {
@@ -23,6 +23,7 @@ import {
 
 import axios from 'axios';
 import type User from 'src/types/user';
+import { UserContext } from './UserContextProvider';
 
 async function loginUser({ email, password }: User) {
   try {
@@ -38,7 +39,7 @@ async function loginUser({ email, password }: User) {
 
 async function getUser() {
   try {
-    const response = await axios.get('/login');
+    const response = await axios.get('/user');
     console.log(response);
   } catch (error) {
     console.error(error);
@@ -60,6 +61,14 @@ const mutation = useMutation(loginUser, {
 });
 
 const Login = () => {
+  const { state, dispatch } = useContext(UserContext);
+  const setUser = (user: User) => {
+    dispatch({
+      type: 'set_user',
+      user: user,
+    });
+  };
+
   return (
     <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }}>

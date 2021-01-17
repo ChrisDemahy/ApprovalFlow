@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
-import StateProvider from './components/StateProvider';
+import { UserContextProvider } from './components/UserContextProvider';
 import logo from './logo.svg';
 
 interface AppProps {}
@@ -8,9 +8,9 @@ interface AppProps {}
 function App({}: AppProps) {
   return (
     <div className="App">
-      <StateProvider>
+      <UserContextProvider>
         <Login />
-      </StateProvider>
+      </UserContextProvider>
     </div>
   );
 }
