@@ -1,1 +1,1 @@
-json.partial! "authorizations/authorization", authorization: @authorization
+json.partial! 'authorizations/authorization', authorization: @authorization

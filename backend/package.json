@@ -1,13 +1,13 @@
 {
-    "name": "backend",
-    "version": "1.0.0",
-    "dependencies": {
-        "@useoptic/cli": "^8.6.2",
-        "cross-env": "5.0.5",
-        "frontend": "1.0.0"
-    },
-    "scripts": {
-        "dev": "rails s",
-        "test": "rails test --fail-fast"
-    }
+  "name": "backend",
+  "version": "1.0.0",
+  "dependencies": {
+    "@useoptic/cli": "^8.6.2",
+    "cross-env": "5.0.5",
+    "frontend": "1.0.0"
+  },
+  "scripts": {
+    "dev": "rails s",
+    "test": "rails test --fail-fast"
+  }
 }

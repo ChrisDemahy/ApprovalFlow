@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
-  before_action :set_notification, only: [:show, :update, :destroy]
+  before_action :set_notification, only: %i[show update destroy]
 
   # GET /notifications
   # GET /notifications.json
@@ -9,8 +9,7 @@ class NotificationsController < ApplicationController
 
   # GET /notifications/1
   # GET /notifications/1.json
-  def show
-  end
+  def show; end
 
   # POST /notifications
   # POST /notifications.json
@@ -41,13 +40,14 @@ class NotificationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_notification
-      @notification = Notification.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def notification_params
-      params.require(:notification).permit(:user_id, :name, :content)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_notification
+    @notification = Notification.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def notification_params
+    params.require(:notification).permit(:user_id, :name, :content)
+  end
 end

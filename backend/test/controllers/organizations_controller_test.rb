@@ -1,34 +1,34 @@
 require 'test_helper'
 
 class OrganizationsControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    @organization = organizations(:one)
-  end
+  setup { @organization = organizations(:one) }
 
-  test "should get index" do
+  test 'should get index' do
     get organizations_url, as: :json
     assert_response :success
   end
 
-  test "should create organization" do
+  test 'should create organization' do
     assert_difference('Organization.count') do
-      post organizations_url, params: { organization: { name: @organization.name } }, as: :json
+      post organizations_url,
+           params: { organization: { name: @organization.name } }, as: :json
     end
 
     assert_response 201
   end
 
-  test "should show organization" do
+  test 'should show organization' do
     get organization_url(@organization), as: :json
     assert_response :success
   end
 
-  test "should update organization" do
-    patch organization_url(@organization), params: { organization: { name: @organization.name } }, as: :json
+  test 'should update organization' do
+    patch organization_url(@organization),
+          params: { organization: { name: @organization.name } }, as: :json
     assert_response 200
   end
 
-  test "should destroy organization" do
+  test 'should destroy organization' do
     assert_difference('Organization.count', -1) do
       delete organization_url(@organization), as: :json
     end

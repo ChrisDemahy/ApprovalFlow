@@ -1,5 +1,5 @@
 class StepsController < ApplicationController
-  before_action :set_step, only: [:show, :update, :destroy]
+  before_action :set_step, only: %i[show update destroy]
 
   # GET /steps
   # GET /steps.json
@@ -9,8 +9,7 @@ class StepsController < ApplicationController
 
   # GET /steps/1
   # GET /steps/1.json
-  def show
-  end
+  def show; end
 
   # POST /steps
   # POST /steps.json
@@ -41,13 +40,14 @@ class StepsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_step
-      @step = Step.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def step_params
-      params.require(:step).permit(:name, :status, :description, :workflow_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_step
+    @step = Step.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def step_params
+    params.require(:step).permit(:name, :status, :description, :workflow_id)
+  end
 end

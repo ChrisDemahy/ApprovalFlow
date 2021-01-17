@@ -4,7 +4,7 @@
 
 ### Introduction
 
-Project approval application that allows the user to build workflows to efficiently get things approved in an automated fashion. The main avenue this application supports is DOA approval or delegation of authority. DOA is used in large enterprises and generally refers to the dollar amount an individual has the authority to approve with regards to expenditures. The main goal of  ApprovalFlow is to ease this burden on managers and administrators by allowing them to create workflows for their projects to get approved.  
+Project approval application that allows the user to build workflows to efficiently get things approved in an automated fashion. The main avenue this application supports is DOA approval or delegation of authority. DOA is used in large enterprises and generally refers to the dollar amount an individual has the authority to approve with regards to expenditures. The main goal of ApprovalFlow is to ease this burden on managers and administrators by allowing them to create workflows for their projects to get approved.
 
 ### User Stories
 

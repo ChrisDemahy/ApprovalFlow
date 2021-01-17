@@ -1,1 +1,1 @@
-json.partial! "workflows/workflow", workflow: @workflow
+json.partial! 'workflows/workflow', workflow: @workflow

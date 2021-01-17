@@ -1,1 +1,1 @@
-json.partial! "notifications/notification", notification: @notification
+json.partial! 'notifications/notification', notification: @notification

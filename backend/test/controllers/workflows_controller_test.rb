@@ -1,34 +1,48 @@
 require 'test_helper'
 
 class WorkflowsControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    @workflow = workflows(:one)
-  end
+  setup { @workflow = workflows(:one) }
 
-  test "should get index" do
+  test 'should get index' do
     get workflows_url, as: :json
     assert_response :success
   end
 
-  test "should create workflow" do
+  test 'should create workflow' do
     assert_difference('Workflow.count') do
-      post workflows_url, params: { workflow: { description: @workflow.description, name: @workflow.name, user_id: @workflow.user_id } }, as: :json
+      post workflows_url,
+           params: {
+             workflow: {
+               description: @workflow.description,
+               name: @workflow.name,
+               user_id: @workflow.user_id
+             }
+           },
+           as: :json
     end
 
     assert_response 201
   end
 
-  test "should show workflow" do
+  test 'should show workflow' do
     get workflow_url(@workflow), as: :json
     assert_response :success
   end
 
-  test "should update workflow" do
-    patch workflow_url(@workflow), params: { workflow: { description: @workflow.description, name: @workflow.name, user_id: @workflow.user_id } }, as: :json
+  test 'should update workflow' do
+    patch workflow_url(@workflow),
+          params: {
+            workflow: {
+              description: @workflow.description,
+              name: @workflow.name,
+              user_id: @workflow.user_id
+            }
+          },
+          as: :json
     assert_response 200
   end
 
-  test "should destroy workflow" do
+  test 'should destroy workflow' do
     assert_difference('Workflow.count', -1) do
       delete workflow_url(@workflow), as: :json
     end

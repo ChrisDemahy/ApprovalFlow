@@ -1,1 +1,3 @@
-json.array! @organization_users, partial: "organization_users/organization_user", as: :organization_user
+json.array! @organization_users,
+            partial: 'organization_users/organization_user',
+            as: :organization_user

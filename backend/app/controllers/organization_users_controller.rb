@@ -1,5 +1,5 @@
 class OrganizationUsersController < ApplicationController
-  before_action :set_organization_user, only: [:show, :update, :destroy]
+  before_action :set_organization_user, only: %i[show update destroy]
 
   # GET /organization_users
   # GET /organization_users.json
@@ -9,8 +9,7 @@ class OrganizationUsersController < ApplicationController
 
   # GET /organization_users/1
   # GET /organization_users/1.json
-  def show
-  end
+  def show; end
 
   # POST /organization_users
   # POST /organization_users.json
@@ -41,13 +40,14 @@ class OrganizationUsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_organization_user
-      @organization_user = OrganizationUser.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def organization_user_params
-      params.require(:organization_user).permit(:user_id, :organization_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_organization_user
+    @organization_user = OrganizationUser.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def organization_user_params
+    params.require(:organization_user).permit(:user_id, :organization_id)
+  end
 end

@@ -1,5 +1,5 @@
 class AuthorizationsController < ApplicationController
-  before_action :set_authorization, only: [:show, :update, :destroy]
+  before_action :set_authorization, only: %i[show update destroy]
 
   # GET /authorizations
   # GET /authorizations.json
@@ -9,8 +9,7 @@ class AuthorizationsController < ApplicationController
 
   # GET /authorizations/1
   # GET /authorizations/1.json
-  def show
-  end
+  def show; end
 
   # POST /authorizations
   # POST /authorizations.json
@@ -41,13 +40,19 @@ class AuthorizationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_authorization
-      @authorization = Authorization.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def authorization_params
-      params.require(:authorization).permit(:user_id, :step_id, :status, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_authorization
+    @authorization = Authorization.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def authorization_params
+    params.require(:authorization).permit(
+      :user_id,
+      :step_id,
+      :status,
+      :description
+    )
+  end
 end
