@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
-
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useQueryClient, useMutation } from 'react-query';
 // Semantic UI Imports
 import {
   Button,
@@ -10,98 +11,97 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-
-// Imports for fetching data
-
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-
-import axios from 'axios';
 import type User from 'src/types/user';
-import { UserContext } from './UserContextProvider';
 
-async function loginUser({ email, password }: User) {
-  try {
-    const response = await axios.post('/login', {
+interface Token {
+  token: string;
+}
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [status, setStatus] = useState('');
+  const postUser = ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    return axios.post('http://localhost:3000/api/users/login', {
       email: email,
       password: password,
     });
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-}
+  };
+  const queryClient = useQueryClient();
+  const mutation = useMutation(postUser, {
+    onSuccess: (res) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries('user');
+      console.log(res.data);
+      localStorage.setItem('token', res.data.token);
+      // Go to next page or show error
+    },
+  });
 
-async function getUser() {
-  try {
-    const response = await axios.get('/user');
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Access the client
-const queryClient = useQueryClient();
-
-// Queries
-const query = useQuery('todos', getUser);
-
-// Mutations
-const mutation = useMutation(loginUser, {
-  onSuccess: () => {
-    // Invalidate and refetch
-    queryClient.invalidateQueries('todos');
-  },
-});
-
-const Login = () => {
-  const { state, dispatch } = useContext(UserContext);
-  const setUser = (user: User) => {
-    dispatch({
-      type: 'set_user',
-      user: user,
-    });
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    mutation.mutate({ email, password });
   };
 
   return (
-    <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          <Image src="/logo.png" /> Log-in to your account
-        </Header>
-        <Form size="large">
-          <Segment stacked>
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="E-mail address"
-            />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Password"
-              type="password"
-            />
+    <>
+      {status === 'loading' ? (
+        'Loading...'
+      ) : status === 'error' ? (
+        <span>Error</span>
+      ) : (
+        <span>Success</span>
+      )}
+      <Grid
+        textAlign="center"
+        style={{ height: '100vh' }}
+        verticalAlign="middle"
+      >
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="teal" textAlign="center">
+            <Image src="/logo.png" /> Log-in to your account
+          </Header>
+          <Form onSubmit={onSubmit} size="large">
+            <Segment stacked>
+              <Form.Input
+                fluid
+                icon="user"
+                iconPosition="left"
+                placeholder="E-mail address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <Form.Input
+                fluid
+                icon="lock"
+                iconPosition="left"
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
 
-            <Button color="teal" fluid size="large">
-              Login
-            </Button>
-          </Segment>
-        </Form>
-        <Message>
-          New to us? <a href="#">Sign Up</a>
-        </Message>
-      </Grid.Column>
-    </Grid>
+              <Button color="teal" fluid size="large">
+                Login
+              </Button>
+            </Segment>
+          </Form>
+          <Message>
+            New to us? <a href="#">Sign Up</a>
+          </Message>
+        </Grid.Column>
+      </Grid>
+    </>
   );
 };
-
 export default Login;

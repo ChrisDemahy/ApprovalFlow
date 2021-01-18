@@ -30,7 +30,6 @@
     "@types/snowpack-env": "^2.3.2",
     "@web/test-runner": "^0.12.0",
     "chai": "^4.2.0",
-    "prettier": "^2.0.5",
     "quicktype": "^15.0.258",
     "snowpack": "^3.0.1",
     "typescript": "^4.0.0"
