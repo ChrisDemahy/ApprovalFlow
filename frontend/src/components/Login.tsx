@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useQueryClient, useMutation } from 'react-query';
+
 // Semantic UI Imports
 import {
   Button,
@@ -13,24 +14,16 @@ import {
 } from 'semantic-ui-react';
 import type User from 'src/types/user';
 
-interface Token {
-  token: string;
-}
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
-  const postUser = ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const postUser = () => {
     return axios.post('http://localhost:3000/api/users/login', {
-      email: email,
-      password: password,
+      user: {
+        email: email,
+        password: password,
+      },
     });
   };
   const queryClient = useQueryClient();
@@ -38,15 +31,16 @@ const Login = () => {
     onSuccess: (res) => {
       // Invalidate and refetch
       queryClient.invalidateQueries('user');
-      console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      const { user }: { user: User } = res.data;
+      console.log(user);
+      localStorage.setItem('token', user.token);
       // Go to next page or show error
     },
   });
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutation.mutate({ email, password });
+    mutation.mutate();
   };
 
   return (
