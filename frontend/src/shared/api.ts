@@ -15,6 +15,12 @@ export const loginUser = (user: { email: string; password: string }) => {
   });
 };
 
+export const postUser = (user: { email: string }) => {
+  return client().put('http://localhost:3000/api/user', {
+    user: user,
+  });
+};
+
 export const getCurrentUser = async () => {
   const { data } = await client().get('/user');
   return data;

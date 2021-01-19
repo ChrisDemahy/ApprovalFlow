@@ -9,7 +9,7 @@ import {
 } from 'react-query';
 import type User from '../types/user';
 
-import { Container, Header, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Segment } from 'semantic-ui-react';
 
 const style = {
   h1: {
@@ -52,16 +52,21 @@ const UserProfile = () => {
       <Header
         as="h3"
         content="Text Container"
-        style={{ marginTop: '2em', padding: '2em 0em' }}
+        style={style.h3}
         textAlign="center"
       />
       <Container text>
-        <Segment.Group>
+        <Segment>
+          <Header as="h5">Email Address</Header>
           <Segment>Email: {data && data.user.email} </Segment>
           <Segment>Content</Segment>
           <Segment>Content</Segment>
           <Segment>Content</Segment>
-        </Segment.Group>
+
+          <Button fluid size="large">
+            Submit
+          </Button>
+        </Segment>
       </Container>
     </>
   );

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // Imports for fetching data
 import { useQueryClient, useMutation } from 'react-query';
 import { loginUser } from '../shared/api';
-import type User from 'src/types/user';
+import type User from '../types/user';
 
 // Import
 import Login from './Login';
@@ -15,6 +15,7 @@ const LoginContainer = () => {
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
 
+  // React Query Mutation
   const queryClient = useQueryClient();
   const mutation = useMutation(loginUser, {
     onSuccess: (res) => {
