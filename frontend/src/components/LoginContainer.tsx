@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 // Imports for fetching data
 import { useQueryClient, useMutation } from 'react-query';
-import { postUser } from '../shared/api';
+import { loginUser } from '../shared/api';
 import type User from 'src/types/user';
 
 // Import
@@ -16,12 +16,12 @@ const LoginContainer = () => {
   const [status, setStatus] = useState('');
 
   const queryClient = useQueryClient();
-  const mutation = useMutation(postUser, {
+  const mutation = useMutation(loginUser, {
     onSuccess: (res) => {
       // Invalidate and refetch
-      const { user }: { user: User } = res.data;
+      const { user, token }: { user: User; token: string } = res.data;
       // TODO Set user query data from here
-      localStorage.token = res.data.user.token;
+      localStorage.token = token;
       queryClient.invalidateQueries('user');
       // Go to next page or show error
     },
