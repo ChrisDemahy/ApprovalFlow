@@ -9,47 +9,24 @@ import {
   QueryClient,
 } from 'react-query';
 
-type request = {
-  status: string;
-  data: any;
-  error: AxiosError;
-  isFetching: any;
-};
-
-export interface Token {
-  token: string;
-}
-
-// Access the client
-const queryClient = useQueryClient();
-
-// Create hook to access Mutation
-export const useLogin = () => {
-  return useMutation('user', loginUser, {
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries('user');
-    },
+export const postUser = (user: { email: string; password: string }) => {
+  return client().post('/users/login', {
+    user: user,
   });
 };
 
-// Private Functions
-
-const loginUser = async ({ email, password }: User): Promise<Token> => {
-  const { data } = await axios.post('/login', {
-    email: email,
-    password: password,
-  });
-  return data;
+export const getCurrentUser = () => {
+  return client().get('/user');
 };
 
 // create axios object with propper settings
 
-const createAuthenticatedInstance = ({ token }: { token: string }) => {
-  const instance = axios.create({
+const client = () => {
+  return axios.create({
     baseURL: 'localhost:3000/api/',
     // timeout: 1000,
-    headers: { Authorization: `Token ${token}` },
+    headers: {
+      Authorization: `Token ${localStorage.token ? localStorage.token : ''}`,
+    },
   });
-  return instance;
 };

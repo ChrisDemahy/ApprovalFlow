@@ -1,6 +1,4 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import { useQueryClient, useMutation } from 'react-query';
 
 // Semantic UI Imports
 import {
@@ -12,46 +10,23 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react';
-import type User from 'src/types/user';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [status, setStatus] = useState('');
-  const postUser = () => {
-    return axios.post('http://localhost:3000/api/users/login', {
-      user: {
-        email: email,
-        password: password,
-      },
-    });
-  };
-  const queryClient = useQueryClient();
-  const mutation = useMutation(postUser, {
-    onSuccess: (res) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries('user');
-      const { user }: { user: User } = res.data;
-      console.log(user);
-      localStorage.setItem('token', user.token);
-      // Go to next page or show error
-    },
-  });
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    mutation.mutate();
-  };
-
+interface loginProps {
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+}
+const Login = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  onSubmit,
+}: loginProps) => {
   return (
     <>
-      {status === 'loading' ? (
-        'Loading...'
-      ) : status === 'error' ? (
-        <span>Error</span>
-      ) : (
-        <span>Success</span>
-      )}
       <Grid
         textAlign="center"
         style={{ height: '100vh' }}
