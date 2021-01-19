@@ -8,40 +8,22 @@ import {
   QueryClientProvider,
 } from 'react-query';
 import type User from '../types/user';
-
+// Semantic UI Imports
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 
-const style = {
-  h1: {
-    marginTop: '3em',
-  },
-  h2: {
-    margin: '4em 0em 2em',
-  },
-  h3: {
-    marginTop: '2em',
-    padding: '2em 0em',
-  },
-  last: {
-    marginBottom: '300px',
-  },
-};
-
+// React Query
 import { getCurrentUser } from '../shared/api';
 
-export type QueryResponse = {
-  [key: string]: string;
-};
-
 const UserProfile = () => {
-  // Access the client
-  const queryClient = useQueryClient();
-
+  // User type is returned under a user key in the response from the backend
   interface userData {
     user: User;
   }
 
-  // Queries
+  // Query to fetch the current user data.
+  // TODO Refetch data on options:
+  //  staleTime, refetchOnMount, refetchOnWindowFocus,
+  //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useQuery<userData, Error>(
     'user',
     getCurrentUser,
@@ -52,19 +34,24 @@ const UserProfile = () => {
       <Header
         as="h3"
         content="Text Container"
-        style={style.h3}
+        style={{
+          marginTop: '2em',
+          padding: '2em 0em',
+        }}
         textAlign="center"
       />
       <Container text>
         <Segment>
+          <div />
+          <Header as="h5">First Name</Header>
+          <Segment>{data && data.user.first_name}</Segment>
+          <Header as="h5">Last Name</Header>
+          <Segment>{data && data.user.last_name} </Segment>
           <Header as="h5">Email Address</Header>
-          <Segment>Email: {data && data.user.email} </Segment>
-          <Segment>Content</Segment>
-          <Segment>Content</Segment>
-          <Segment>Content</Segment>
+          <Segment>{data && data.user.email} </Segment>
 
           <Button fluid size="large">
-            Submit
+            Update
           </Button>
         </Segment>
       </Container>

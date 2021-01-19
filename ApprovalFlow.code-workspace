@@ -1,33 +1,40 @@
 {
-    "folders": [
-        {
-            "path": "./"
-        }
-    ],
-    "settings": {
-        "files.exclude": {
-            "**/node_modules": true
-        }
-    },
-    "launch": {
-        "version": "0.2.0",
-        "configurations": [
-            {
-                "name": "Minitest - current line",
-                "type": "Ruby",
-                "cwd": "${workspaceRoot}/backend",
-                "request": "launch",
-                "program": "${workspaceRoot}/backend/bin/rails",
-                "args": ["test", "${file}:${lineNumber}"]
-            },
-            {
-                "name": "Minitest - all",
-                "type": "Ruby",
-                "cwd": "${workspaceRoot}/backend",
-                "request": "launch",
-                "program": "${workspaceRoot}/backend/bin/rails",
-                "args": ["test"]
-            }
-        ]
+  "folders": [
+    {
+      "path": "./"
     }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true
+    }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Attach to Chrome",
+        "port": 8080,
+        "request": "attach",
+        "type": "pwa-chrome",
+        "webRoot": "${workspaceFolder}/frontend"
+      },
+      {
+        "name": "Minitest - current line",
+        "type": "Ruby",
+        "cwd": "${workspaceRoot}/backend",
+        "request": "launch",
+        "program": "${workspaceRoot}/backend/bin/rails",
+        "args": ["test", "${file}:${lineNumber}"]
+      },
+      {
+        "name": "Minitest - all",
+        "type": "Ruby",
+        "cwd": "${workspaceRoot}/backend",
+        "request": "launch",
+        "program": "${workspaceRoot}/backend/bin/rails",
+        "args": ["test"]
+      }
+    ]
+  }
 }

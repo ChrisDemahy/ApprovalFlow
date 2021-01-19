@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import LoginContainer from './components/LoginContainer';
 import UserProfile from './components/UserProfile';
-import UserProfileForm from './components/UserProfileForm';
+import MainContainer from './containers/MainContainer';
+import UserProfileForm from './Forms/UserProfileForm';
 import logo from './logo.svg';
-
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 interface AppProps {}
 
 function App({}: AppProps) {
   return (
-    <div className="App">
-      <UserProfile />
+    <Router>
+      <Route path="/">
+        <MainContainer>
+          {/* <IndexRoute exact component={AsyncDashboard} /> */}
+          <Switch>
+            <Route path="/account" children={<UserProfile />} />
+          </Switch>
+        </MainContainer>
+      </Route>
       {/* <LoginContainer />  */}
-      <UserProfileForm />
-    </div>
+      {/* <MainContainer> */}
+      {/* <UserProfileForm /> */}
+      {/* <UserProfile /> */}
+      {/* </MainContainer> */}]
+    </Router>
   );
 }
 
