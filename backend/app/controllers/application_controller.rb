@@ -6,6 +6,8 @@ class ApplicationController < ActionController::API
   # Check for authentication
   before_action :authenticate_user
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   private
 
   # Shared logic to check if a user is logged in
@@ -36,5 +38,15 @@ class ApplicationController < ActionController::API
 
   def signed_in?
     @current_user_id.present?
+  end
+
+  protected
+
+  # Configure custom parameters to register a user
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(
+      :sign_up,
+      keys: %i[supervisor_id first_name last_name]
+    )
   end
 end

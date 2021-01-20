@@ -21,7 +21,9 @@ const MainContainer = ({ children }: Props) => (
   <div>
     <DashboardSidebar />
     <NavBar />
-    <div style={{ marginTop: '3em', marginLeft: '15em' }}>{children}</div>
+    <Container text style={{ marginTop: '7em' }}>
+      {children}
+    </Container>
   </div>
 );
 

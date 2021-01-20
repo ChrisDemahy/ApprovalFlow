@@ -3,7 +3,11 @@ class User < ApplicationRecord
   has_many :organizations, through: :organization_users
   # has_many :projects
   # has_many :workflows
-  # Include default devise modules. Others available are:
+
+  has_many :subordinates, class_name: 'User', foreign_key: 'supervisor_id'
+  belongs_to :supervisor, class_name: 'User', optional: true
+
+  # Includedevise modules.
   devise :database_authenticatable,
          :registerable,
          :recoverable,

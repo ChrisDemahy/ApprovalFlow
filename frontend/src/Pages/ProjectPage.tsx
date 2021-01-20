@@ -13,18 +13,18 @@ import { Button, Container, Header, Segment } from 'semantic-ui-react';
 
 // React Query
 import { getCurrentUser } from '../shared/api';
+import type Project from 'src/types/project';
 
-const UserProfile = () => {
-  // User type is returned under a user key in the response from the backend
-  interface userData {
-    user: User;
-  }
+interface projectData {
+  project: Project;
+}
 
+const ProjectPage = () => {
   // Query to fetch the current user data.
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<userData, Error>(
+  const { error, data, status, isFetching } = useQuery<projectData, Error>(
     'user',
     getCurrentUser,
   );
@@ -46,5 +46,4 @@ const UserProfile = () => {
     </>
   );
 };
-
-export default UserProfile;
+export default ProjectPage;

@@ -8,6 +8,10 @@
 
 User.destroy_all
 
-user1 = User.create email: 'ab@c', password: 'abc'
+user =
+  User.create! name: 'John Doe',
+               email: 'john@gmail.com',
+               password: 'topsecret',
+               password_confirmation: 'topsecret'
 workflow1 = Workflow.create user_id: user1.id
 project1 = Project.create user_id: user1.id, workflow_id: workflow1.id

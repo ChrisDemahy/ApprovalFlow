@@ -14,15 +14,12 @@ function App({}: AppProps) {
         <MainContainer>
           {/* <IndexRoute exact component={AsyncDashboard} /> */}
           <Switch>
+            <Route path="/accountForm" children={<UserProfileForm />} />
             <Route path="/account" children={<UserProfile />} />
           </Switch>
         </MainContainer>
       </Route>
-      {/* <LoginContainer />  */}
-      {/* <MainContainer> */}
-      {/* <UserProfileForm /> */}
-      {/* <UserProfile /> */}
-      {/* </MainContainer> */}]
+      {/* <LoginContainer /> */}
     </Router>
   );
 }

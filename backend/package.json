@@ -7,7 +7,7 @@
     "frontend": "1.0.0"
   },
   "scripts": {
-    "dev": "rails s",
-    "test": "rails test --fail-fast"
+    "start": "rails s",
+    "test": "rails test"
   }
 }

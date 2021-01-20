@@ -10,8 +10,8 @@ interface item {
 }
 type itemArray = item[];
 
-const CardContainer = ({ items }: { items: itemArray }) => (
+const CardList = ({ items }: { items: itemArray }) => (
   <Card.Group items={items} />
 );
 
-export default CardContainer;
+export default CardList;

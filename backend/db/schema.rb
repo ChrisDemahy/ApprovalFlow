@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_060732) do
+ActiveRecord::Schema.define(version: 2021_01_20_202115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,9 @@ ActiveRecord::Schema.define(version: 2021_01_19_060732) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "workflow_id", null: false
+    t.float "total_cost"
+    t.string "status", default: "created"
+    t.string "name"
     t.index ["user_id"], name: "index_projects_on_user_id"
     t.index ["workflow_id"], name: "index_projects_on_workflow_id"
   end
@@ -94,10 +97,13 @@ ActiveRecord::Schema.define(version: 2021_01_19_060732) do
     t.bigint "organization_id"
     t.string "first_name"
     t.string "last_name"
+    t.float "DOA"
+    t.bigint "supervisor_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["supervisor_id"], name: "index_users_on_supervisor_id"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 

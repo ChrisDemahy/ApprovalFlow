@@ -74,69 +74,50 @@ const UserProfileForm = () => {
   };
   return (
     <>
-      <Header
-        as="h3"
-        content="User Form"
-        style={{ marginTop: '2em', padding: '2em 0em' }}
-        textAlign="center"
-      />
-      <Container text>
-        <Form
-          onSubmit={onSubmit}
-          size="large"
-          error={mutation.isError}
-          success={mutation.isSuccess}
-          loading={mutation.isLoading}
-        >
-          <Segment>
-            <Message
-              success
-              header="Form Completed"
-              content="The Form was Successfully Submitted"
-            />
-            <Message error header="Action Forbidden" content={apiError} />
+      <Header as="h3" content="User Form" />
 
-            <Header as="h5">First Name</Header>
-            <Form.Input
-              fluid
-              // icon="user"
-              // iconPosition="left"
-              placeholder={data && data.user.first_name}
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
-            <Header as="h5">Last Name</Header>
-            <Form.Input
-              fluid
-              // icon="user"
-              // iconPosition="left"
-              placeholder={data && data.user.last_name}
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-            />
+      <Form
+        onSubmit={onSubmit}
+        error={mutation.isError}
+        success={mutation.isSuccess}
+        loading={mutation.isLoading}
+        size="small"
+      >
+        <Message
+          success
+          header="Form Completed"
+          content="The Form was Successfully Submitted"
+        />
+        <Message error header="Action Forbidden" content={apiError} />
 
-            <Header as="h5">Email Address</Header>
-            <Form.Input
-              fluid
-              // icon="user"
-              // iconPosition="left"
-              placeholder={data && data.user.email}
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
+        <Header as="h5">First Name</Header>
+        <Form.Input
+          placeholder={data && data.user.first_name}
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
+        />
+        <Header as="h5">Last Name</Header>
+        <Form.Input
+          placeholder={data && data.user.last_name}
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
+        />
 
-            <Button fluid size="large">
-              Submit
-            </Button>
-          </Segment>
-        </Form>
-      </Container>
+        <Header as="h5">Email Address</Header>
+        <Form.Input
+          placeholder={data && data.user.email}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+
+        <Button size="large">Submit</Button>
+      </Form>
     </>
   );
 };
