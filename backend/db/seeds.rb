@@ -6,47 +6,84 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-project1 = Project.create user_id: user.id, workflow_id: workflow1.id
-
 # Gernereate new users, Boards, Swimlanes,
 #  and Cards, as well as associate all of them
 require 'faker'
 
-User.destroy_all
 Project.destroy_all
+User.destroy_all
 Step.destroy_all
 Organization.destroy_all
-Workflow.destroy_all
+WorkflowRun.destroy_all
+WorkflowTemplate.destroy_all
+
+organization = Organization.create name: 'Royal Carribean'
 
 #=> "kirsten.greenholt@corkeryfisher.info"
 @users = []
-5.times do |i|
-  @users <<
+
+# Create the final user in the approval chain
+@super_user =
+  User.create!(
+    name: Faker::Name.name,
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: Faker::Internet.email,
+    organization_id: organization.id,
+    DOA: 500_000
+  )
+
+@previous_user =
+  User.create!(
+    name: Faker::Name.name,
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: Faker::Internet.email,
+    organization_id: organization.id,
+    DOA: 1000
+  )
+@users << @previous_user
+
+doa = 2000
+20.times do |i|
+  @new_user =
     User.create!(
       name: Faker::Name.name,
       password: 'abc123',
       password_confirmation: 'abc123',
-      email: Faker::Internet.email
+      email: Faker::Internet.email,
+      organization_id: organization.id,
+      DOA: doa
     )
-end
+  @users << @new_user
+  doa = doa + 1000
 
-workflow =
-  Workflow.create user_id: user.id,
-                  name: 'DOA Workflow',
-                  description: 'Workflow for DOA Approval.'
+  @previous_user.supervisor = @new_user
+  @previous_user.save
+  @previous_user = @new_user
+end
+# Set the last personn's supervisor to the super user
+@previous_user.supervisor_id = @super_user
 
 @projects = []
-@users.each do |user|
-  2.times do
-    @projects <<
-      Project.create(
-        name: Faker::App.name,
-        description:
-          Faker::Lorem.sentence(
-            word_count: 3, supplemental: false, random_words_to_add: 15
-          ),
-        user_id: user.id,
-        workflow_id: workflow.id
-      )
-  end
+cost = 4000
+3.times do
+  @projects <<
+    Project.create!(
+      name: Faker::App.name,
+      description:
+        Faker::Lorem.sentence(
+          word_count: 3, supplemental: false, random_words_to_add: 15
+        ),
+      user_id: @users.first.id,
+      total_cost: cost
+    )
+  cost = cost * 2
 end
+
+@workflow_template = WorkflowTemplate.create(name: 'DOA Approval')
+
+# @projects.each do |project|
+#   project.workflow_template = @workflow_template
+#   project.save!
+# end

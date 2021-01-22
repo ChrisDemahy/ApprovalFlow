@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class OrganizationUserTest < ActiveSupport::TestCase
+class WorkflowTemplateTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -8,7 +8,7 @@
 
 #  rails db:migrate
 
-rails g scaffold organizationUser user:references organization:references &&
+rails d scaffold organizationUser user:references organization:references &&
 
 rails g scaffold Project user:references && # workflow:references 
 rails g scaffold Workflow name:string description:text User:references &&

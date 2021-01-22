@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  has_many :organization_users, dependent: :destroy
-  has_many :organizations, through: :organization_users
+  belongs_to :organization
   # has_many :projects
   # has_many :workflows
 

@@ -34,14 +34,20 @@
 
 
 
-AddWorkflowToStep
-AddWorkflowToProject
+# AddWorkflowToStep
+# AddWorkflowToProject
 rails destroy scaffold oganizationUser user:references organization:references &&
 # Organization no longer has many orgusers : Users belong to Org
 rails g migration AddOrganizationToUser organization:references &&
+
 rails g scaffold WorkflowRun name:string description:text user:references &&
-rails g scaffold 
+# FIXME Add Relations to models 
+rails g migration AddFirstStepToWorkflowRun first_step:references
+rails g migration AddCurrentStepToWorkflowRun current_step:references
+rails g migration AddLastStepToWorkflowRun last_step:references
+
 rails g scaffold WorkflowTemplate name:string &&
+
 # Workflow Templates are static. For now there is one workflow template
 rails g migration AddWorkflowRunToProject workflow_run:references &&
 rails g migration AddWorkflowTemplateToProject workflow_template:references &&
