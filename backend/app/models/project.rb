@@ -9,7 +9,7 @@ class Project < ApplicationRecord
   # Project can be either created, pending, finshed
   validates :status,
             inclusion: {
-              in: %w[created pending finished],
+              in: %w[created pending approved denied],
               message: '%{value} is not a valid status'
             }
 
@@ -82,6 +82,8 @@ class Project < ApplicationRecord
       @workflow_run.last_step_id = @last_step.id
 
       @workflow_run.save!
+      project.update
+
       @steps.each do |step|
         step.workflow_run_id = @workflow_run.id
         step.save

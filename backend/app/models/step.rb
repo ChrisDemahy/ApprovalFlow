@@ -7,7 +7,7 @@ class Step < ApplicationRecord
 
   validates :status,
             inclusion: {
-              in: %w[created pending finished],
+              in: %w[created pending approved denied],
               message: '%{value} is not a valid status'
             }
 
@@ -23,10 +23,10 @@ class Step < ApplicationRecord
         )
 
       # Move to next step if there is one
-    elsif self.status == 'finished' && self.next_step_id?
+    elsif self.status == 'approved' && self.next_step_id?
       self.workflow_run.update current_step: self.next_step
       self.next_step.update status: 'pending'
-    elsif self.status == 'finished'
+    elsif self.status == 'denied' || self.status == 'approved'
       # Else set the workflow as finished
       notification =
         Notification.create! user_id: self.user_id,

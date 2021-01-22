@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useQueryClient, useMutation } from 'react-query';
 import { loginUser } from '../shared/api';
 import type User from '../types/user';
-
+import { useHistory } from 'react-router-dom';
 // Import
 import Login from './Login';
 
@@ -15,6 +15,8 @@ const LoginContainer = () => {
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
 
+  let history = useHistory();
+
   // React Query Mutation
   const queryClient = useQueryClient();
   const mutation = useMutation(loginUser, {
@@ -23,8 +25,9 @@ const LoginContainer = () => {
       const { user, token }: { user: User; token: string } = res.data;
       // TODO Set user query data from here
       localStorage.token = token;
-      queryClient.invalidateQueries('user');
+      queryClient.invalidateQueries('currentUser');
       // Go to next page or show error
+      history.push('/home');
     },
   });
 

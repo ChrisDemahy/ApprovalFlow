@@ -8,11 +8,17 @@ import {
   useQueryClient,
   QueryClient,
 } from 'react-query';
+import type Project from 'src/types/project';
 
 export const loginUser = (user: { email: string; password: string }) => {
   return axios.post('http://localhost:3000/api/users/login', {
     user: user,
   });
+};
+
+export const getCurrentUser = async () => {
+  const { data } = await client().get('/user');
+  return data;
 };
 
 export const postUser = (user: { email: string }) => {
@@ -21,8 +27,44 @@ export const postUser = (user: { email: string }) => {
   });
 };
 
-export const getCurrentUser = async () => {
-  const { data } = await client().get('/user');
+export const postProject = (project: {
+  name: string;
+  total_cost: number;
+  description: string;
+}) => {
+  return client().post('http://localhost:3000/api/projects', {
+    project: project,
+  });
+};
+
+export const putProject = (project: {
+  name: string;
+  total_cost: number;
+  description: string;
+}) => {
+  return client().put('http://localhost:3000/api/projects', {
+    project: project,
+  });
+};
+
+export const submitProject = (project: {
+  name: string;
+  total_cost: number;
+  description: string;
+  workflow_template_id: 1;
+}) => {
+  return client().put('http://localhost:3000/api/projects', {
+    project: project,
+  });
+};
+
+export const getProject = (id: number) => async () => {
+  const { data } = await client().get(`/projects/${id}`);
+  return data;
+};
+
+export const getAllProjects = async () => {
+  const { data } = await client().get('/projects');
   return data;
 };
 

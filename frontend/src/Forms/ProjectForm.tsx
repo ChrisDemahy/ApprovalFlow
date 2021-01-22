@@ -14,39 +14,42 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
 
-import { getCurrentUser, postUser } from '../shared/api';
-import type User from '../types/user';
+import { postProject } from '../shared/api';
 
-const UserProfileForm = () => {
+import type Project from '../types/user';
+import { useHistory } from 'react-router-dom';
+
+const ProjectForm = () => {
   // Setup state for the form
-  const [email, setEmail] = useState('');
+  const [description, setDescription] = useState('');
   const [name, setName] = useState('');
+  const [totalCost, setTotalCost] = useState(0);
 
   const [apiError, setApiError] = useState(['']);
 
   // Setup React Query for fetching and posting data
   const queryClient = useQueryClient();
 
-  // User type is returned under a user key in the response from the backend
-  interface userData {
-    user: User;
-  }
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
 
-  // Query to fetch the current user data.
-  const { data, error } = useQuery<userData, Error>(
-    'currentUser',
-    getCurrentUser,
-  );
-
+  let history = useHistory();
   // React Query Mutation
-  const mutation = useMutation(postUser, {
+
+  interface projectData {
+    project: Project;
+  }
+
+  const mutation = useMutation(postProject, {
     onSuccess: (res) => {
+      // const project = data.project;
+      console.log(res.data);
+
       // Invalidate and refetch
-      queryClient.invalidateQueries('user');
+      queryClient.invalidateQueries('projects');
       // Go to next page or show error
+      history.push(`/projects/${res.data.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
@@ -71,8 +74,9 @@ const UserProfileForm = () => {
   // and mutate the user on the server with the new values
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const user = { email, name };
-    mutation.mutate(user);
+    const total_cost = totalCost;
+    const project = { description, name, total_cost };
+    mutation.mutate(project);
   };
   return (
     <>
@@ -94,19 +98,28 @@ const UserProfileForm = () => {
 
         <Header as="h5">Name</Header>
         <Form.Input
-          placeholder={data && data.user.name}
+          placeholder={'Name'}
           value={name}
           onChange={(e) => {
             setName(e.target.value);
           }}
         />
 
-        <Header as="h5">Email Address</Header>
+        <Header as="h5">Description</Header>
         <Form.Input
-          placeholder={data && data.user.email}
-          value={email}
+          placeholder={'Description'}
+          value={description}
           onChange={(e) => {
-            setEmail(e.target.value);
+            setDescription(e.target.value);
+          }}
+        />
+
+        <Header as="h5">Total Cost</Header>
+        <Form.Input
+          placeholder={'TotalCost'}
+          value={totalCost}
+          onChange={(e) => {
+            +e.target.value ? setTotalCost(+e.target.value) : setTotalCost(0);
           }}
         />
 
@@ -116,4 +129,4 @@ const UserProfileForm = () => {
   );
 };
 
-export default UserProfileForm;
+export default ProjectForm;

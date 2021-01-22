@@ -21,6 +21,6 @@ class Authorization < ApplicationRecord
   end
 
   def update_step
-    self.step.status = 'finished' if self.status != 'pending'
+    self.step.status = self.status if self.status != 'pending'
   end
 end

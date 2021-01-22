@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const DashboardSidebar = () => {
   const [activeItem, setActiveItem] = useState('');
@@ -9,58 +10,38 @@ const DashboardSidebar = () => {
       <Menu.Item>
         <Input placeholder="Search..." />
       </Menu.Item>
-
-      <Menu.Item>
+      <Menu.Item
+        name="home"
+        active={activeItem === 'home'}
+        onClick={(e, { name }) => {
+          name && setActiveItem(name);
+        }}
+        as={Link}
+        to="/"
+      >
         Home
-        <Menu.Menu>
-          <Menu.Item
-            name="search"
-            active={activeItem === 'search'}
-            onClick={(e, { name }) => {
-              name && setActiveItem(name);
-            }}
-          >
-            Search
-          </Menu.Item>
-          <Menu.Item
-            name="add"
-            active={activeItem === 'add'}
-            onClick={(e, { name }) => {
-              name && setActiveItem(name);
-            }}
-          >
-            Add
-          </Menu.Item>
-          <Menu.Item
-            name="about"
-            active={activeItem === 'about'}
-            onClick={(e, { name }) => {
-              name && setActiveItem(name);
-            }}
-          >
-            Remove
-          </Menu.Item>
-        </Menu.Menu>
       </Menu.Item>
-
       <Menu.Item
-        name="browse"
-        active={activeItem === 'browse'}
+        name="projects"
+        active={activeItem === 'projects'}
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
+        as={Link}
+        to="/projects"
       >
-        <Icon name="grid layout" />
-        Browse
+        Projects
       </Menu.Item>
       <Menu.Item
-        name="messages"
-        active={activeItem === 'messages'}
+        name="notifications"
+        active={activeItem === 'notifications'}
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
+        as={Link}
+        to="/notifications"
       >
-        Messages
+        Notifications
       </Menu.Item>
 
       <Dropdown item text="More">

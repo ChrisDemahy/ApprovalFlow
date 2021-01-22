@@ -1,14 +1,14 @@
 import React from 'react';
 import { Card } from 'semantic-ui-react';
 
-interface item {
+interface cardItem {
   header: string;
   description?: string;
   meta?: string;
   image?: string;
   extra?: JSX.Element;
 }
-type itemArray = item[];
+export type itemArray = cardItem[];
 
 const CardList = ({ items }: { items: itemArray }) => (
   <Card.Group items={items} />

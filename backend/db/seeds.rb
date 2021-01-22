@@ -89,5 +89,3 @@ end
 test_project = @projects.first
 test_project.update! workflow_template_id: @workflow_template.id
 test_project.save
-byebug
-puts ''

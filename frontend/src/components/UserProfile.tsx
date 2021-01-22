@@ -25,7 +25,7 @@ const UserProfile = () => {
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useQuery<userData, Error>(
-    'user',
+    'currentUser',
     getCurrentUser,
   );
 

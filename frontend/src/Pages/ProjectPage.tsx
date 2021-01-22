@@ -11,8 +11,10 @@ import type User from '../types/user';
 // Semantic UI Imports
 import { Button, Container, Header, Segment } from 'semantic-ui-react';
 
-// React Query
-import { getCurrentUser } from '../shared/api';
+import { useParams } from 'react-router-dom';
+
+// React Query axios functions
+import { getProject } from '../shared/api';
 import type Project from 'src/types/project';
 
 interface projectData {
@@ -20,16 +22,18 @@ interface projectData {
 }
 
 const ProjectPage = () => {
+  const { id }: { id: string } = useParams();
+
   // Query to fetch the current user data.
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useQuery<projectData, Error>(
-    'user',
-    getCurrentUser,
+    ['project', +id],
+    getProject(+id),
   );
-
-  return (
+  console.log(data);
+  return data ? (
     <>
       <Header as="h3" content="User Profile" />
       {/* 
@@ -44,6 +48,8 @@ const ProjectPage = () => {
           Update
         </Button> */}
     </>
+  ) : (
+    <div>Loading...</div>
   );
 };
 export default ProjectPage;
