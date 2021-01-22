@@ -10,11 +10,13 @@
 #  and Cards, as well as associate all of them
 require 'faker'
 
+Notification.destroy_all
+Authorization.destroy_all
+Step.destroy_all
+WorkflowRun.destroy_all
 Project.destroy_all
 User.destroy_all
-Step.destroy_all
 Organization.destroy_all
-WorkflowRun.destroy_all
 WorkflowTemplate.destroy_all
 
 organization = Organization.create name: 'Royal Carribean'
@@ -83,7 +85,9 @@ end
 
 @workflow_template = WorkflowTemplate.create(name: 'DOA Approval')
 
-# @projects.each do |project|
-#   project.workflow_template = @workflow_template
-#   project.save!
-# end
+# Submit one project for approval
+test_project = @projects.first
+test_project.update! workflow_template_id: @workflow_template.id
+test_project.save
+byebug
+puts ''

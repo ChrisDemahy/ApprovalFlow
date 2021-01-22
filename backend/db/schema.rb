@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_22_073800) do
+ActiveRecord::Schema.define(version: 2021_01_22_122804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,10 @@ ActiveRecord::Schema.define(version: 2021_01_22_073800) do
     t.string "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "authorization_id"
+    t.bigint "project_id"
+    t.index ["authorization_id"], name: "index_notifications_on_authorization_id"
+    t.index ["project_id"], name: "index_notifications_on_project_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -65,8 +69,10 @@ ActiveRecord::Schema.define(version: 2021_01_22_073800) do
     t.bigint "authorization_id"
     t.bigint "workflow_run_id"
     t.bigint "next_step_id"
+    t.bigint "user_id", null: false
     t.index ["authorization_id"], name: "index_steps_on_authorization_id"
     t.index ["next_step_id"], name: "index_steps_on_next_step_id"
+    t.index ["user_id"], name: "index_steps_on_user_id"
     t.index ["workflow_run_id"], name: "index_steps_on_workflow_run_id"
   end
 
@@ -110,9 +116,11 @@ ActiveRecord::Schema.define(version: 2021_01_22_073800) do
     t.bigint "first_step_id"
     t.bigint "current_step_id"
     t.bigint "last_step_id"
+    t.bigint "project_id", null: false
     t.index ["current_step_id"], name: "index_workflow_runs_on_current_step_id"
     t.index ["first_step_id"], name: "index_workflow_runs_on_first_step_id"
     t.index ["last_step_id"], name: "index_workflow_runs_on_last_step_id"
+    t.index ["project_id"], name: "index_workflow_runs_on_project_id"
   end
 
   create_table "workflow_templates", force: :cascade do |t|
@@ -123,11 +131,15 @@ ActiveRecord::Schema.define(version: 2021_01_22_073800) do
 
   add_foreign_key "authorizations", "steps"
   add_foreign_key "authorizations", "users"
+  add_foreign_key "notifications", "authorizations"
+  add_foreign_key "notifications", "projects"
   add_foreign_key "notifications", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "projects", "workflow_runs"
   add_foreign_key "projects", "workflow_templates"
   add_foreign_key "steps", "authorizations"
+  add_foreign_key "steps", "users"
   add_foreign_key "steps", "workflow_runs"
   add_foreign_key "users", "organizations"
+  add_foreign_key "workflow_runs", "projects"
 end

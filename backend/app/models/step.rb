@@ -4,4 +4,34 @@ class Step < ApplicationRecord
 
   has_one :previous_step, class_name: 'Step', foreign_key: 'next_step_id'
   belongs_to :next_step, class_name: 'Step', optional: true
+
+  validates :status,
+            inclusion: {
+              in: %w[created pending finished],
+              message: '%{value} is not a valid status'
+            }
+
+  after_save :update_on_save
+
+  private
+
+  def update_on_save
+    if self.status == 'pending' && self.user_id? && !self.authorization_id?
+      auth =
+        Authorization.create!(
+          step: self, status: 'pending', user_id: self.user_id
+        )
+
+      # Move to next step if there is one
+    elsif self.status == 'finished' && self.next_step_id?
+      self.workflow_run.update current_step: self.next_step
+      self.next_step.update status: 'pending'
+    elsif self.status == 'finished'
+      # Else set the workflow as finished
+      notification =
+        Notification.create! user_id: self.user_id,
+                             name: self.step.name,
+                             project_id: self.workflow_run.project_id
+    end
+  end
 end
