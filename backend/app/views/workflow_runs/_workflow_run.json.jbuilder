@@ -4,5 +4,7 @@ json.extract! workflow_run,
               :description,
               :status,
               :created_at,
-              :updated_at
-json.url workflow_run_url(workflow_run, format: :json)
+              :updated_at,
+              :project_id,
+              :current_step_id,
+              :last_step_id

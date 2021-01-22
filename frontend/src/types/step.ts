@@ -5,5 +5,9 @@ export interface Step {
   description?: any;
   created_at: Date;
   updated_at: Date;
-  url: string;
+  next_step_id?: number;
+  email: string;
+  organization_id: number;
+  DOA: number;
 }
+export default Step;

@@ -1,11 +1,11 @@
-interface Workflowrun {
+export interface Workflowrun {
   id: number;
   name: string;
   description?: any;
-  created_at: string;
-  updated_at: string;
-  first_step_id: number;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
+  project_id: number;
   current_step_id: number;
   last_step_id: number;
-  project_id: number;
 }

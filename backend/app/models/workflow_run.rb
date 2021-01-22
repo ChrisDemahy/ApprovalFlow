@@ -3,6 +3,7 @@ class WorkflowRun < ApplicationRecord
   has_one :current_step, foreign_key: 'current_step_id', class_name: 'Step'
   has_one :last_step, foreign_key: 'last_step_id', class_name: 'Step'
   belongs_to :project
+  has_many :steps
 
   after_save :update_project
 

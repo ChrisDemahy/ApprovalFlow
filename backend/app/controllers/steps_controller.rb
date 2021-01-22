@@ -44,6 +44,7 @@ class StepsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_step
     @step = Step.find(params[:id])
+    @user = User.find(@step.user_id)
   end
 
   # Only allow a list of trusted parameters through.

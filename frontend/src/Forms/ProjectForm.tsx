@@ -80,7 +80,7 @@ const ProjectForm = () => {
   };
   return (
     <>
-      <Header as="h3" content="User Form" />
+      <Header as="h3" content="Project Form" />
 
       <Form
         onSubmit={onSubmit}

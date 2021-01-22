@@ -68,6 +68,11 @@ export const getAllProjects = async () => {
   return data;
 };
 
+export const getWorkflowRun = (id: number) => async () => {
+  const { data } = await client().get(`/workflow_run/${id}`);
+  return data;
+};
+
 // create axios object with propper settings
 
 const client = () => {
