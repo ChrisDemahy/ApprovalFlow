@@ -7,8 +7,7 @@ Rails.application.routes.draw do
     resources :notifications
     resources :authorizations
     resources :steps
-    resources :workflows
-    resources :projects
+      resources :projects
 
     resource :user, only: %i[show update]
     resources :organizations

@@ -20,8 +20,7 @@ import type User from '../types/user';
 const UserProfileForm = () => {
   // Setup state for the form
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
 
   const [apiError, setApiError] = useState(['']);
 
@@ -69,7 +68,7 @@ const UserProfileForm = () => {
   // and mutate the user on the server with the new values
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const user = { email, firstName, lastName };
+    const user = { email, name };
     mutation.mutate(user);
   };
   return (
@@ -90,20 +89,12 @@ const UserProfileForm = () => {
         />
         <Message error header="Action Forbidden" content={apiError} />
 
-        <Header as="h5">First Name</Header>
+        <Header as="h5">Name</Header>
         <Form.Input
-          placeholder={data && data.user.first_name}
-          value={firstName}
+          placeholder={data && data.user.name}
+          value={name}
           onChange={(e) => {
-            setFirstName(e.target.value);
-          }}
-        />
-        <Header as="h5">Last Name</Header>
-        <Form.Input
-          placeholder={data && data.user.last_name}
-          value={lastName}
-          onChange={(e) => {
-            setLastName(e.target.value);
+            setName(e.target.value);
           }}
         />
 

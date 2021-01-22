@@ -32,13 +32,13 @@ const ProjectPage = () => {
   return (
     <>
       <Header as="h3" content="User Profile" />
-
+      {/* 
       <Header as="h5" content="First Name" />
       {data && data.user.first_name}
       <Header as="h5" content="Last Name" />
       {data && data.user.last_name}
       <Header as="h5" content="Email Address" />
-      {data && data.user.email}
+      {data && data.user.email} */}
 
       {/* <Button fluid size="large">
           Update

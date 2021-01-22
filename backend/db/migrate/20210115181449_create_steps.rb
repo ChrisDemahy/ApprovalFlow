@@ -4,7 +4,9 @@ class CreateSteps < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :status
       t.text :description
-      t.references :workflow, null: false, foreign_key: true
+      # t.references :workflow, null: false, foreign_key: true
+      # ^ Moved to own migration to rename workflow
+      #   without breaking references
 
       t.timestamps
     end

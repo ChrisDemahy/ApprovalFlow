@@ -33,10 +33,9 @@ const UserProfile = () => {
     <>
       <Header as="h3" content="User Profile" />
 
-      <Header as="h5" content="First Name" />
-      {data && data.user.first_name}
-      <Header as="h5" content="Last Name" />
-      {data && data.user.last_name}
+      <Header as="h5" content="Name" />
+      {data && data.user.name}
+
       <Header as="h5" content="Email Address" />
       {data && data.user.email}
 

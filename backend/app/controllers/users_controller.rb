@@ -20,8 +20,7 @@ class UsersController < ApplicationController
       :password,
       :organization,
       :image,
-      :first_name,
-      :last_name,
+      :name,
       :supervisor_id
     )
   end

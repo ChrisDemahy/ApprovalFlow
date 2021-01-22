@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CreateDoaWorkflowJobTest < ActiveJob::TestCase
+class CreateWorkflowRunJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end
