@@ -1,4 +1,6 @@
+import type Authorization from './authorization';
 import type User from './user';
+
 export interface Step {
   id: number;
   name: string;
@@ -9,6 +11,7 @@ export interface Step {
   next_step_id?: number;
   workflow_run_id?: number;
   user: User;
+  authorizations?: Authorization[];
 }
 
 export interface StepData {

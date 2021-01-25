@@ -10,8 +10,10 @@ import {
 } from 'react-query';
 import type Project from 'src/types/project';
 
+const BASE_URL = 'http://localhost:3000/api';
+
 export const loginUser = (user: { email: string; password: string }) => {
-  return axios.post('http://localhost:3000/api/users/login', {
+  return axios.post(`${BASE_URL}/users/login`, {
     user: user,
   });
 };
@@ -22,7 +24,7 @@ export const getCurrentUser = async () => {
 };
 
 export const postUser = (user: { email: string }) => {
-  return client().put('http://localhost:3000/api/user', {
+  return client().put('/user', {
     user: user,
   });
 };
@@ -32,7 +34,7 @@ export const postProject = (project: {
   total_cost: number;
   description: string;
 }) => {
-  return client().post('http://localhost:3000/api/projects', {
+  return client().post('/projects', {
     project: project,
   });
 };
@@ -43,21 +45,23 @@ export const putProject = (project: {
   total_cost: number;
   description: string;
 }) => {
-  return client().put(`http://localhost:3000/api/projects/${project.id}`, {
+  return client().put(`/projects/${project.id}`, {
     project: project,
   });
 };
 
-export const submitProject = (project: {
-  id: number;
+export const postWorkflowRun = ({
+  name,
+  description,
+  id, // Project ID
+}: {
   name: string;
-  total_cost: number;
   description: string;
-  status: string;
-  workflow_template_id: 1;
+  id: number;
 }) => {
-  return client().put(`http://localhost:3000/api/projects/${project.id}`, {
-    project: project,
+  const project_id = id;
+  return client().post(`/workflow_runs/`, {
+    workflow_run: { name, description, project_id },
   });
 };
 
@@ -80,7 +84,7 @@ export const getWorkflowRun = (id: number) => async () => {
 
 const client = () => {
   return axios.create({
-    baseURL: 'http://localhost:3000/api/',
+    baseURL: `${BASE_URL}/`,
     // timeout: 1000,
     headers: {
       Authorization: `Token ${localStorage.token ? localStorage.token : ''}`,

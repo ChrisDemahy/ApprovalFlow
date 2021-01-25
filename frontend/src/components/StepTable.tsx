@@ -6,20 +6,15 @@ import { getProject, getWorkflowRun } from '../shared/api';
 import type { Workflowrun } from '../types/workflowrun';
 import type Step from '../types/step';
 import type Project from 'src/types/project';
-const StepTable = () => {
-  const { id }: { id: string } = useParams();
 
-  // Query to fetch the current user data.
-  // TODO Refetch data on options:
-  //  staleTime, refetchOnMount, refetchOnWindowFocus,
-  //  refetchOnReconnect and refetchInterval.
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faCheck,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 
-  const { error, data, status, isFetching } = useQuery<Workflowrun, Error>(
-    ['workflow_run', +id],
-    getWorkflowRun(+id),
-    {},
-  );
-
+const StepTable = ({ steps }: { steps: Step[] }) => {
   const statusMessage = (status: string) => {
     if (status == 'approved') {
       return 'Approved';
@@ -30,63 +25,125 @@ const StepTable = () => {
     }
   };
 
+  const formatDate = (date_string: string) => {
+    const d = Date.parse(date_string);
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+    return `${da} ${mo} ${ye}`;
+  };
+
   return (
     <>
-      {!!data ? (
-        <Table compact celled definition>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell />
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Approval Assignment Date</Table.HeaderCell>
-              <Table.HeaderCell>Premium Plan</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+      <Table compact celled definition>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>User Name</Table.HeaderCell>
+            <Table.HeaderCell>Assignment Date</Table.HeaderCell>
+            <Table.HeaderCell>Date Finished</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
 
-          <Table.Body>
-            {data.steps.map((step) => (
-              <Table.Row
-                positive={step.status == 'approved'}
-                negative={step.status == 'denied'}
-                warning={step.status == 'pending'}
+        <Table.Body>
+          {steps.map((step) => (
+            <Table.Row
+              key={step.id}
+              positive={step.status == 'approved'}
+              negative={step.status == 'denied'}
+              warning={step.status == 'pending'}
+            >
+              {/* Icons to show status of the project */}
+              <Table.Cell collapsing>
+                {step.status === 'pending' && (
+                  <FontAwesomeIcon
+                    style={{
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    icon={faExclamationTriangle}
+                  />
+                )}
+                {step.status === 'approved' && (
+                  <FontAwesomeIcon
+                    style={{
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    icon={faCheck}
+                  />
+                )}
+                {step.status === 'denied' && (
+                  <FontAwesomeIcon
+                    style={{
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    icon={faTimes}
+                  />
+                )}
+              </Table.Cell>
+              <Table.Cell>{statusMessage(step.status)}</Table.Cell>
+              <Table.Cell>{step.name}</Table.Cell>
+
+              {!!step.authorizations &&
+              !!step.authorizations[step.authorizations.length - 1] ? (
+                <>
+                  <Table.Cell>
+                    {/* If step has an authorization it has been assigned for approval */}
+                    {formatDate(
+                      step.authorizations[step.authorizations.length - 1]
+                        .created_at,
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {/* If the status is approved/denied show the date finished */}
+                    {(step.status === 'approved' || step.status === 'denied') &&
+                      formatDate(
+                        step.authorizations[step.authorizations.length - 1]
+                          .created_at,
+                      )}
+                  </Table.Cell>
+                </>
+              ) : (
+                <>
+                  <Table.Cell>
+                    {/* If step has no authorization, it has not been assigned */}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {/* If the status is not approved/denied, the step can't have
+                     a date finished */}
+                  </Table.Cell>
+                </>
+              )}
+            </Table.Row>
+          ))}
+        </Table.Body>
+
+        <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell colSpan="4">
+              <Button
+                floated="right"
+                icon
+                labelPosition="left"
+                primary
+                size="small"
               >
-                <Table.Cell collapsing>
-                  <Checkbox slider />
-                </Table.Cell>
-                <Table.Cell>{step.name}</Table.Cell>
-                <Table.Cell>{statusMessage(step.status)}</Table.Cell>
-                <Table.Cell>September 14, 2013</Table.Cell>
-                <Table.Cell>{step}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-
-          <Table.Footer fullWidth>
-            <Table.Row>
-              <Table.HeaderCell />
-              <Table.HeaderCell colSpan="4">
-                <Button
-                  floated="right"
-                  icon
-                  labelPosition="left"
-                  primary
-                  size="small"
-                >
-                  <Icon name="user" /> Add User
-                </Button>
-                <Button size="small">Approve</Button>
-                <Button disabled size="small">
-                  Approve All
-                </Button>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-      ) : (
-        <Loader />
-      )}
+                <Icon name="user" /> Add User
+              </Button>
+              <Button size="small">Approve</Button>
+              <Button disabled size="small">
+                Approve All
+              </Button>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
     </>
   );
 };
+
 export default StepTable;

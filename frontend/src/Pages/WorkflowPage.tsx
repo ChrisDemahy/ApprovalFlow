@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import type User from '../types/user';
+import type project from '../types/project';
 // Semantic UI Imports
 import {
   Button,
@@ -24,65 +24,65 @@ import {
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 // React Query axios functions
-import { getProject } from '../shared/api';
-import type { ProjectData } from '../types/project';
+import { getProject, getWorkflowRun } from '../shared/api';
+
 import type { AxiosError } from 'axios';
 import StepTable from '../components/StepTable';
 import ProjectDetail from '../components/ProjectDetails';
 import WorkflowRunList from '../components/WorkflowRunList';
 import ProjectSubmissionForm from '../Forms/ProjectSubmissionForm';
+import type { WorkflowRunData } from '../types/workflowrun';
+import WorkflowDetails from '../components/WorkflowDetails';
 
-const ProjectPage = () => {
+const WorkflowPage = () => {
+  // WorkflowRun ID
   const { id }: { id: string } = useParams();
   const [apiError, setApiError] = useState(['']);
 
   let history = useHistory();
 
-  // Query to fetch the current user data.
+  // Query to fetch the current project data.
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<ProjectData, Error>(
-    ['project', +id],
-    getProject(+id),
+  const { error, data, status, isFetching } = useQuery<WorkflowRunData, Error>(
+    ['workflow_run', +id],
+    getWorkflowRun(+id),
   );
 
   // Setup React Query for fetching and posting data
   const queryClient = useQueryClient();
 
-  // User type is returned under a user key in the response from the backend
-  interface userData {
-    user: User;
-  }
+  // project type is returned under a project key in the response from the backend
 
-  const renderTabs = (data: ProjectData) => {
+  const renderTabs = (data: WorkflowRunData) => {
     // One pane for each tab, rendering it's components
     const panes = [
       {
         menuItem: 'Details',
         render: () => (
           <Tab.Pane>
-            <ProjectDetail project={data.project} />
+            {<WorkflowDetails workflow_run={data.workflow_run} />}
           </Tab.Pane>
         ),
       },
+      // {
+      //   menuItem: (
+      //     <Menu.Item key="messages">
+      //       {/* Previous Workflows<Label>{data.project.previous_runs.length}</Label> */}
+      //     </Menu.Item>
+      //   ),
+      //   render: () => (
+      //     <Tab.Pane>
+      //       {/* <WorkflowRunList workflows={data.project.previous_runs} /> */}
+      //     </Tab.Pane>
+      //   ),
+      // },
       {
-        menuItem: (
-          <Menu.Item key="messages">
-            Previous Workflows<Label>{data.project.previous_runs.length}</Label>
-          </Menu.Item>
-        ),
+        menuItem: 'Steps',
         render: () => (
           <Tab.Pane>
-            <WorkflowRunList workflows={data.project.previous_runs} />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Submit For Approval',
-        render: () => (
-          <Tab.Pane>
-            <ProjectSubmissionForm project={data.project} />
+            <StepTable steps={data.workflow_run.steps} />
           </Tab.Pane>
         ),
       },
@@ -96,7 +96,7 @@ const ProjectPage = () => {
     <>
       <Header
         as="h2"
-        content={`Project ${data.project.name}`}
+        content={`Project ${data.workflow_run.name}`}
         subheader={[
           <span key="project-page-subheader-1">
             Manage details about your project and see previous workflows. When
@@ -112,4 +112,4 @@ const ProjectPage = () => {
     <Loader active />
   );
 };
-export default ProjectPage;
+export default WorkflowPage;

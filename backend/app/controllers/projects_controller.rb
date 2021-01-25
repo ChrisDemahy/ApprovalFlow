@@ -34,9 +34,6 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
-    if project_params[:status] == 'pending_workflow'
-      CreateWorkflowRunJob.perform_later @project
-    end
     if @project.update(project_params)
       render :show, status: :ok, location: @project
     else

@@ -12,7 +12,8 @@ class WorkflowRun < ApplicationRecord
 
   def status=(status)
     cs = Step.find_by id: self.current_step_id
-    cs.update!(status: status)
+
+    cs.update!(status: status) if !!cs
     return cs.status
   end
 end

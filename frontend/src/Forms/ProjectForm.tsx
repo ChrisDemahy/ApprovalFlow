@@ -48,7 +48,6 @@ const ProjectForm = () => {
   const mutation = useMutation(postProject, {
     onSuccess: (res) => {
       // const project = data.project;
-      console.log(res.data);
 
       // Invalidate and refetch
       queryClient.invalidateQueries('projects');
@@ -102,7 +101,7 @@ const ProjectForm = () => {
             />
             <Message error header="Action Forbidden" content={apiError} />
             <Header as="h5">Name</Header>
-            {console.log(data)}
+
             <Form.Input
               placeholder={data.project.name}
               value={name}

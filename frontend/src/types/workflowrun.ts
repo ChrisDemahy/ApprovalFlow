@@ -13,6 +13,6 @@ export interface Workflowrun {
   steps: Step[];
 }
 
-interface WorkflowRunData {
+export interface WorkflowRunData {
   workflow_run: Workflowrun;
 }

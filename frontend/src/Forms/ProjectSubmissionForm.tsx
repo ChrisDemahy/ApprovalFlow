@@ -13,29 +13,38 @@ import {
 // Imports for interacting with api
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
-import { submitProject } from '../shared/api';
+import { postWorkflowRun } from '../shared/api';
 import { useParams, useHistory } from 'react-router';
 
 import type { ProjectData } from '../types/project';
+import type { WorkflowRunData } from 'src/types/workflowrun';
 const ProjectForm = ({ project }: ProjectData) => {
   // Setup state for the form
   const { id }: { id: string } = useParams();
 
   const [apiError, setApiError] = useState(['']);
-  const [description, setDescription] = useState(project.description);
-  const [name, setName] = useState(project.name);
+  const [description, setDescription] = useState('');
+  // TODO Format Name
+  // Workflow Name Default Format
+  const initName = !!project.user
+    ? `${project.user.name}'s ${project.name} Approval Workflow`
+    : `${project.name} Approval Workflow`;
+  const [name, setName] = useState(initName);
   const [totalCost, setTotalCost] = useState(project.total_cost);
 
   // Setup React Query for fetching and posting data
   const queryClient = useQueryClient();
   const history = useHistory();
-  // React Query Mutation
-  const mutation = useMutation(submitProject, {
-    onSuccess: (res) => {
+  // React Query Muation
+
+  const mutation = useMutation(postWorkflowRun, {
+    onSuccess: ({ data }: { data: WorkflowRunData }) => {
       // Invalidate and refetch
       queryClient.invalidateQueries(['project', +id]);
+
+      // Get The id of the new workflow_run
       // Go to next page or show error
-      history.push('/workflow_runs/');
+      history.push(`/workflow_runs/${data.workflow_run.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
@@ -62,17 +71,15 @@ const ProjectForm = ({ project }: ProjectData) => {
     event.preventDefault();
     const { id, name, total_cost, description, status } = project;
     mutation.mutate({
-      id,
       name,
-      total_cost,
+
       description,
-      status,
-      workflow_template_id: 1,
+      id,
     });
   };
   return (
     <>
-      <Header as="h3" content={'Update Project'} />
+      <Header as="h3" content={'Submit Worfklow for Project Approval'} />
 
       <Form
         onSubmit={onSubmit}
@@ -98,20 +105,13 @@ const ProjectForm = ({ project }: ProjectData) => {
         />
         <Header as="h5">Description</Header>
         <Form.Input
-          placeholder={description}
+          placeholder={'An Example Description for '}
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
           }}
         />
-        <Header as="h5">Total Cost</Header>
-        <Form.Input
-          placeholder={totalCost}
-          value={totalCost === 0 ? '' : totalCost}
-          onChange={(e) => {
-            +e.target.value ? setTotalCost(+e.target.value) : setTotalCost(0);
-          }}
-        />
+
         <Divider />
         <Button size="large">Submit</Button>
       </Form>

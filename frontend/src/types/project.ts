@@ -1,8 +1,9 @@
+import type User from './user';
 import type { Workflowrun } from './workflowrun';
 
 export interface Project {
   id: number;
-  user_id: number;
+  user?: User;
   name: string;
   status: string;
   total_cost: number;

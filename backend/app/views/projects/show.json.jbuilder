@@ -2,7 +2,7 @@
 json.project do |json|
   json.extract! @project,
                 :id,
-                :user_id,
+                :user,
                 :name,
                 :status,
                 :total_cost,

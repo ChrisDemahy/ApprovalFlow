@@ -45,7 +45,6 @@ const NewProjectForm = () => {
   const mutation = useMutation(postProject, {
     onSuccess: (res) => {
       // const project = data.project;
-      console.log(res.data);
 
       // Invalidate and refetch
       queryClient.invalidateQueries('projects');
