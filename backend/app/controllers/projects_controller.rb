@@ -57,6 +57,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @workflow_run = @project.workflow_run
     @workflow_template = @project.workflow_template
+    @steps = @workflow_run.steps if !!@workflow_run
   end
 
   # Only allow a list of trusted parameters through.
