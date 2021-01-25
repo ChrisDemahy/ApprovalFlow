@@ -11,8 +11,10 @@ class CreateWorkflowRunJob < ApplicationJob
     # End any previous workflow
 
     if project.status == 'pending_workflow'
-      project.workflow_run.status = 'denied'
-      project.previous_runs << project.workflow_run if !!project.workflow_run
+      if !!project.workflow_run
+        project.workflow_run.status = 'denied'
+        project.previous_runs << project.workflow_run
+      end
       @project_submitter = project.user
       @supervisor = @project_submitter.supervisor
       @workflow_run =

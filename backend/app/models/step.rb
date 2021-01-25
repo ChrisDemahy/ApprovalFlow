@@ -30,7 +30,7 @@ class Step < ApplicationRecord
       # Else set the workflow as finished
       notification =
         Notification.create! user_id: self.user_id,
-                             name: self.step.name,
+                             name: self.name,
                              project_id: self.workflow_run.project_id
     end
   end

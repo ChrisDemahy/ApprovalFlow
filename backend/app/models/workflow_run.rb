@@ -9,4 +9,10 @@ class WorkflowRun < ApplicationRecord
     cs = Step.find_by id: self.current_step_id
     return cs.status
   end
+
+  def status=(status)
+    cs = Step.find_by id: self.current_step_id
+    cs.update!(status: status)
+    return cs.status
+  end
 end
