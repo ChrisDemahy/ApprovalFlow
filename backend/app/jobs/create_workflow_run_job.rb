@@ -8,7 +8,11 @@ class CreateWorkflowRunJob < ApplicationJob
     #  then the workflow_template was just assigned
     # And workflow_run should be created via ActiveJob
 
+    # End any previous workflow
+
     if project.status == 'pending_workflow'
+      project.workflow_run.status = 'denied'
+      project.previous_runs << project.workflow_run if !!project.workflow_run
       @project_submitter = project.user
       @supervisor = @project_submitter.supervisor
       @workflow_run =

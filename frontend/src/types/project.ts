@@ -12,6 +12,7 @@ export interface Project {
   created_at: string;
   updated_at: string;
   url: string;
+  previous_runs: Workflowrun[];
 }
 
 export interface ProjectData {

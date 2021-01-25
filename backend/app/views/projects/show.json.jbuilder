@@ -10,7 +10,8 @@ json.project do |json|
                 # :workflow_run,
                 :workflow_template_id,
                 :created_at,
-                :updated_at
+                :updated_at,
+                :previous_runs
 
   if !!@workflow_run
     json.workflow_run do |json|

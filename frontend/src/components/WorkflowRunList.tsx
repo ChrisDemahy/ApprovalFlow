@@ -5,12 +5,25 @@ import type { Workflowrun } from 'src/types/workflowrun';
 const ListExampleAnimated = (workflows: Workflowrun[]) => {
   return (
     <List animated verticalAlign="middle">
-      <List.Item>
-        <Image avatar src="../../public/alert-triangle.svg" />
-        <List.Content>
-          <List.Header>Christian</List.Header>
-        </List.Content>
-      </List.Item>
+      {workflows.map((workflow) => (
+        <List.Item>
+          {console.log(workflow)}
+          <Image
+            avatar
+            src="https://react.semantic-ui.com/images/avatar/small/daniel.jpg"
+          />
+          <List.Content>
+            <List.Header as="a">Daniel Louise</List.Header>
+            <List.Description>
+              Last waiting for
+              <a>
+                <b>user</b>
+              </a>
+              to approve yesterday just now.
+            </List.Description>
+          </List.Content>
+        </List.Item>
+      ))}
     </List>
   );
 };
