@@ -5,14 +5,8 @@ class WorkflowRun < ApplicationRecord
   belongs_to :project
   has_many :steps
 
-  after_save :update_project
-
   def status
     cs = Step.find_by id: self.current_step_id
     return cs.status
-  end
-
-  def update_project
-    self.project.update status: self.status
   end
 end

@@ -8,6 +8,7 @@ import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import ProjectPage from './Pages/ProjectPage';
 import ProjectForm from './Forms/ProjectForm';
+import NewProjectForm from './Forms/NewProjectForm';
 
 interface AppProps {}
 
@@ -31,7 +32,8 @@ function App({}: AppProps) {
                 children={<ProjectListContainer />}
               />
               <Route path="/projects/:id" children={<ProjectPage />} />
-              <Route path="/projectForm" children={<ProjectForm />} />
+              <Route path="/projectForm/:id" children={<ProjectForm />} />
+              <Route path="/newProjectForm" children={<NewProjectForm />} />
             </Switch>
           </MainContainer>
         </Route>

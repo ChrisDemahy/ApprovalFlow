@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import {
   Button,
   Header,
+  Container,
   Form,
   Message,
-  Loader,
+  Segment,
   Divider,
 } from 'semantic-ui-react';
 
@@ -14,21 +15,18 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
 
-import { getProject, postProject } from '../shared/api';
+import { postProject } from '../shared/api';
 
-import type { ProjectData } from '../types/project';
-import { useHistory, useParams } from 'react-router-dom';
+import type Project from '../types/user';
+import { useHistory } from 'react-router-dom';
 
-const ProjectForm = () => {
+const NewProjectForm = () => {
   // Setup state for the form
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [totalCost, setTotalCost] = useState(0);
 
   const [apiError, setApiError] = useState(['']);
-
-  // Get the id of the current project being updated
-  const { id }: { id: string } = useParams();
 
   // Setup React Query for fetching and posting data
   const queryClient = useQueryClient();
@@ -40,10 +38,9 @@ const ProjectForm = () => {
   let history = useHistory();
   // React Query Mutation
 
-  const { error, data, status, isFetching } = useQuery<ProjectData, Error>(
-    ['project', +id],
-    getProject(+id),
-  );
+  interface projectData {
+    project: Project;
+  }
 
   const mutation = useMutation(postProject, {
     onSuccess: (res) => {
@@ -84,59 +81,53 @@ const ProjectForm = () => {
   };
   return (
     <>
-      {data ? (
-        <>
-          <Header as="h3" content={'Update Project'} />
+      <Header as="h3" content="Project Form" />
 
-          <Form
-            onSubmit={onSubmit}
-            error={mutation.isError}
-            success={mutation.isSuccess}
-            loading={mutation.isLoading}
-            size="small"
-          >
-            <Message
-              success
-              header="Form Completed"
-              content="The Form was Successfully Submitted"
-            />
-            <Message error header="Action Forbidden" content={apiError} />
-            <Header as="h5">Name</Header>
-            {console.log(data)}
-            <Form.Input
-              placeholder={data.project.name}
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <Header as="h5">Description</Header>
-            <Form.Input
-              placeholder={data.project.description}
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
-            <Header as="h5">Total Cost</Header>
-            <Form.Input
-              placeholder={data.project.total_cost}
-              value={totalCost === 0 ? '' : totalCost}
-              onChange={(e) => {
-                +e.target.value
-                  ? setTotalCost(+e.target.value)
-                  : setTotalCost(0);
-              }}
-            />
-            <Divider />
-            <Button size="large">Submit</Button>
-          </Form>
-        </>
-      ) : (
-        <Loader />
-      )}
+      <Form
+        onSubmit={onSubmit}
+        error={mutation.isError}
+        success={mutation.isSuccess}
+        loading={mutation.isLoading}
+        size="small"
+      >
+        <Message
+          success
+          header="Form Completed"
+          content="The Form was Successfully Submitted"
+        />
+        <Message error header="Action Forbidden" content={apiError} />
+
+        <Header as="h5">Name</Header>
+        <Form.Input
+          placeholder={'Name'}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        />
+
+        <Header as="h5">Description</Header>
+        <Form.Input
+          placeholder={'Description'}
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+        />
+
+        <Header as="h5">Total Cost</Header>
+        <Form.Input
+          placeholder={'TotalCost'}
+          value={totalCost}
+          onChange={(e) => {
+            +e.target.value ? setTotalCost(+e.target.value) : setTotalCost(0);
+          }}
+        />
+        <Divider />
+        <Button size="large">Submit</Button>
+      </Form>
     </>
   );
 };
 
-export default ProjectForm;
+export default NewProjectForm;

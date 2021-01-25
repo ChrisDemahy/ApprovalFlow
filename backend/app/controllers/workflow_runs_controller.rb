@@ -49,6 +49,11 @@ class WorkflowRunsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def workflow_run_params
-    params.require(:workflow_run).permit(:name, :description)
+    params.require(:workflow_run).permit(
+      :name,
+      :description,
+      :workflow_template_id,
+      :total_cost
+    )
   end
 end

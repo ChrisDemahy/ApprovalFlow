@@ -38,22 +38,25 @@ export const postProject = (project: {
 };
 
 export const putProject = (project: {
+  id: number;
   name: string;
   total_cost: number;
   description: string;
 }) => {
-  return client().put('http://localhost:3000/api/projects', {
+  return client().put(`http://localhost:3000/api/projects/${project.id}`, {
     project: project,
   });
 };
 
 export const submitProject = (project: {
+  id: number;
   name: string;
   total_cost: number;
   description: string;
+  status: string;
   workflow_template_id: 1;
 }) => {
-  return client().put('http://localhost:3000/api/projects', {
+  return client().put(`http://localhost:3000/api/projects/${project.id}`, {
     project: project,
   });
 };
@@ -69,7 +72,7 @@ export const getAllProjects = async () => {
 };
 
 export const getWorkflowRun = (id: number) => async () => {
-  const { data } = await client().get(`/workflow_run/${id}`);
+  const { data } = await client().get(`/workflow_runs/${id}`);
   return data;
 };
 

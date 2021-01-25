@@ -4,8 +4,6 @@ json.extract! project,
               :name,
               :status,
               :total_cost,
-              :workflow_run,
-              :workflow_template,
               :description,
               :created_at,
               :updated_at

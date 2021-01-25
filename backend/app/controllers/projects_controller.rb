@@ -10,7 +10,13 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   # GET /projects/1.json
-  def show; end
+  def show
+    if @project.status == 'pending_workflow'
+      render nothing: true, status: :service_unavailable
+    else
+      render :show, status: :ok, location: @project
+    end
+  end
 
   # POST /projects
   # POST /projects.json
@@ -28,6 +34,9 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
+    if project_params[:status] == 'pending_workflow'
+      CreateWorkflowRunJob.perform_later @project
+    end
     if @project.update(project_params)
       render :show, status: :ok, location: @project
     else
@@ -46,10 +55,19 @@ class ProjectsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find(params[:id])
+    @workflow_run = @project.workflow_run
+    @workflow_template = @project.workflow_template
   end
 
   # Only allow a list of trusted parameters through.
   def project_params
-    params.require(:project).permit(:description, :total_cost, :name)
+    # byebug
+    params.require(:project).permit(
+      :description,
+      :total_cost,
+      :name,
+      :description,
+      :status
+    )
   end
 end

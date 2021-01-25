@@ -12,7 +12,7 @@ const ProjectPage = () => {
   return (
     <>
       <ProjectDetail />
-      <StepTable />
+      {/* <StepTable /> */}
     </>
   );
 };
