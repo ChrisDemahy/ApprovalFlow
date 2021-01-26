@@ -27,6 +27,52 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
       return '';
     }
   };
+  // Render icon based on status
+  const renderIcons = (step: Step) => {
+    if (step.status === 'created') {
+      return (
+        <FontAwesomeIcon
+          style={{
+            height: '20px',
+            width: '20px',
+          }}
+          icon={faHourglassEnd}
+        />
+      );
+    } else if (step.status === 'pending') {
+      return (
+        <FontAwesomeIcon
+          style={{
+            height: '20px',
+            width: '20px',
+          }}
+          icon={faExclamationTriangle}
+        />
+      );
+    } else if (step.status === 'approved') {
+      return (
+        <FontAwesomeIcon
+          style={{
+            height: '20px',
+            width: '20px',
+          }}
+          icon={faCheck}
+        />
+      );
+    } else if (step.status === 'denied') {
+      return (
+        <FontAwesomeIcon
+          style={{
+            height: '20px',
+            width: '20px',
+          }}
+          icon={faTimes}
+        />
+      );
+    } else {
+      return '';
+    }
+  };
 
   const formatDate = (date_string: string) => {
     const d = Date.parse(date_string);
@@ -58,44 +104,7 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
               warning={step.status == 'pending'}
             >
               {/* Icons to show status of the project */}
-              <Table.Cell collapsing>
-                {step.status === 'created' && (
-                  <FontAwesomeIcon
-                    style={{
-                      height: '20px',
-                      width: '20px',
-                    }}
-                    icon={faHourglassEnd}
-                  />
-                )}
-                {step.status === 'pending' && (
-                  <FontAwesomeIcon
-                    style={{
-                      height: '20px',
-                      width: '20px',
-                    }}
-                    icon={faExclamationTriangle}
-                  />
-                )}
-                {step.status === 'approved' && (
-                  <FontAwesomeIcon
-                    style={{
-                      height: '20px',
-                      width: '20px',
-                    }}
-                    icon={faCheck}
-                  />
-                )}
-                {step.status === 'denied' && (
-                  <FontAwesomeIcon
-                    style={{
-                      height: '20px',
-                      width: '20px',
-                    }}
-                    icon={faTimes}
-                  />
-                )}
-              </Table.Cell>
+              <Table.Cell collapsing>{renderIcons(step)}</Table.Cell>
               <Table.Cell>{statusMessage(step.status)}</Table.Cell>
               <Table.Cell>{step.name}</Table.Cell>
 

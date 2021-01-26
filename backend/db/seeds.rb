@@ -27,10 +27,10 @@ organization = Organization.create name: 'Royal Carribean'
 # Create the final user in the approval chain
 @super_user =
   User.create!(
-    name: Faker::Name.name,
+    name: 'Chris Demahy',
     password: 'abc123',
     password_confirmation: 'abc123',
-    email: Faker::Internet.email,
+    email: 'demahyc@gmail.com',
     organization_id: organization.id,
     DOA: 500_000
   )

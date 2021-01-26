@@ -1,6 +1,6 @@
 class Authorization < ApplicationRecord
   belongs_to :user
-  belongs_to :step
+  belongs_to :step,
   has_many :notifications
 
   validates :status,
