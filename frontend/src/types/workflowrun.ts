@@ -16,3 +16,5 @@ export interface Workflowrun {
 export interface WorkflowRunData {
   workflow_run: Workflowrun;
 }
+
+export default Workflowrun;

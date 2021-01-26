@@ -12,6 +12,7 @@ import {
   faExclamationTriangle,
   faCheck,
   faTimes,
+  faHourglassEnd,
 } from '@fortawesome/free-solid-svg-icons';
 
 const StepTable = ({ steps }: { steps: Step[] }) => {
@@ -22,6 +23,8 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
       return 'Denied';
     } else if (status == 'pending') {
       return 'Action Required';
+    } else if (status == 'created') {
+      return '';
     }
   };
 
@@ -56,6 +59,15 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
             >
               {/* Icons to show status of the project */}
               <Table.Cell collapsing>
+                {step.status === 'created' && (
+                  <FontAwesomeIcon
+                    style={{
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    icon={faHourglassEnd}
+                  />
+                )}
                 {step.status === 'pending' && (
                   <FontAwesomeIcon
                     style={{

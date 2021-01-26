@@ -1,4 +1,4 @@
-json.extract! @workflow_run,
+json.extract! workflow_run,
               :id,
               :name,
               :description,

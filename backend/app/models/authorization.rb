@@ -1,6 +1,7 @@
 class Authorization < ApplicationRecord
   belongs_to :user
   belongs_to :step
+  has_many :notifications
 
   validates :status,
             inclusion: {
@@ -21,6 +22,6 @@ class Authorization < ApplicationRecord
   end
 
   def update_step
-    self.step.status = self.status if self.status != 'pending'
+    self.step.update status: self.status if self.status != 'pending'
   end
 end

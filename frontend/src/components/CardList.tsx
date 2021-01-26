@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'semantic-ui-react';
 
-interface cardItem {
+export interface cardItem {
   header: string;
   description?: string;
   meta?: string;

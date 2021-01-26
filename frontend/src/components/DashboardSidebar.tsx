@@ -1,8 +1,8 @@
 import React, { Component, useState } from 'react';
 import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 const DashboardSidebar = () => {
   const [activeItem, setActiveItem] = useState('');
@@ -35,6 +35,17 @@ const DashboardSidebar = () => {
         Projects
       </Menu.Item>
       <Menu.Item
+        name="Workflows"
+        active={activeItem === 'Workflows'}
+        onClick={(e, { name }) => {
+          name && setActiveItem(name);
+        }}
+        as={Link}
+        to="/workflow_runs"
+      >
+        Workflows
+      </Menu.Item>
+      <Menu.Item
         name="notifications"
         active={activeItem === 'notifications'}
         onClick={(e, { name }) => {
@@ -48,14 +59,15 @@ const DashboardSidebar = () => {
 
       <Dropdown item text="More">
         <Dropdown.Menu>
-          <Dropdown.Item icon="edit" text="Edit Profile" >
-          <FontAwesomeIcon
-                                                style={{
-                                                    height: "20px",
-                                                    width: "20px",
-                                                }}
-                                                icon={faEnvelope}
-                                            /> Edit Profile
+          <Dropdown.Item icon="edit" text="Edit Profile">
+            <FontAwesomeIcon
+              style={{
+                height: '20px',
+                width: '20px',
+              }}
+              icon={faEnvelope}
+            />{' '}
+            Edit Profile
           </Dropdown.Item>
           <Dropdown.Item icon="globe" text="Choose Language" />
           <Dropdown.Item icon="settings" text="Account Settings" />

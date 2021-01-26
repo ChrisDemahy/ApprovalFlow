@@ -18,11 +18,6 @@ export const loginUser = (user: { email: string; password: string }) => {
   });
 };
 
-export const getCurrentUser = async () => {
-  const { data } = await client().get('/user');
-  return data;
-};
-
 export const postUser = (user: { email: string }) => {
   return client().put('/user', {
     user: user,
@@ -36,6 +31,15 @@ export const postProject = (project: {
 }) => {
   return client().post('/projects', {
     project: project,
+  });
+};
+
+export const putAuthorization = (authorization: {
+  id: number;
+  auth_status: string;
+}) => {
+  return client().put(`/authorizations/${authorization.id}`, {
+    authorization: { status: authorization.auth_status },
   });
 };
 
@@ -70,8 +74,22 @@ export const getProject = (id: number) => async () => {
   return data;
 };
 
+export const getCurrentUser = async () => {
+  const { data } = await client().get('/user');
+  return data;
+};
+
 export const getAllProjects = async () => {
   const { data } = await client().get('/projects');
+  return data;
+};
+
+export const getAllNotifications = async () => {
+  const { data } = await client().get('/notifications');
+  return data;
+};
+export const getAllWorkflowRuns = async () => {
+  const { data } = await client().get('/workflow_runs/');
   return data;
 };
 
