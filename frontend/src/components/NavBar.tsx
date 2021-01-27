@@ -21,8 +21,7 @@ const NavBar = () => {
         </Menu.Item>
         <Menu.Item as="a">Home</Menu.Item>
 
-        <Dropdown item simple>
-          <Dropdown.Text></Dropdown.Text>
+        <Dropdown item simple text="dropdown">
           <Dropdown.Menu>
             <Dropdown.Item>List Item</Dropdown.Item>
             <Dropdown.Item>List Item</Dropdown.Item>
