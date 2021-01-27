@@ -33,6 +33,7 @@ class WorkflowRun < ApplicationRecord
 
     # Set the project
     project = self.project
+
     # Set project submitter
     @project_submitter = project.user
 
@@ -108,8 +109,6 @@ class WorkflowRun < ApplicationRecord
         user_id: supervisor.id,
         workflow_run_id: self.id
       )
-    byebug
-    puts ''
     return temp
     # workflow_run: workflow_run
   end

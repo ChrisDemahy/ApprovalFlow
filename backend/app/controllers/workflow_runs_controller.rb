@@ -48,6 +48,7 @@ class WorkflowRunsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_workflow_run
     @workflow_run = WorkflowRun.find(params[:id])
+
     @steps = @workflow_run.steps.sort_by(&:id)
   end
 

@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :subordinates, class_name: 'User', foreign_key: 'supervisor_id'
   belongs_to :supervisor, class_name: 'User', optional: true
 
+  has_many :steps
+
   # Includedevise modules.
   devise :database_authenticatable,
          :registerable,

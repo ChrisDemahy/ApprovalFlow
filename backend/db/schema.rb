@@ -66,11 +66,9 @@ ActiveRecord::Schema.define(version: 2021_01_22_122804) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "authorization_id"
     t.bigint "workflow_run_id"
     t.bigint "next_step_id"
     t.bigint "user_id", null: false
-    t.index ["authorization_id"], name: "index_steps_on_authorization_id"
     t.index ["next_step_id"], name: "index_steps_on_next_step_id"
     t.index ["user_id"], name: "index_steps_on_user_id"
     t.index ["workflow_run_id"], name: "index_steps_on_workflow_run_id"
@@ -137,7 +135,6 @@ ActiveRecord::Schema.define(version: 2021_01_22_122804) do
   add_foreign_key "projects", "users"
   add_foreign_key "projects", "workflow_runs"
   add_foreign_key "projects", "workflow_templates"
-  add_foreign_key "steps", "authorizations"
   add_foreign_key "steps", "users"
   add_foreign_key "steps", "workflow_runs"
   add_foreign_key "users", "organizations"

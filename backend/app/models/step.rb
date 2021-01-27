@@ -1,7 +1,7 @@
 class Step < ApplicationRecord
   belongs_to :workflow_run, optional: true
-  has_many :authorizations
-  has_many :users, through: :authorizations
+  has_one :authorization
+  belongs_to :user #, through: :authorization
 
   has_one :previous_step, class_name: 'Step', foreign_key: 'next_step_id'
   belongs_to :next_step, class_name: 'Step', optional: true
@@ -17,8 +17,7 @@ class Step < ApplicationRecord
   private
 
   def update_on_save
-    if self.status == 'pending' && self.user_id? &&
-         self.authorizations.count == 0
+    if self.status == 'pending' && self.user_id? && !self.authorization
       auth =
         Authorization.create!(
           step: self, status: 'pending', user_id: self.user_id
