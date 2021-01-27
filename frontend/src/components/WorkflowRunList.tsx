@@ -3,6 +3,7 @@ import { List, Image, Table, Header } from 'semantic-ui-react';
 import type { Workflowrun } from 'src/types/workflowrun';
 
 const WorkflowRunList = ({ workflows }: { workflows: Workflowrun[] }) => {
+  // Helper Methods
   const formatDate = (date_string: string) => {
     const d = Date.parse(date_string);
     const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);

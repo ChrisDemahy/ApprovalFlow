@@ -1,3 +1,5 @@
+import type Step from './step';
+
 export interface Authorization {
   id: number;
   user_id: number;
@@ -6,6 +8,7 @@ export interface Authorization {
   description?: any;
   created_at: string;
   updated_at: string;
+  step?: Step;
 }
 export default Authorization;
 

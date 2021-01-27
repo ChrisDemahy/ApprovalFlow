@@ -88,6 +88,12 @@ export const getAllNotifications = async () => {
   const { data } = await client().get('/notifications');
   return data;
 };
+
+export const getAllAuthorizations = async () => {
+  const { data } = await client().get('/authorizations');
+  return data;
+};
+
 export const getAllWorkflowRuns = async () => {
   const { data } = await client().get('/workflow_runs/');
   return data;

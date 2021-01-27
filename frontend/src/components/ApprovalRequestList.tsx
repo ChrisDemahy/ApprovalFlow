@@ -10,10 +10,9 @@ import {
 } from 'react-query';
 import type User from '../types/user';
 import type { AxiosError } from 'axios';
-import type NotificationAlert from '../types/notification';
-import type { ApprovalRequest } from '../types/notification';
+
 import {
-  getAllNotifications,
+  getAllAuthorizations,
   getProject,
   putAuthorization,
 } from '../shared/api';
@@ -21,7 +20,7 @@ import CardList, { cardItem } from './CardList';
 import type Authorization from '../types/authorization';
 import type { AuthorizationData } from '../types/authorization';
 
-const ApprovalRequestList = () => {
+const AuthorizationList = () => {
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(putAuthorization, {
     onSuccess: ({ data }: { data: AuthorizationData }) => {
@@ -53,11 +52,12 @@ const ApprovalRequestList = () => {
 
   const queryClient = useQueryClient();
   const id = '5';
-  type ApprovalRequests = ApprovalRequest[];
-  const { error, data, status, isFetching } = useQuery<ApprovalRequests, Error>(
-    ['notifications'],
-    getAllNotifications,
+  type Authorizations = Authorization[];
+  const { error, data, status, isFetching } = useQuery<Authorizations, Error>(
+    ['authorizations'],
+    getAllAuthorizations,
   );
+  console.log(data);
   return (
     <>
       {data ? (
@@ -65,11 +65,11 @@ const ApprovalRequestList = () => {
           <Header as="h3" content="Notification" />
           <CardList
             items={data.map(
-              (alert: ApprovalRequest): cardItem => {
+              (auth: Authorization): cardItem => {
                 const new_card = {
-                  header: alert.name,
-                  description: alert.content,
-                  meta: `${alert.id}`,
+                  header: auth.step ? auth.step.name : '',
+                  description: auth.description ? auth.description : '',
+                  meta: `${auth.status}`,
                   extra: (
                     <div className="ui two buttons">
                       <Button
@@ -79,7 +79,7 @@ const ApprovalRequestList = () => {
                           e.preventDefault();
 
                           const authorization = {
-                            id: alert.authorization_id,
+                            id: auth.id,
                             auth_status: 'approved',
                           };
                           mutation.mutate(authorization);
@@ -94,7 +94,7 @@ const ApprovalRequestList = () => {
                           e.preventDefault();
 
                           const authorization = {
-                            id: alert.authorization_id,
+                            id: auth.id,
                             auth_status: 'denied',
                           };
                           mutation.mutate(authorization);
@@ -117,4 +117,4 @@ const ApprovalRequestList = () => {
   );
 };
 
-export default ApprovalRequestList;
+export default AuthorizationList;

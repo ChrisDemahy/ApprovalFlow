@@ -104,7 +104,7 @@ class WorkflowRun < ApplicationRecord
   def create_step(supervisor, project, status)
     temp =
       Step.create!(
-        name: "#{supervisor.name}'s Approval Of #{project.name}",
+        name: "#{project.name}",
         status: status,
         user_id: supervisor.id,
         workflow_run_id: self.id

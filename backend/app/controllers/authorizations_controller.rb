@@ -4,7 +4,9 @@ class AuthorizationsController < ApplicationController
   # GET /authorizations
   # GET /authorizations.json
   def index
-    @authorizations = Authorization.all
+    @authorizations = Authorization.includes(:step)
+    # byebug
+    # puts ''
   end
 
   # GET /authorizations/1
