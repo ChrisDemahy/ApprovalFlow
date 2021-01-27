@@ -17,7 +17,7 @@ import { postWorkflowRun } from '../shared/api';
 import { useParams, useHistory } from 'react-router';
 
 import type { ProjectData } from '../types/project';
-import type { WorkflowRunData } from 'src/types/workflowrun';
+import type { WorkflowRunData } from '../types/workflowrun';
 const ProjectForm = ({ project }: ProjectData) => {
   // Setup state for the form
   const { id }: { id: string } = useParams();

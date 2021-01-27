@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, Header } from 'semantic-ui-react';
-import type { ProjectData } from 'src/types/project';
+import type { ProjectData } from '../types/project';
 
 const ProjectDetail = ({ project }: ProjectData) => {
   return (

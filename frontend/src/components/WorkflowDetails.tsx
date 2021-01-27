@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Divider, Header } from 'semantic-ui-react';
 
-import type { WorkflowRunData } from 'src/types/workflowrun';
+import type { WorkflowRunData } from '../types/workflowrun';
 
 const WorkflowDetails = ({ workflow_run }: WorkflowRunData) => {
   return (

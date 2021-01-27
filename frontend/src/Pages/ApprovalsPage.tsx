@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthorizationList from 'src/components/AuthorizationList';
+import AuthorizationList from '../components/AuthorizationList';
 
 const ApprovalsPage = () => {
   return <AuthorizationList />;

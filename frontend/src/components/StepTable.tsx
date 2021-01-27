@@ -18,7 +18,7 @@ import {
 import { getProject, getWorkflowRun } from '../shared/api';
 import type { Workflowrun } from '../types/workflowrun';
 import type Step from '../types/step';
-import type Project from 'src/types/project';
+import type Project from '../types/project';
 
 const StepTable = ({ steps }: { steps: Step[] }) => {
   const statusMessage = (status: string) => {

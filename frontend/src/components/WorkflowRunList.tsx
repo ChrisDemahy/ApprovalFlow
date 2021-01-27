@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Image, Table, Header } from 'semantic-ui-react';
-import type { Workflowrun } from 'src/types/workflowrun';
+import type { Workflowrun } from '../types/workflowrun';
 
 const WorkflowRunList = ({ workflows }: { workflows: Workflowrun[] }) => {
   // Helper Methods
