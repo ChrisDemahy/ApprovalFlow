@@ -10,8 +10,9 @@ import ProjectPage from './Pages/ProjectPage';
 import ProjectForm from './Forms/ProjectForm';
 import NewProjectForm from './Forms/NewProjectForm';
 import WorkflowPage from './Pages/WorkflowPage';
-import ApprovalRequestList from './components/ApprovalRequestList';
+import ApprovalRequestList from './components/AuthorizationList';
 import WorkflowList from './components/WorkflowList';
+import ApprovalsPage from './Pages/ApprovalsPage';
 
 interface AppProps {}
 
@@ -43,7 +44,7 @@ function App({}: AppProps) {
               <Route exact path="/workflow_runs/" children={<WorkflowList />} />
               <Route path="/projectForm/:id" children={<ProjectForm />} />
               <Route path="/newProjectForm" children={<NewProjectForm />} />
-              <Route path="/notifications" children={<ApprovalRequestList />} />
+              <Route path="/authorizations" children={<ApprovalsPage />} />
             </Switch>
           </MainContainer>
         </Route>

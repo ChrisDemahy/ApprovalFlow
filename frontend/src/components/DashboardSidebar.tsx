@@ -24,6 +24,17 @@ const DashboardSidebar = () => {
         Home
       </Menu.Item>
       <Menu.Item
+        name="authorizations"
+        active={activeItem === 'authorizations'}
+        onClick={(e, { name }) => {
+          name && setActiveItem(name);
+        }}
+        as={Link}
+        to="/authorizations"
+      >
+        My Approvals
+      </Menu.Item>
+      <Menu.Item
         name="projects"
         active={activeItem === 'projects'}
         onClick={(e, { name }) => {
@@ -44,17 +55,6 @@ const DashboardSidebar = () => {
         to="/workflow_runs"
       >
         Workflows
-      </Menu.Item>
-      <Menu.Item
-        name="notifications"
-        active={activeItem === 'notifications'}
-        onClick={(e, { name }) => {
-          name && setActiveItem(name);
-        }}
-        as={Link}
-        to="/notifications"
-      >
-        Notifications
       </Menu.Item>
 
       <Dropdown item text="More">
