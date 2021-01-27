@@ -11,7 +11,7 @@ export interface Step {
   next_step_id?: number;
   workflow_run_id?: number;
   user: User;
-  authorizations?: Authorization[];
+  authorization?: Authorization;
 }
 
 export interface StepData {

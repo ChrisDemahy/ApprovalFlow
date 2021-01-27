@@ -1,12 +1,11 @@
 import React from 'react';
+// React Query
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+// Semantic Ui
 import { Button, Checkbox, Icon, Loader, Table } from 'semantic-ui-react';
-import { getProject, getWorkflowRun } from '../shared/api';
-import type { Workflowrun } from '../types/workflowrun';
-import type Step from '../types/step';
-import type Project from 'src/types/project';
 
+// Font Awesome Imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationTriangle,
@@ -14,6 +13,12 @@ import {
   faTimes,
   faHourglassEnd,
 } from '@fortawesome/free-solid-svg-icons';
+
+// Api module for axios functions and some type imports
+import { getProject, getWorkflowRun } from '../shared/api';
+import type { Workflowrun } from '../types/workflowrun';
+import type Step from '../types/step';
+import type Project from 'src/types/project';
 
 const StepTable = ({ steps }: { steps: Step[] }) => {
   const statusMessage = (status: string) => {
@@ -88,8 +93,9 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
-            <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>User Name</Table.HeaderCell>
+            <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>User DOA</Table.HeaderCell>
             <Table.HeaderCell>Assignment Date</Table.HeaderCell>
             <Table.HeaderCell>Date Finished</Table.HeaderCell>
           </Table.Row>
@@ -105,44 +111,34 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
             >
               {/* Icons to show status of the project */}
               <Table.Cell collapsing>{renderIcons(step)}</Table.Cell>
+              <Table.Cell>{step.user.name}</Table.Cell>
               <Table.Cell>{statusMessage(step.status)}</Table.Cell>
-              <Table.Cell>{step.name}</Table.Cell>
+              <Table.Cell>{step.user.DOA}</Table.Cell>
 
-              {!!step.authorizations &&
-              !!step.authorizations[step.authorizations.length - 1] ? (
+              {step.authorization ? (
                 <>
                   <Table.Cell>
                     {/* If step has an authorization it has been assigned for approval */}
-                    {formatDate(
-                      step.authorizations[step.authorizations.length - 1]
-                        .created_at,
-                    )}
+                    {formatDate(step.authorization.created_at)}
                   </Table.Cell>
+
                   <Table.Cell>
                     {/* If the status is approved/denied show the date finished */}
                     {(step.status === 'approved' || step.status === 'denied') &&
-                      formatDate(
-                        step.authorizations[step.authorizations.length - 1]
-                          .created_at,
-                      )}
+                      formatDate(step.authorization.updated_at)}
                   </Table.Cell>
                 </>
               ) : (
                 <>
-                  <Table.Cell>
-                    {/* If step has no authorization, it has not been assigned */}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {/* If the status is not approved/denied, the step can't have
-                     a date finished */}
-                  </Table.Cell>
+                  {' '}
+                  <Table.Cell /> <Table.Cell />{' '}
                 </>
               )}
             </Table.Row>
           ))}
         </Table.Body>
 
-        <Table.Footer fullWidth>
+        {/* <Table.Footer fullWidth>
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell colSpan="4">
@@ -161,7 +157,7 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
               </Button>
             </Table.HeaderCell>
           </Table.Row>
-        </Table.Footer>
+        </Table.Footer> */}
       </Table>
     </>
   );
