@@ -31,6 +31,7 @@ import StepTable from '../components/StepTable';
 import ProjectDetail from '../components/ProjectDetails';
 import WorkflowRunList from '../components/WorkflowRunList';
 import ProjectSubmissionForm from '../Forms/ProjectSubmissionForm';
+import TabContainer, { panes } from '../containers/TabContainer';
 
 const ProjectPage = () => {
   const { id }: { id: string } = useParams();
@@ -47,17 +48,10 @@ const ProjectPage = () => {
     getProject(+id),
   );
 
-  // Setup React Query for fetching and posting data
-  const queryClient = useQueryClient();
-
-  // User type is returned under a user key in the response from the backend
-  interface userData {
-    user: User;
-  }
-
-  const renderTabs = (data: ProjectData) => {
-    // One pane for each tab, rendering it's components
-    const panes = [
+  if (!data) {
+    return <Loader />;
+  } else {
+    const panes: panes = [
       {
         menuItem: 'Details',
         render: () => (
@@ -88,28 +82,19 @@ const ProjectPage = () => {
       },
     ];
 
-    return <Tab panes={panes} />;
-  };
-
-  // Check data isn't undefined
-  return !!data ? (
-    <>
-      <Header
-        as="h2"
-        content={`Project ${data.project.name}`}
-        subheader={[
-          <span key="project-page-subheader-1">
-            Manage details about your project and see previous workflows. When
-            your ready
-          </span>,
-          <br key="project-page-subheader-2" />,
-          <span key="project-page-subheader-3">submit it for approval.</span>,
-        ]}
-      />
-      {renderTabs(data)}
-    </>
-  ) : (
-    <Loader active />
-  );
+    return (
+      <>
+        <TabContainer
+          panes={panes}
+          head={{
+            content: `Project ${data.project.name}`,
+            subHeader1:
+              'Manage details about your project and see previous workflows.',
+            subHeader2: 'When your ready submit it for approval.',
+          }}
+        />
+      </>
+    );
+  }
 };
 export default ProjectPage;

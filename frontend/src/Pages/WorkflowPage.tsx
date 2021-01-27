@@ -33,13 +33,11 @@ import WorkflowRunList from '../components/WorkflowRunList';
 import ProjectSubmissionForm from '../Forms/ProjectSubmissionForm';
 import type { WorkflowRunData } from '../types/workflowrun';
 import WorkflowDetails from '../components/WorkflowDetails';
+import TabContainer, { panes } from '../containers/TabContainer';
 
 const WorkflowPage = () => {
   // WorkflowRun ID
   const { id }: { id: string } = useParams();
-  const [apiError, setApiError] = useState(['']);
-
-  let history = useHistory();
 
   // Query to fetch the current project data.
   // TODO Refetch data on options:
@@ -50,14 +48,10 @@ const WorkflowPage = () => {
     getWorkflowRun(+id),
   );
 
-  // Setup React Query for fetching and posting data
-  const queryClient = useQueryClient();
-
-  // project type is returned under a project key in the response from the backend
-
-  const renderTabs = (data: WorkflowRunData) => {
-    // One pane for each tab, rendering it's components
-    const panes = [
+  if (!data) {
+    return <Loader />;
+  } else {
+    const panes: panes = [
       {
         menuItem: 'Details',
         render: () => (
@@ -88,28 +82,19 @@ const WorkflowPage = () => {
       },
     ];
 
-    return <Tab panes={panes} />;
-  };
-
-  // Check data isn't undefined
-  return !!data ? (
-    <>
-      <Header
-        as="h2"
-        content={`Project ${data.workflow_run.name}`}
-        subheader={[
-          <span key="project-page-subheader-1">
-            Manage details about your project and see previous workflows. When
-            your ready
-          </span>,
-          <br key="project-page-subheader-2" />,
-          <span key="project-page-subheader-3">submit it for approval.</span>,
-        ]}
-      />
-      {renderTabs(data)}
-    </>
-  ) : (
-    <Loader active />
-  );
+    return (
+      <>
+        <TabContainer
+          panes={panes}
+          head={{
+            content: `Workflow ${data.workflow_run.name}`,
+            subHeader1:
+              'Manage details about this workflow and see who is up for approval',
+          }}
+        />
+      </>
+    );
+  }
 };
+
 export default WorkflowPage;
