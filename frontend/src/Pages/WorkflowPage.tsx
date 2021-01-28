@@ -83,16 +83,14 @@ const WorkflowPage = () => {
     ];
 
     return (
-      <>
-        <TabContainer
-          panes={panes}
-          head={{
-            content: `Workflow ${data.workflow_run.name}`,
-            subHeader1:
-              'Manage details about this workflow and see who is up for approval',
-          }}
-        />
-      </>
+      <TabContainer
+        panes={panes}
+        head={{
+          content: `Workflow ${data.workflow_run.name}`,
+          subHeader1:
+            'Manage details about this workflow and see who is up for approval',
+        }}
+      />
     );
   }
 };
