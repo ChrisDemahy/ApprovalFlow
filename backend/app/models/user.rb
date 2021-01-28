@@ -30,9 +30,11 @@ class User < ApplicationRecord
   after_save :ensure_supervisor_id
 
   def ensure_supervisor_id
-    if !self.supervisor_id?
+    if !self.supervisor_id? && self.doa == 500_000
       self.supervisor_id = self.id
       self.save!
+    elsif !self.supervisor_id?
+      self.supervisor_id = User.find_by(name: 'Mike Smith')
     end
   end
   def generate_jwt

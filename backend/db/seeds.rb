@@ -59,7 +59,7 @@ doa = 76_500
     )
   @users << @new_user
   doa = doa + 1000
-
+  @new_user.supervisor = @super_user
   @previous_user.supervisor = @new_user
   @previous_user.save
   @previous_user = @new_user

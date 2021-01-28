@@ -40,6 +40,8 @@ function App({}: AppProps) {
             {/* <IndexRoute exact component={AsyncDashboard} /> */}
             <Route path="/accountForm" children={<UserProfileForm />} />
             <Route path="/account" children={<UserProfile />} />
+            <Route path="/projectForm" children={<NewProjectForm />} />
+
             <Route exact path="/projects" children={<ProjectListPage />} />
             <Route exact path="/projects/:id" children={<ProjectPage />} />
             <Route

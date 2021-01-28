@@ -45,6 +45,7 @@ class WorkflowRun < ApplicationRecord
     first_loop = false
     # While loop to find the supervisor that meets the project total_cost
     go_now = false
+    byebug
     while !go_now
       ###### First Step ######
       go_now = @supervisor.doa > project.total_cost
@@ -113,6 +114,8 @@ class WorkflowRun < ApplicationRecord
   private
 
   def create_step(supervisor, project, status)
+    byebug
+    puts ''
     temp =
       Step.create!(
         name: "#{project.name}",
