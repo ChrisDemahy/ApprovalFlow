@@ -5,7 +5,7 @@ export interface User {
   name: string;
   created_at: string;
   updated_at: string;
-  organization_id?: number;
+  organization_id: number;
   DOA?: number;
   supervisor_id: number;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardList, { itemArray } from '../components/CardList';
-import { getAllProjects, getCurrentUser, getOrganization } from '../shared/api';
+import { getAllProjects } from '../shared/api';
 import {
   useQuery,
   useMutation,
@@ -25,53 +25,55 @@ import type Project from '../types/project';
 import ApprovalList from '../components/ApprovalList';
 import ProjectList from '../components/ProjectList';
 import TabContainer, { panes } from '../containers/TabContainer';
-import type { Organization } from 'src/types/organization';
-import OrganizationList from 'src/components/OrganizationList';
-import type User from 'src/types/user';
 
-const OrganizationPage = () => {
+const ProjectListPage = () => {
   // React Query
 
   // Projects are returned under and array
-  type OrganizationData = Organization;
+  type projectData = Project[];
 
   // Query to fetch the current projects data.
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  interface userData {
-    user: User;
-  }
-  const userQuery = useQuery<userData, Error>('currentUser', getCurrentUser);
-  const orgId = userQuery.data?.user.organization_id;
-  const orgQuery = useQuery<OrganizationData, Error>(
-    ['organization', orgId ? orgId : 0],
-    getOrganization(orgId ? orgId : 0),
-    { enabled: !!userQuery.data },
+  const { error, data, status, isFetching } = useQuery<projectData, Error>(
+    'projects',
+    getAllProjects,
   );
-  const orgData = orgQuery.data;
 
-  if (!orgData) {
+  if (!data) {
     return <Loader />;
   } else {
+    const pendingList = data.filter(
+      (project) =>
+        project.status === 'pending_approval' || project.status === 'created',
+    );
+    const finishedList = data.filter(
+      (project) =>
+        project.status !== 'pending_approval' && project.status !== 'created',
+    );
     const panes: panes = [
       {
-        menuItem: <Menu.Item key="active">Details</Menu.Item>,
+        menuItem: (
+          <Menu.Item key="active">
+            Active<Label>{pendingList.length}</Label>
+          </Menu.Item>
+        ),
         render: () => (
           <Tab.Pane>
-            <div />
+            <ProjectList data={pendingList} />
           </Tab.Pane>
         ),
       },
       {
         menuItem: (
           <Menu.Item key="finished">
-            Finished<Label>{orgData.users.length}</Label>
+            Finished<Label>{finishedList.length}</Label>
           </Menu.Item>
         ),
         render: () => (
           <Tab.Pane>
-            <OrganizationList data={orgData.users} />
+            <ProjectList data={finishedList} />
           </Tab.Pane>
         ),
       },
@@ -88,4 +90,4 @@ const OrganizationPage = () => {
   }
 };
 
-export default OrganizationPage;
+export default ProjectListPage;

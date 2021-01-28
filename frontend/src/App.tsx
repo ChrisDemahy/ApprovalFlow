@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoginContainer from './components/LoginContainer';
 import UserProfile from './components/UserProfile';
 import MainContainer from './containers/MainContainer';
-import ProjectListContainer from './containers/ProjectListContainer';
+import ProjectListPage from './Pages/ProjectListPage';
 import UserProfileForm from './Forms/UserProfileForm';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
@@ -30,11 +30,7 @@ function App({}: AppProps) {
             <Switch>
               <Route path="/accountForm" children={<UserProfileForm />} />
               <Route path="/account" children={<UserProfile />} />
-              <Route
-                exact
-                path="/projects"
-                children={<ProjectListContainer />}
-              />
+              <Route exact path="/projects" children={<ProjectListPage />} />
               <Route exact path="/projects/:id" children={<ProjectPage />} />
               <Route
                 exact

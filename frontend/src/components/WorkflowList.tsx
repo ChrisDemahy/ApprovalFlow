@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader, List, Image, Table, Header } from 'semantic-ui-react';
+import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 import type { ProjectData } from '../types/project';
 import {
   useQuery,
@@ -42,29 +42,39 @@ const WorkflowList = () => {
     return <Loader />;
   } else {
     return (
-      <Table basic="very">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Date Started</Table.HeaderCell>
-            <Table.HeaderCell>Date Last Updated</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {data.map((workflow_run) => (
-            <Table.Row key={workflow_run.id}>
-              <Table.Cell>
-                <Header as="h4">{workflow_run.name}</Header>
-              </Table.Cell>
-              <Table.Cell>{workflow_run.status}</Table.Cell>
-              <Table.Cell>{formatDate(workflow_run.created_at)}</Table.Cell>
-              <Table.Cell>{formatDate(workflow_run.updated_at)}</Table.Cell>
+      <>
+        <Header
+          as="h2"
+          content={'Workflows'}
+          subheader={['See all the workflows that are currently active.']}
+        />
+        <Table basic="very">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Date Started</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+          </Table.Header>
+
+          <Table.Body>
+            {data.map((workflow_run) => (
+              <Table.Row key={workflow_run.id}>
+                <Table.Cell>
+                  <Header as="h4">{workflow_run.name}</Header>
+                </Table.Cell>
+                <Table.Cell>{workflow_run.status}</Table.Cell>
+                <Table.Cell>{formatDate(workflow_run.created_at)}</Table.Cell>
+                {/* <Table.Cell>{formatDate(workflow_run.updated_at)}</Table.Cell> */}
+                <Table.Cell>
+                  <Button basic>Open</Button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </>
     );
   }
 };

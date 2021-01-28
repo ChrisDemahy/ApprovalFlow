@@ -48,7 +48,7 @@ const ApprovalList = ({
               <Table.Cell>{auth.status}</Table.Cell>
               <Table.Cell>{formatDate(auth.created_at)}</Table.Cell>
               <Table.Cell>
-                <Button basic>Approve</Button>
+                <Button basic>Approve / Deny</Button>
               </Table.Cell>
             </Table.Row>
           ) : (

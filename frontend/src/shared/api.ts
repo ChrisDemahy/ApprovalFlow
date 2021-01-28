@@ -73,6 +73,10 @@ export const getProject = (id: number) => async () => {
   const { data } = await client().get(`/projects/${id}`);
   return data;
 };
+export const getOrganization = (id: number) => async () => {
+  const { data } = await client().get(`/organizations/${id}`);
+  return data;
+};
 
 export const getCurrentUser = async () => {
   const { data } = await client().get('/user');
