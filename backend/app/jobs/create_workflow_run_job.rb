@@ -23,7 +23,7 @@ class CreateWorkflowRunJob < ApplicationJob
                         } Approval Workflow",
                       project_id: project.id
     @steps = []
-    while @supervisor.DOA < project.total_cost
+    while @supervisor.doa < project.total_cost
       # If this is the first step, set it to pending.
       # TODO Add validation to Steps
 

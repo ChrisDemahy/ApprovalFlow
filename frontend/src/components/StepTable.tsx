@@ -113,7 +113,7 @@ const StepTable = ({ steps }: { steps: Step[] }) => {
               <Table.Cell collapsing>{renderIcons(step)}</Table.Cell>
               <Table.Cell>{step.user.name}</Table.Cell>
               <Table.Cell>{statusMessage(step.status)}</Table.Cell>
-              <Table.Cell>{step.user.DOA}</Table.Cell>
+              <Table.Cell>{step.user.doa}</Table.Cell>
 
               {step.authorization ? (
                 <>

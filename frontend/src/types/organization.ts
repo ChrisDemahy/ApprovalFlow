@@ -12,7 +12,7 @@ interface User {
   created_at: string;
   updated_at: string;
   organization_id: number;
-  DOA: number;
+  doa: number;
   supervisor_id: number;
   name: string;
 }

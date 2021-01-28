@@ -46,7 +46,7 @@ class ApplicationController < ActionController::API
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(
       :sign_up,
-      keys: %i[supervisor_id name DOA doa organization_id]
+      keys: %i[supervisor_id name doa doa organization_id]
     )
   end
 end

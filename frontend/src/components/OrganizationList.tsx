@@ -32,7 +32,7 @@ const OrganizationList = ({ data }: { data: User[] }) => {
             <Table.Cell>
               <Header as="h4">{user.name}</Header>
             </Table.Cell>
-            <Table.Cell>{user.DOA ? user.DOA : ''}</Table.Cell>
+            <Table.Cell>{user.doa ? user.doa : ''}</Table.Cell>
             <Table.Cell>{formatDate(user.created_at)}</Table.Cell>
 
             <Table.Cell>

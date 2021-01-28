@@ -35,7 +35,7 @@ export const postUser = (user: {
     email: user.email,
     password: user.password,
     organization_id: user.organization_id,
-    DOA: user.doa,
+    doa: user.doa,
     name: user.name,
   };
   return axios.post(`${BASE_URL}/users/`, {

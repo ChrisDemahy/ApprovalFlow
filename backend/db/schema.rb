@@ -97,7 +97,7 @@ ActiveRecord::Schema.define(version: 2021_01_28_025255) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "organization_id"
-    t.float "DOA"
+    t.float "doa"
     t.bigint "supervisor_id"
     t.string "name"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

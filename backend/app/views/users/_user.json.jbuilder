@@ -3,4 +3,4 @@
 
 # Renders the id and email only of the user
 # Same ase json.extract! :user, :id, :email
-json.call(user, :id, :email, :name, :organization_id, :DOA)
+json.call(user, :id, :email, :name, :organization_id, :doa)

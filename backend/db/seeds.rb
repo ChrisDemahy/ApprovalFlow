@@ -32,7 +32,7 @@ organization = Organization.create name: 'Royal Carribean'
     password_confirmation: 'abc123',
     email: 'demahyc@gmail.com',
     organization_id: organization.id,
-    DOA: 500_000
+    doa: 500_000
   )
 
 @previous_user =
@@ -42,7 +42,7 @@ organization = Organization.create name: 'Royal Carribean'
     password_confirmation: 'abc123',
     email: 'mike@gmail.com',
     organization_id: organization.id,
-    DOA: 12_000
+    doa: 12_000
   )
 @users << @previous_user
 
@@ -55,7 +55,7 @@ doa = 76_500
       password_confirmation: 'abc123',
       email: Faker::Internet.email,
       organization_id: organization.id,
-      DOA: doa
+      doa: doa
     )
   @users << @new_user
   doa = doa + 1000
@@ -88,4 +88,4 @@ project_names = [
   cost = cost * 2
 end
 
-@workflow_template = WorkflowTemplate.create(name: 'DOA Approval')
+@workflow_template = WorkflowTemplate.create(name: 'doa Approval')
