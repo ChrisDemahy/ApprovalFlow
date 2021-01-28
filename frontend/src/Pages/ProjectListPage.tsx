@@ -82,7 +82,7 @@ const ProjectListPage = () => {
       <TabContainer
         panes={panes}
         head={{
-          content: `Proejects`,
+          content: `Projects`,
           subHeader1: 'See outstanding projects',
         }}
       />

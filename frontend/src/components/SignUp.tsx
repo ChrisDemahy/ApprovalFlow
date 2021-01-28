@@ -24,6 +24,10 @@ interface loginProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   organization: number;
   setOrganization: React.Dispatch<React.SetStateAction<number>>;
+  doa: number;
+  setDoa: React.Dispatch<React.SetStateAction<number>>;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SignUp = ({
@@ -34,6 +38,10 @@ const SignUp = ({
   onSubmit,
   organization,
   setOrganization,
+  doa,
+  setDoa,
+  name,
+  setName,
 }: loginProps) => {
   return (
     <>
@@ -62,6 +70,16 @@ const SignUp = ({
                 <Form.Input
                   fluid
                   iconPosition="left"
+                  placeholder="name"
+                  type="name"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+                <Form.Input
+                  fluid
+                  iconPosition="left"
                   placeholder="E-mail address"
                   value={email}
                   onChange={(e) => {
@@ -76,6 +94,16 @@ const SignUp = ({
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                  }}
+                />
+                <Form.Input
+                  fluid
+                  iconPosition="left"
+                  placeholder="doa"
+                  type="doa"
+                  value={doa}
+                  onChange={(e) => {
+                    setDoa(+e.target.value);
                   }}
                 />
                 <OrganizationOptions

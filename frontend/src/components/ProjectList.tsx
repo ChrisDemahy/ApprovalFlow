@@ -18,7 +18,9 @@ const ProjectList = ({ data }: { data: Project[] }) => {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Cost</Table.HeaderCell>
           <Table.HeaderCell>Status</Table.HeaderCell>
+
           <Table.HeaderCell>Date Started</Table.HeaderCell>
           <Table.HeaderCell></Table.HeaderCell>
         </Table.Row>
@@ -35,6 +37,7 @@ const ProjectList = ({ data }: { data: Project[] }) => {
             <Table.Cell>
               <Header as="h4">{project.name}</Header>
             </Table.Cell>
+            <Table.Cell>{project.total_cost}</Table.Cell>
             <Table.Cell>
               {project.status === 'pending_approval'
                 ? 'pending'

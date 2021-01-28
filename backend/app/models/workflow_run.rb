@@ -44,6 +44,7 @@ class WorkflowRun < ApplicationRecord
 
     first_loop = false
     # While loop to find the supervisor that meets the project total_cost
+
     while @supervisor.DOA < project.total_cost
       ###### First Step ######
       if first_loop == false
@@ -83,10 +84,19 @@ class WorkflowRun < ApplicationRecord
 
     # Assign previous_step with this step as it's next step, and set
     #  workfow_run's @last_step to this step
-    @last_step = create_step(@supervisor, project, 'created')
+    if first_loop == true
+      @last_step = create_step(@supervisor, project, 'created')
+    end
+    if first_loop == false
+      @last_step = create_step(@supervisor, project, 'pending')
+    end
+    self.first_step_id = @last_step.id if first_loop == false
+
+    # and current_step
+    self.current_step_id = @last_step.id if first_loop == false
 
     # Set the second-to-last step's next_step
-    @previous_step.update!(next_step_id: @last_step.id)
+    @previous_step.update!(next_step_id: @last_step.id) if @previous_step
 
     # Set the last step on the workflow to the final step.
     self.update!(last_step_id: @last_step.id)

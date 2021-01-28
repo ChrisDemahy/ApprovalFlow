@@ -13,6 +13,7 @@ import {
 // Font Awesome Imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faLock } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 interface loginProps {
   email: string;
@@ -72,7 +73,9 @@ const Login = ({
                   }}
                 />
                 <Button.Group widths="2">
-                  <Button color="green">New Here?</Button>
+                  <Button as={Link} to="/signUp" color="green">
+                    New Here?
+                  </Button>
 
                   <Button color="blue" size="large">
                     Login

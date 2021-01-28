@@ -37,20 +37,20 @@ organization = Organization.create name: 'Royal Carribean'
 
 @previous_user =
   User.create!(
-    name: Faker::Name.name,
+    name: 'Mike Smith',
     password: 'abc123',
     password_confirmation: 'abc123',
-    email: Faker::Internet.email,
+    email: 'mike@gmail.com',
     organization_id: organization.id,
-    DOA: 1000
+    DOA: 12_000
   )
 @users << @previous_user
 
-doa = 2000
-20.times do |i|
+doa = 76_500
+1.times do |i|
   @new_user =
     User.create!(
-      name: Faker::Name.name,
+      name: 'Jack Deaton',
       password: 'abc123',
       password_confirmation: 'abc123',
       email: Faker::Internet.email,
@@ -68,11 +68,16 @@ end
 @previous_user.supervisor_id = @super_user
 
 @projects = []
-cost = 4000
-3.times do
+cost = 17_000
+project_names = [
+  'Oasis of the Seas Rudder Replacement',
+  'Majesty of the Seas Bi-Yearly Mainenace',
+  '2021 Houston Port Rennovation'
+]
+3.times do |index|
   @projects <<
     Project.create!(
-      name: Faker::App.name,
+      name: project_names[index],
       description:
         Faker::Lorem.sentence(
           word_count: 3, supplemental: false, random_words_to_add: 15

@@ -105,7 +105,7 @@ const ProjectForm = ({ project }: ProjectData) => {
         />
         <Header as="h5">Description</Header>
         <Form.Input
-          placeholder={'An Example Description for '}
+          placeholder={'An Example Description'}
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
