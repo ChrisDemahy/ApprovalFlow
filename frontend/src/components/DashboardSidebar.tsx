@@ -24,15 +24,15 @@ const DashboardSidebar = () => {
         Home
       </Menu.Item>
       <Menu.Item
-        name="authorizations"
-        active={activeItem === 'authorizations'}
+        name="approvals"
+        active={activeItem === 'approvals'}
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
         as={Link}
-        to="/authorizations"
+        to="/approvals"
       >
-        My Approvals
+        Approvals
       </Menu.Item>
       <Menu.Item
         name="projects"

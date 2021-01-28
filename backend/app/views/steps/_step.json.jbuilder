@@ -7,6 +7,7 @@ json.extract! step,
               :updated_at,
               :next_step_id,
               :workflow_run_id,
+              :project_id,
               :user,
               :authorization
 # json.url step_url(step, format: :json)

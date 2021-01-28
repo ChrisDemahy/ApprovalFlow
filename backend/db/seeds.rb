@@ -84,8 +84,3 @@ cost = 4000
 end
 
 @workflow_template = WorkflowTemplate.create(name: 'DOA Approval')
-
-# Submit one project for approval
-test_project = @projects.first
-test_project.update! workflow_template_id: @workflow_template.id
-test_project.save

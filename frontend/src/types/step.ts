@@ -12,6 +12,7 @@ export interface Step {
   workflow_run_id?: number;
   user: User;
   authorization?: Authorization;
+  project_id: number;
 }
 
 export interface StepData {

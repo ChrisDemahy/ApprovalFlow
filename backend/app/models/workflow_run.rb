@@ -105,6 +105,7 @@ class WorkflowRun < ApplicationRecord
     temp =
       Step.create!(
         name: "#{project.name}",
+        project_id: project.id,
         status: status,
         user_id: supervisor.id,
         workflow_run_id: self.id

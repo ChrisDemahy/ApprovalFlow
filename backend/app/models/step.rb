@@ -5,6 +5,7 @@ class Step < ApplicationRecord
 
   has_one :previous_step, class_name: 'Step', foreign_key: 'next_step_id'
   belongs_to :next_step, class_name: 'Step', optional: true
+  belongs_to :project
 
   validates :status,
             inclusion: {
