@@ -1,29 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
+import type Authorization from 'src/types/authorization';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 
-import { useQuery, useQueryClient } from 'react-query';
-import type User from '../types/user';
-
-import { getAllAuthorizations } from '../shared/api';
-
-import type Workflowrun from '../types/workflowrun';
-
-import type Authorization from 'src/types/authorization';
-import { ModalContext } from './ApprovalModal';
-
-const ApprovalList = () => {
-  const [open, toggleOpen] = useState('OPEN');
-  const { state, dispatch } = useContext(ModalContext);
-
-  const queryClient = useQueryClient();
-  const id = '5';
-  type WorkflowRuns = Workflowrun[];
-  type Authorizations = Authorization[];
-  const { error, data, status, isFetching } = useQuery<Authorizations, Error>(
-    ['authorizations'],
-    getAllAuthorizations,
-  );
-  // Helper Methods
+const ApprovalList = ({
+  data,
+  dispatchMethod,
+}: {
+  data: Authorization[];
+  dispatchMethod: React.Dispatch<any>;
+}) => {
   const formatDate = (date_string: string) => {
     const d = Date.parse(date_string);
     const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
@@ -31,25 +16,30 @@ const ApprovalList = () => {
     const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
     return `${da} ${mo} ${ye}`;
   };
+  return (
+    <Table basic="very">
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Status</Table.HeaderCell>
+          <Table.HeaderCell>Date Started</Table.HeaderCell>
+          <Table.HeaderCell></Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
 
-  if (!data) {
-    return <Loader />;
-  } else {
-    return (
-      <Table basic="very">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Date Started</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {data.map((auth) => (
+      <Table.Body>
+        {data.map((auth) =>
+          auth.step ? (
             <Table.Row
-              onClick={(e: any) => dispatch({ type: open })}
+              onClick={(e: any) => {
+                if (!!auth.step) {
+                  return dispatchMethod({
+                    type: 'OPEN',
+                    project_id: auth.step.project_id,
+                    authorization_id: auth.id,
+                  });
+                }
+              }}
               key={auth.id}
             >
               <Table.Cell>
@@ -61,11 +51,13 @@ const ApprovalList = () => {
                 <Button basic>Approve</Button>
               </Table.Cell>
             </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-    );
-  }
+          ) : (
+            <span />
+          ),
+        )}
+      </Table.Body>
+    </Table>
+  );
 };
 
 export default ApprovalList;

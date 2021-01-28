@@ -90,7 +90,6 @@ const ProjectPage = () => {
             content: `Project ${data.project.name}`,
             subHeader1:
               'Manage details about your project and see previous workflows.',
-            subHeader2: 'When your ready submit it for approval.',
           }}
         />
       </>
