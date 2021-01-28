@@ -19,7 +19,7 @@ class Step < ApplicationRecord
 
   def update_on_save
     if self.status == 'pending' && self.user_id? && !self.authorization
-      byebug
+      # byebug
       auth =
         Authorization.create!(
           step: self, status: 'pending', user_id: self.user_id

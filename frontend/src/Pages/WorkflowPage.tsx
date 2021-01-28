@@ -51,6 +51,7 @@ const WorkflowPage = () => {
   if (!data) {
     return <Loader />;
   } else {
+    const the_steps = data.workflow_run.steps.reverse();
     const panes: panes = [
       {
         menuItem: 'Details',
@@ -76,7 +77,7 @@ const WorkflowPage = () => {
         menuItem: 'Steps',
         render: () => (
           <Tab.Pane>
-            <StepTable steps={data.workflow_run.steps} />
+            <StepTable steps={the_steps} />
           </Tab.Pane>
         ),
       },

@@ -53,9 +53,10 @@ doa = 76_500
       name: 'Jack Deaton',
       password: 'abc123',
       password_confirmation: 'abc123',
-      email: Faker::Internet.email,
+      email: 'jack@gmail.com',
       organization_id: organization.id,
-      doa: doa
+      doa: doa,
+      supervisor_id: @previous_user.id
     )
   @users << @new_user
   doa = doa + 1000

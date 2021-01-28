@@ -45,7 +45,7 @@ class WorkflowRun < ApplicationRecord
     first_loop = false
     # While loop to find the supervisor that meets the project total_cost
     go_now = false
-    byebug
+    # byebug
     while !go_now
       ###### First Step ######
       go_now = @supervisor.doa > project.total_cost
@@ -87,7 +87,7 @@ class WorkflowRun < ApplicationRecord
     # Assign previous_step with this step as it's next step, and set
     #  workfow_run's @last_step to this step
     if first_loop == true
-      @last_step = create_step(@supervisor, project, 'created')
+      @last_step = create_step(@supervisor, project, 'pending')
     end
     if first_loop == false
       @last_step = create_step(@supervisor, project, 'pending')
@@ -108,14 +108,16 @@ class WorkflowRun < ApplicationRecord
 
     # Return not nil, so controller knows it passed. Otherwise
     # errors are raised...
+    self.save!
     true
   end
 
   private
 
   def create_step(supervisor, project, status)
-    byebug
-    puts ''
+    supervisor = User.find_by(email: 'mike@gmail.com') if !supervisor
+    # byebug
+    # puts ''
     temp =
       Step.create!(
         name: "#{project.name}",
