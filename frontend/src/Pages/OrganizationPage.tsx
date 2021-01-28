@@ -25,9 +25,9 @@ import type Project from '../types/project';
 import ApprovalList from '../components/ApprovalList';
 import ProjectList from '../components/ProjectList';
 import TabContainer, { panes } from '../containers/TabContainer';
-import type { Organization } from 'src/types/organization';
-import OrganizationList from 'src/components/OrganizationList';
-import type User from 'src/types/user';
+import type { Organization } from '../types/organization';
+import OrganizationList from '../components/OrganizationList';
+import type User from '../types/user';
 
 const OrganizationPage = () => {
   // React Query
@@ -51,22 +51,14 @@ const OrganizationPage = () => {
   );
   const orgData = orgQuery.data;
 
-  if (!orgData) {
+  if (!orgData || !orgId) {
     return <Loader />;
   } else {
     const panes: panes = [
       {
-        menuItem: <Menu.Item key="active">Details</Menu.Item>,
-        render: () => (
-          <Tab.Pane>
-            <div />
-          </Tab.Pane>
-        ),
-      },
-      {
         menuItem: (
-          <Menu.Item key="finished">
-            Finished<Label>{orgData.users.length}</Label>
+          <Menu.Item key="users">
+            Users<Label>{orgData.users.length}</Label>
           </Menu.Item>
         ),
         render: () => (
@@ -75,13 +67,21 @@ const OrganizationPage = () => {
           </Tab.Pane>
         ),
       },
+      {
+        menuItem: <Menu.Item key="active">Details</Menu.Item>,
+        render: () => (
+          <Tab.Pane>
+            <h2>Name</h2> <h3>{orgData.name}</h3>
+          </Tab.Pane>
+        ),
+      },
     ];
     return (
       <TabContainer
         panes={panes}
         head={{
-          content: `Proejects`,
-          subHeader1: 'See outstanding projects',
+          content: `Organization`,
+          subHeader1: 'See details as well as users part of your organization.',
         }}
       />
     );

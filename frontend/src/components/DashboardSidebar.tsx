@@ -12,7 +12,7 @@ const DashboardSidebar = () => {
       <Menu.Item>
         <Input placeholder="Search..." />
       </Menu.Item>
-      <Menu.Item
+      {/* <Menu.Item
         name="home"
         active={activeItem === 'home'}
         onClick={(e, { name }) => {
@@ -22,6 +22,17 @@ const DashboardSidebar = () => {
         to="/"
       >
         Home
+      </Menu.Item> */}
+      <Menu.Item
+        name="projects"
+        active={activeItem === 'projects'}
+        onClick={(e, { name }) => {
+          name && setActiveItem(name);
+        }}
+        as={Link}
+        to="/projects"
+      >
+        Projects
       </Menu.Item>
       <Menu.Item
         name="approvals"
@@ -35,17 +46,6 @@ const DashboardSidebar = () => {
         Approvals
       </Menu.Item>
       <Menu.Item
-        name="projects"
-        active={activeItem === 'projects'}
-        onClick={(e, { name }) => {
-          name && setActiveItem(name);
-        }}
-        as={Link}
-        to="/projects"
-      >
-        Projects
-      </Menu.Item>
-      <Menu.Item
         name="Workflows"
         active={activeItem === 'Workflows'}
         onClick={(e, { name }) => {
@@ -57,22 +57,17 @@ const DashboardSidebar = () => {
         Workflows
       </Menu.Item>
 
-      <Dropdown item text="More">
-        <Dropdown.Menu>
-          <Dropdown.Item icon="edit" text="Edit Profile">
-            <FontAwesomeIcon
-              style={{
-                height: '20px',
-                width: '20px',
-              }}
-              icon={faEnvelope}
-            />{' '}
-            Edit Profile
-          </Dropdown.Item>
-          <Dropdown.Item icon="globe" text="Choose Language" />
-          <Dropdown.Item icon="settings" text="Account Settings" />
-        </Dropdown.Menu>
-      </Dropdown>
+      <Menu.Item
+        name="Organization"
+        active={activeItem === 'Organization'}
+        onClick={(e, { name }) => {
+          name && setActiveItem(name);
+        }}
+        as={Link}
+        to="/organization"
+      >
+        Organization
+      </Menu.Item>
     </Menu>
   );
 };

@@ -1,10 +1,12 @@
 class AuthorizationsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_authorization, only: %i[show update destroy]
 
   # GET /authorizations
   # GET /authorizations.json
   def index
-    @authorizations = Authorization.includes(:step)
+    @auths = Authorization.includes(:step)
+    @authorizations = @auths.filter { |auth| auth.user_id === current_user.id }
     # byebug
     # puts ''
   end

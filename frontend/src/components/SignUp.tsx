@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // Semantic UI Imports
 import {
   Button,
+  Divider,
   Form,
   Grid,
   Header,
@@ -13,6 +14,7 @@ import {
 // Font Awesome Imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faLock } from '@fortawesome/free-solid-svg-icons';
+import OrganizationOptions from './OrganizationOptions';
 
 interface loginProps {
   email: string;
@@ -20,13 +22,18 @@ interface loginProps {
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  organization: number;
+  setOrganization: React.Dispatch<React.SetStateAction<number>>;
 }
-const Login = ({
+
+const SignUp = ({
   email,
   setEmail,
   password,
   setPassword,
   onSubmit,
+  organization,
+  setOrganization,
 }: loginProps) => {
   return (
     <>
@@ -71,13 +78,15 @@ const Login = ({
                     setPassword(e.target.value);
                   }}
                 />
-                <Button.Group widths="2">
-                  <Button color="green">New Here?</Button>
+                <OrganizationOptions
+                  organization={organization}
+                  setOrganization={setOrganization}
+                />
+                <Divider />
 
-                  <Button color="blue" size="large">
-                    Login
-                  </Button>
-                </Button.Group>
+                <Button fluid color="green">
+                  Sign Up
+                </Button>
               </Segment>
             </Form>
           </Grid.Column>
@@ -86,4 +95,4 @@ const Login = ({
     </>
   );
 };
-export default Login;
+export default SignUp;

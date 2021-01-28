@@ -18,8 +18,18 @@ export const loginUser = (user: { email: string; password: string }) => {
   });
 };
 
-export const postUser = (user: { email: string }) => {
+export const putUser = (user: { email: string }) => {
   return client().put('/user', {
+    user: user,
+  });
+};
+
+export const postUser = (user: {
+  email: string;
+  password: string;
+  organization_id: number;
+}) => {
+  return axios.post(`${BASE_URL}/users/`, {
     user: user,
   });
 };
@@ -85,6 +95,10 @@ export const getCurrentUser = async () => {
 
 export const getAllProjects = async () => {
   const { data } = await client().get('/projects');
+  return data;
+};
+export const getAllOrganizations = async () => {
+  const { data } = await axios.get(`${BASE_URL}/organizations/`);
   return data;
 };
 

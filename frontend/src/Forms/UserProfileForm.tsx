@@ -14,7 +14,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
 
-import { getCurrentUser, postUser } from '../shared/api';
+import { getCurrentUser, putUser } from '../shared/api';
 import type User from '../types/user';
 
 const UserProfileForm = () => {
@@ -42,7 +42,7 @@ const UserProfileForm = () => {
   );
 
   // React Query Mutation
-  const mutation = useMutation(postUser, {
+  const mutation = useMutation(putUser, {
     onSuccess: (res) => {
       // Invalidate and refetch
       queryClient.invalidateQueries('user');
