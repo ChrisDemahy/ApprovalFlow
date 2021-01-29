@@ -32,7 +32,7 @@ organization = Organization.create name: 'Royal Carribean'
     password_confirmation: 'abc123',
     email: 'demahyc@gmail.com',
     organization_id: organization.id,
-    doa: 500_000
+    doa: 100_000
   )
 
 @previous_user =
@@ -42,7 +42,8 @@ organization = Organization.create name: 'Royal Carribean'
     password_confirmation: 'abc123',
     email: 'mike@gmail.com',
     organization_id: organization.id,
-    doa: 12_000
+    doa: 40_000,
+    supervisor_id: @super_user.id
   )
 @users << @previous_user
 

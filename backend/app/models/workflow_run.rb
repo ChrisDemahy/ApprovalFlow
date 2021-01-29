@@ -40,84 +40,64 @@ class WorkflowRun < ApplicationRecord
     # Get the supervisor of the user submitting the project
     @supervisor = @project_submitter.supervisor
 
+    #### First Step ####
+    # Create the step and store it
+    first_step = create_step(@supervisor, project, 'pending')
+
+    # Assign that step as the workflow_run's first_step
+    self.first_step_id = first_step.id
+
+    # and current_step
+    self.current_step_id = first_step.id
+
+    # Set previous_step as as this step to later assign this steps next_step
+    @previous_step = first_step
+
     ###### doa Loop ######
 
-    first_loop = false
     # While loop to find the supervisor that meets the project total_cost
-    go_now = false
-    # byebug
-    while !go_now
-      ###### First Step ######
-      go_now = @supervisor.doa > project.total_cost
-      if first_loop == false
-        # Only create the first step once
-        first_loop = true
+    while @supervisor.doa < project.total_cost
+      @supervisor = @supervisor.supervisor
 
-        # Create the step and store it
-        new_step = create_step(@supervisor, project, 'pending')
+      ###### Intermediary Step ######
 
-        # Assign that step as the workflow_run's first_step
-        self.first_step_id = new_step.id
+      # Create the new step
+      new_step = create_step(@supervisor, project, 'created')
 
-        # and current_step
-        self.current_step_id = new_step.id
+      # Assign this newly created step as the previous-step-in-the-loop's,
+      # next step, like from line:65
+      @previous_step.update!(next_step_id: new_step.id)
 
-        # Set previous_step as as this step to later assign this steps next_step
-        @previous_step = new_step
-
-        ###### Intermediary Step ######
-      else
-        # Create the new step
-        new_step = create_step(@supervisor, project, 'created')
-
-        # Assign this newly created step as the previous-step-in-the-loop's,
-        # next step, like from line:65
-        @previous_step.update!(next_step_id: new_step.id)
-
-        # Set previous_step as as this step to later assign this steps next_step
-        @previous_step = new_step
-      end
+      # Set previous_step as as this step to later assign this steps next_step
+      @previous_step = new_step
 
       # Set the supervisor to the that of the person who a step was just created for.
-      @supervisor = @supervisor.supervisor
     end
 
     ###### Final Step #######
 
     # Assign previous_step with this step as it's next step, and set
     #  workfow_run's @last_step to this step
-    if first_loop == true
-      @last_step = create_step(@supervisor, project, 'pending')
-    end
-    if first_loop == false
-      @last_step = create_step(@supervisor, project, 'pending')
-    end
-    self.first_step_id = @last_step.id if first_loop == false
-
-    # and current_step
-    self.current_step_id = @last_step.id if first_loop == false
+    # @last_step = create_step(@supervisor, project, 'created')
 
     # Set the second-to-last step's next_step
-    @previous_step.update!(next_step_id: @last_step.id) if !!@previous_step
 
     # Set the last step on the workflow to the final step.
-    self.update!(last_step_id: @last_step.id)
+    self.update!(last_step_id: @previous_step.id)
 
     # update the project as pending approval
     project.update!(status: 'pending_approval')
 
     # Return not nil, so controller knows it passed. Otherwise
     # errors are raised...
-    self.save!
     true
   end
 
   private
 
   def create_step(supervisor, project, status)
-    supervisor = User.find_by(email: 'mike@gmail.com') if !supervisor
-    # byebug
-    # puts ''
+    byebug
+    puts ''
     temp =
       Step.create!(
         name: "#{project.name}",
