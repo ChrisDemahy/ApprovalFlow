@@ -3,9 +3,9 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations
   def index
-    @organizations = Organization.all
+    @organizations = Organization.includes(:users)
 
-    render json: @organizations
+    render json: @organizations.to_json(include: :users)
   end
 
   # GET /organizations/1

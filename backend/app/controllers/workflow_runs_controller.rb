@@ -19,7 +19,8 @@ class WorkflowRunsController < ApplicationController
     # The create a workflow, call the method that creates all the steps,
     #   authorizations, etc...
 
-    if @workflow_run.save! && @workflow_run.submit_for_approval
+    # Submit for approval saves the workflow_run
+    if @workflow_run.submit_for_approval
       render :show, status: :created, location: @workflow_run
     else
       # TODO Show errors from submit_for_approval

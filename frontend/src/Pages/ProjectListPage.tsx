@@ -25,6 +25,7 @@ import type Project from '../types/project';
 import ApprovalList from '../components/ApprovalList';
 import ProjectList from '../components/ProjectList';
 import TabContainer, { panes } from '../containers/TabContainer';
+import NewProjectForm from '../Forms/NewProjectForm';
 
 const ProjectListPage = () => {
   // React Query
@@ -74,6 +75,14 @@ const ProjectListPage = () => {
         render: () => (
           <Tab.Pane>
             <ProjectList data={finishedList} />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: <Menu.Item key="new">New Project</Menu.Item>,
+        render: () => (
+          <Tab.Pane>
+            <NewProjectForm />
           </Tab.Pane>
         ),
       },

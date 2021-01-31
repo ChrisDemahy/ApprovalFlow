@@ -30,6 +30,7 @@ export const postUser = (user: {
   organization_id: number;
   doa: number;
   name: string;
+  supervisor_id: number;
 }) => {
   const a_user = {
     email: user.email,
@@ -37,6 +38,7 @@ export const postUser = (user: {
     organization_id: user.organization_id,
     doa: user.doa,
     name: user.name,
+    supervisor_id: user.supervisor_id,
   };
   return axios.post(`${BASE_URL}/users/`, {
     user: a_user,

@@ -26,6 +26,8 @@ interface loginProps {
   setOrganization: React.Dispatch<React.SetStateAction<number>>;
   doa: number;
   setDoa: React.Dispatch<React.SetStateAction<number>>;
+  supervisor: number;
+  setSupervisor: React.Dispatch<React.SetStateAction<number>>;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -42,6 +44,8 @@ const SignUp = ({
   setDoa,
   name,
   setName,
+  supervisor,
+  setSupervisor,
 }: loginProps) => {
   return (
     <>
@@ -109,6 +113,8 @@ const SignUp = ({
                 <OrganizationOptions
                   organization={organization}
                   setOrganization={setOrganization}
+                  supervisor={supervisor}
+                  setSupervisor={setSupervisor}
                 />
                 <Divider />
 

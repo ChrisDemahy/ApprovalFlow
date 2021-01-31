@@ -65,7 +65,8 @@ class ProjectsController < ApplicationController
       :total_cost,
       :name,
       :description,
-      :status
+      :status,
+      :supervisor_id
     )
   end
 end

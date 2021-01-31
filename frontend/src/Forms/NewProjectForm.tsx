@@ -49,7 +49,8 @@ const NewProjectForm = () => {
       // Invalidate and refetch
       queryClient.invalidateQueries('projects');
       // Go to next page or show error
-      history.push(`/projects/${res.data.id}`);
+      console.log(res.data.project);
+      history.push(`/projects/${res.data.project.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response

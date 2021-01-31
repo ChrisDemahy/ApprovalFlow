@@ -20,28 +20,19 @@ class WorkflowRun < ApplicationRecord
   ####### Method to 'Submit' Project for approval #######
   # Creates the steps associated with the workflow.
 
-  def submit_for_approval()
-    # Grab the workflow template if it exists
-
-    # If the workflow_template exists, and the status is 'created',
-    #  then the workflow_template was just assigned
-    # And workflow_run should be created via ActiveJob
-
-    # Leave if a projct has a workflow already to the pros lol
-
-    # TODO Fix thse next two assignments, both need to be refactored
-
+  def submit_for_approval(project_submitter)
     # Set the project
     project = self.project
 
-    # Set project submitter
-    @project_submitter = project.user
+    # Get the project submitter from arguments
+    # project_submitter = project.user
 
-    # Get the supervisor of the user submitting the project
-    @supervisor = @project_submitter.supervisor
+    # Get the supervisor of the user submitting the project or error
+    raise Exceptions::NoSubmitterSupervisor if !project_submitter.supervisor_id?
+    @supervisor = project_submitter.supervisor
 
     #### First Step ####
-    # Create the step and store it
+    # Create the step and store it. First step is always pending.
     first_step = create_step(@supervisor, project, 'pending')
 
     # Assign that step as the workflow_run's first_step
@@ -50,13 +41,16 @@ class WorkflowRun < ApplicationRecord
     # and current_step
     self.current_step_id = first_step.id
 
-    # Set previous_step as as this step to later assign this steps next_step
+    # Store this step so it can later be assigned a next_step_id
     @previous_step = first_step
 
     ###### doa Loop ######
 
     # While loop to find the supervisor that meets the project total_cost
     while @supervisor.doa < project.total_cost
+      if !project_submitter.supervisor_id?
+        raise Exceptions::NoSubmitterSupervisor
+      end
       @supervisor = @supervisor.supervisor
 
       ###### Intermediary Step ######
@@ -70,20 +64,12 @@ class WorkflowRun < ApplicationRecord
 
       # Set previous_step as as this step to later assign this steps next_step
       @previous_step = new_step
-
-      # Set the supervisor to the that of the person who a step was just created for.
+      # Break if the supervisor id is equal to itself. OrganizationOwner/SuperUser
+      break if @supervisor = @supervisor.supervisor
     end
 
-    ###### Final Step #######
-
-    # Assign previous_step with this step as it's next step, and set
-    #  workfow_run's @last_step to this step
-    # @last_step = create_step(@supervisor, project, 'created')
-
-    # Set the second-to-last step's next_step
-
     # Set the last step on the workflow to the final step.
-    self.update!(last_step_id: @previous_step.id)
+    self.last_step_id = @previous_step.id
 
     # update the project as pending approval
     project.update!(status: 'pending_approval')
@@ -96,17 +82,22 @@ class WorkflowRun < ApplicationRecord
   private
 
   def create_step(supervisor, project, status)
+    # Create the step from given information
     byebug
-    puts ''
-    temp =
-      Step.create!(
+    step =
+      Step.new(
         name: "#{project.name}",
         project_id: project.id,
         status: status,
         user_id: supervisor.id,
         workflow_run_id: self.id
       )
-    return temp
+    # if it saves properly, return it. Otherwise error.
+    if step.save!
+      return step
+    else
+      raise Exceptions::CreateStepError
+    end
     # workflow_run: workflow_run
   end
 end

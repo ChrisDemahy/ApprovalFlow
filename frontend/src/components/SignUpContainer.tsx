@@ -16,6 +16,7 @@ const SignUpContainer = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [doa, setDoa] = useState(0);
+  const [supervisor, setSupervisor] = useState(0);
   const [status, setStatus] = useState('');
   const [organization, setOrganization] = useState(0);
   let history = useHistory();
@@ -37,7 +38,8 @@ const SignUpContainer = () => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const organization_id = organization;
-    const user = { email, password, organization_id, doa, name };
+    const supervisor_id = supervisor;
+    const user = { email, password, organization_id, doa, name, supervisor_id };
     mutation.mutate(user);
   };
 
@@ -54,6 +56,8 @@ const SignUpContainer = () => {
       setName={setName}
       doa={doa}
       setDoa={setDoa}
+      supervisor={supervisor}
+      setSupervisor={setSupervisor}
     />
   );
 };

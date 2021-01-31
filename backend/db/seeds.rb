@@ -19,23 +19,24 @@ User.destroy_all
 Organization.destroy_all
 WorkflowTemplate.destroy_all
 
-organization = Organization.create name: 'Royal Carribean'
+organization = Organization.create! name: 'Royal Carribean'
 
 #=> "kirsten.greenholt@corkeryfisher.info"
-@users = []
 
 # Create the final user in the approval chain
-@super_user =
+@first_user =
   User.create!(
     name: 'Chris Demahy',
     password: 'abc123',
     password_confirmation: 'abc123',
     email: 'demahyc@gmail.com',
     organization_id: organization.id,
-    doa: 100_000
+    doa: 700_000
   )
 
-@previous_user =
+@first_user.update! supervisor_id: @first_user.id
+
+@second_user =
   User.create!(
     name: 'Mike Smith',
     password: 'abc123',
@@ -43,48 +44,51 @@ organization = Organization.create name: 'Royal Carribean'
     email: 'mike@gmail.com',
     organization_id: organization.id,
     doa: 40_000,
-    supervisor_id: @super_user.id
+    supervisor_id: @first_user.id
   )
-@users << @previous_user
 
-doa = 76_500
-1.times do |i|
-  @new_user =
-    User.create!(
-      name: 'Jack Deaton',
-      password: 'abc123',
-      password_confirmation: 'abc123',
-      email: 'jack@gmail.com',
-      organization_id: organization.id,
-      doa: doa,
-      supervisor_id: @previous_user.id
-    )
-  @users << @new_user
-  doa = doa + 1000
-  @new_user.supervisor = @super_user
-  @previous_user.supervisor = @new_user
-  @previous_user.save
-  @previous_user = @new_user
-end
-# Set the last personn's supervisor to the super user
-@previous_user.supervisor_id = @super_user
+@third_user =
+  User.create!(
+    name: 'Jack Deaton',
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: 'jack@gmail.com',
+    organization_id: organization.id,
+    doa: 26_500,
+    supervisor_id: @second_user.id
+  )
+
+@fourth_user =
+  User.create!(
+    name: 'Marry Horton',
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: 'Marry@gmail.com',
+    organization_id: organization.id,
+    doa: 86_500,
+    supervisor_id: @second_user.id
+  )
 
 @projects = []
 cost = 17_000
 project_names = [
   'Oasis of the Seas Rudder Replacement',
   'Majesty of the Seas Bi-Yearly Mainenace',
-  '2021 Houston Port Rennovation'
+  '2021 Port of Galveston Terminal Rennovation',
+  'Independence of the Seas Cabin Rennovation',
+  'Enchantment of the Seas Quadrennial Hull Inspection',
+  '2020 Fiscal Year Annual Customer Experience Report'
 ]
-3.times do |index|
+
+project_names.each do |name|
   @projects <<
     Project.create!(
-      name: project_names[index],
+      name: name,
       description:
         Faker::Lorem.sentence(
           word_count: 3, supplemental: false, random_words_to_add: 15
         ),
-      user_id: @users.first.id,
+      user_id: @third_user.id,
       total_cost: cost
     )
   cost = cost * 2
