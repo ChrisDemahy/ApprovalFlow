@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
 
 // Semantic UI Imports
-import {
-  Button,
-  Header,
-  Container,
-  Form,
-  Message,
-  Segment,
-  Divider,
-} from 'semantic-ui-react';
+import { Button, Header, Form, Message, Divider } from 'semantic-ui-react';
 
 // Imports for interacting with api
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import type { AxiosError } from 'axios';
 
-import { postProject } from '../shared/api';
-
-import type Project from '../types/user';
-import { useHistory } from 'react-router-dom';
+import { usePostProject } from '../shared/api';
 
 const NewProjectForm = () => {
   // Setup state for the form
@@ -26,50 +13,9 @@ const NewProjectForm = () => {
   const [name, setName] = useState('');
   const [totalCost, setTotalCost] = useState(0);
 
-  const [apiError, setApiError] = useState(['']);
-
-  // Setup React Query for fetching and posting data
-  const queryClient = useQueryClient();
-
-  // TODO Refetch data on options:
-  //  staleTime, refetchOnMount, refetchOnWindowFocus,
-  //  refetchOnReconnect and refetchInterval.
-
-  let history = useHistory();
   // React Query Mutation
 
-  interface projectData {
-    project: Project;
-  }
-
-  const mutation = useMutation(postProject, {
-    onSuccess: (res) => {
-      // const project = data.project;
-
-      // Invalidate and refetch
-      queryClient.invalidateQueries('projects');
-      // Go to next page or show error
-      console.log(res.data.project);
-      history.push(`/projects/${res.data.project.id}`);
-    },
-    onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
-    },
-  });
+  const { mutation, apiError } = usePostProject();
 
   // When the user submits the form, assign the values to a user,
   // and mutate the user on the server with the new values

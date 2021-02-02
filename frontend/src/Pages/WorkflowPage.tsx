@@ -23,9 +23,6 @@ import {
 
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-// React Query axios functions
-import { getProject, getWorkflowRun } from '../shared/api';
-
 import type { AxiosError } from 'axios';
 import StepTable from '../components/StepTable';
 import ProjectDetail from '../components/ProjectDetails';
@@ -34,6 +31,7 @@ import ProjectSubmissionForm from '../Forms/ProjectSubmissionForm';
 import type { WorkflowRunData } from '../types/workflowrun';
 import WorkflowDetails from '../components/WorkflowDetails';
 import TabContainer, { panes } from '../containers/TabContainer';
+import { useGetWorkflowRun } from '../shared/api';
 
 const WorkflowPage = () => {
   // WorkflowRun ID
@@ -43,10 +41,7 @@ const WorkflowPage = () => {
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<WorkflowRunData, Error>(
-    ['workflow_run', +id],
-    getWorkflowRun(+id),
-  );
+  const { error, data, status, isFetching } = useGetWorkflowRun(+id);
 
   if (!data) {
     return <Loader />;

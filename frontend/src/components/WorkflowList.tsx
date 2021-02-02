@@ -1,34 +1,13 @@
 import React from 'react';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
-import type { ProjectData } from '../types/project';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-import type User from '../types/user';
 
-import type NotificationAlert from '../types/notification';
-import type { ApprovalRequest } from '../types/notification';
-import {
-  getAllNotifications,
-  getAllWorkflowRuns,
-  getProject,
-} from '../shared/api';
-import CardList, { cardItem } from './CardList';
 import type Workflowrun from '../types/workflowrun';
 import { Link } from 'react-router-dom';
+import { useGetWorkflowRuns } from '../shared/api';
 
 const WorkflowList = () => {
-  const queryClient = useQueryClient();
-  const id = '5';
-  type WorkflowRuns = Workflowrun[];
-  const { error, data, status, isFetching } = useQuery<WorkflowRuns, Error>(
-    ['notifications'],
-    getAllWorkflowRuns,
-  );
+  // Data Fetcher
+  const { error, data, status, isFetching } = useGetWorkflowRuns();
   // Helper Methods
   const formatDate = (date_string: string) => {
     const d = Date.parse(date_string);

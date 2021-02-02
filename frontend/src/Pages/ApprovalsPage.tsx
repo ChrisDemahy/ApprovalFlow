@@ -14,11 +14,11 @@ import {
 import { useQuery, useQueryClient } from 'react-query';
 import type User from '../types/user';
 
-import { getAllAuthorizations } from '../shared/api';
+import { useGetAuthorizations } from '../shared/api';
 
 import type Workflowrun from '../types/workflowrun';
 
-import type Authorization from 'src/types/authorization';
+import type Authorization from '../types/authorization';
 import { ModalContext } from '../components/ApprovalModal';
 import ApprovalList from '../components/ApprovalList';
 import TabContainer, { panes } from '../containers/TabContainer';
@@ -30,17 +30,19 @@ const ApprovalsPage = () => {
   const id = '5';
   type WorkflowRuns = Workflowrun[];
   type Authorizations = Authorization[];
-  const { error, data, status, isFetching } = useQuery<Authorizations, Error>(
-    ['authorizations'],
-    getAllAuthorizations,
-  );
+  const { error, data, status, isFetching } = useGetAuthorizations();
+
   // Helper Methods
 
   if (!data) {
     return <Loader />;
   } else {
-    const pendingList = data.filter((auth) => auth.status === 'pending');
-    const finishedList = data.filter((auth) => auth.status !== 'pending');
+    const pendingList = data.filter(
+      (auth: Authorization) => auth.status === 'pending',
+    );
+    const finishedList = data.filter(
+      (auth: Authorization) => auth.status !== 'pending',
+    );
     const panes: panes = [
       {
         menuItem: (

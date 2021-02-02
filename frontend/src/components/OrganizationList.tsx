@@ -3,8 +3,8 @@ import React from 'react';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 
 import { useHistory } from 'react-router-dom';
-import type { Organization } from 'src/types/organization';
-import type User from 'src/types/user';
+import type { Organization } from '../types/organization';
+import type User from '../types/user';
 
 const OrganizationList = ({ data }: { data: User[] }) => {
   const history = useHistory();

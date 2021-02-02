@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 // Semantic UI Imports
 import {
   Button,
-  Divider,
   Form,
   Grid,
   Header,
@@ -14,7 +13,7 @@ import {
 // Font Awesome Imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faLock } from '@fortawesome/free-solid-svg-icons';
-import OrganizationOptions from './OrganizationOptions';
+import { Link } from 'react-router-dom';
 
 interface loginProps {
   email: string;
@@ -22,30 +21,15 @@ interface loginProps {
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  organization: number;
-  setOrganization: React.Dispatch<React.SetStateAction<number>>;
-  doa: number;
-  setDoa: React.Dispatch<React.SetStateAction<number>>;
-  supervisor: number;
-  setSupervisor: React.Dispatch<React.SetStateAction<number>>;
-  name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  apiError: string[];
 }
-
-const SignUp = ({
+const Login = ({
   email,
   setEmail,
   password,
   setPassword,
   onSubmit,
-  organization,
-  setOrganization,
-  doa,
-  setDoa,
-  name,
-  setName,
-  supervisor,
-  setSupervisor,
+  apiError, // FIXME User this
 }: loginProps) => {
   return (
     <>
@@ -74,16 +58,6 @@ const SignUp = ({
                 <Form.Input
                   fluid
                   iconPosition="left"
-                  placeholder="name"
-                  type="name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-                <Form.Input
-                  fluid
-                  iconPosition="left"
                   placeholder="E-mail address"
                   value={email}
                   onChange={(e) => {
@@ -100,27 +74,15 @@ const SignUp = ({
                     setPassword(e.target.value);
                   }}
                 />
-                <Form.Input
-                  fluid
-                  iconPosition="left"
-                  placeholder="doa"
-                  type="doa"
-                  value={doa}
-                  onChange={(e) => {
-                    setDoa(+e.target.value);
-                  }}
-                />
-                <OrganizationOptions
-                  organization={organization}
-                  setOrganization={setOrganization}
-                  supervisor={supervisor}
-                  setSupervisor={setSupervisor}
-                />
-                <Divider />
+                <Button.Group widths="2">
+                  <Button as={Link} to="/signUp" color="green">
+                    New Here?
+                  </Button>
 
-                <Button fluid color="green">
-                  Sign Up
-                </Button>
+                  <Button color="blue" size="large">
+                    Login
+                  </Button>
+                </Button.Group>
               </Segment>
             </Form>
           </Grid.Column>
@@ -129,4 +91,4 @@ const SignUp = ({
     </>
   );
 };
-export default SignUp;
+export default Login;

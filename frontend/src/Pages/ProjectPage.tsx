@@ -1,37 +1,16 @@
 import React, { useState } from 'react';
-// Imports for fetching data
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-import type User from '../types/user';
+
 // Semantic UI Imports
-import {
-  Button,
-  Container,
-  Header,
-  Segment,
-  Loader,
-  Divider,
-  Tab,
-  Menu,
-  Label,
-} from 'semantic-ui-react';
+import { Loader, Tab, Menu, Label } from 'semantic-ui-react';
 
 import { Link, useHistory, useParams } from 'react-router-dom';
 
 // React Query axios functions
-import { getProject } from '../shared/api';
-import type { ProjectData } from '../types/project';
-import type { AxiosError } from 'axios';
-import StepTable from '../components/StepTable';
 import ProjectDetail from '../components/ProjectDetails';
 import WorkflowRunList from '../components/WorkflowRunList';
 import ProjectSubmissionForm from '../Forms/ProjectSubmissionForm';
 import TabContainer, { panes } from '../containers/TabContainer';
+import { useGetProject } from '../shared/api';
 
 const ProjectPage = () => {
   const { id }: { id: string } = useParams();
@@ -43,10 +22,7 @@ const ProjectPage = () => {
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<ProjectData, Error>(
-    ['project', +id],
-    getProject(+id),
-  );
+  const { error, data, status, isFetching } = useGetProject(+id);
 
   if (!data) {
     return <Loader />;

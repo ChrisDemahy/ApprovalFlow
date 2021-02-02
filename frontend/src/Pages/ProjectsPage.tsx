@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CardList, { itemArray } from '../components/CardList';
-import { getAllProjects } from '../shared/api';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-} from 'react-query';
-import { Link } from 'react-router-dom';
+
 import {
   Button,
   Divider,
@@ -18,14 +10,13 @@ import {
   Menu,
   Tab,
 } from 'semantic-ui-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import type Project from '../types/project';
-import ApprovalList from '../components/ApprovalList';
+
 import ProjectList from '../components/ProjectList';
 import TabContainer, { panes } from '../containers/TabContainer';
 import NewProjectForm from '../Forms/NewProjectForm';
+import { useGetProjects } from '../shared/api';
 
 const ProjectListPage = () => {
   // React Query
@@ -37,11 +28,7 @@ const ProjectListPage = () => {
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<projectData, Error>(
-    'projects',
-    getAllProjects,
-  );
-
+  const { error, data, status, isFetching } = useGetProjects();
   if (!data) {
     return <Loader />;
   } else {

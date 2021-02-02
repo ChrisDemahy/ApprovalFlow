@@ -14,7 +14,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
 
-import { getProject, postProject } from '../shared/api';
+import { useGetProject, usePostProject } from '../shared/api';
 
 import type { ProjectData } from '../types/project';
 import { useHistory, useParams } from 'react-router-dom';
@@ -24,8 +24,6 @@ const ProjectForm = () => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [totalCost, setTotalCost] = useState(0);
-
-  const [apiError, setApiError] = useState(['']);
 
   // Get the id of the current project being updated
   const { id }: { id: string } = useParams();
@@ -40,39 +38,9 @@ const ProjectForm = () => {
   let history = useHistory();
   // React Query Mutation
 
-  const { error, data, status, isFetching } = useQuery<ProjectData, Error>(
-    ['project', +id],
-    getProject(+id),
-  );
+  const { error, data, status, isFetching } = useGetProject(+id);
 
-  const mutation = useMutation(postProject, {
-    onSuccess: (res) => {
-      // const project = data.project;
-
-      // Invalidate and refetch
-      queryClient.invalidateQueries('projects');
-      // Go to next page or show error
-      history.push(`/projects/${res.data.id}`);
-    },
-    onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
-    },
-  });
-
+  const { mutation, apiError } = usePostProject();
   // When the user submits the form, assign the values to a user,
   // and mutate the user on the server with the new values
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {

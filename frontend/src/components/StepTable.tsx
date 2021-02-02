@@ -15,10 +15,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Api module for axios functions and some type imports
-import { getProject, getWorkflowRun } from '../shared/api';
-import type { Workflowrun } from '../types/workflowrun';
+
 import type Step from '../types/step';
-import type Project from '../types/project';
 
 const StepTable = ({ steps }: { steps: Step[] }) => {
   const statusMessage = (status: string) => {

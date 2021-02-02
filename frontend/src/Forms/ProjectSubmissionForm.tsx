@@ -13,7 +13,7 @@ import {
 // Imports for interacting with api
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import type { AxiosError } from 'axios';
-import { postWorkflowRun } from '../shared/api';
+import { usePostWorkflowRun } from '../shared/api';
 import { useParams, useHistory } from 'react-router';
 
 import type { ProjectData } from '../types/project';
@@ -37,33 +37,7 @@ const ProjectForm = ({ project }: ProjectData) => {
   const history = useHistory();
   // React Query Muation
 
-  const mutation = useMutation(postWorkflowRun, {
-    onSuccess: ({ data }: { data: WorkflowRunData }) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries(['project', +id]);
-
-      // Get The id of the new workflow_run
-      // Go to next page or show error
-      history.push(`/workflow_runs/${data.workflow_run.id}`);
-    },
-    onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
-    },
-  });
+  const { mutation } = usePostWorkflowRun();
 
   // When the user submits the form, assign the values to a user,
   // and mutate the user on the server with the new values

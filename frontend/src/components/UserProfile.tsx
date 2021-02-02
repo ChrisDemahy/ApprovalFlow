@@ -1,18 +1,12 @@
 import React from 'react';
 // Imports for fetching data
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
+
 import type User from '../types/user';
 // Semantic UI Imports
-import { Button, Container, Header, Segment } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 
 // React Query
-import { getCurrentUser } from '../shared/api';
+import { useGetCurrentUser } from '../shared/api';
 
 const UserProfile = () => {
   // User type is returned under a user key in the response from the backend
@@ -24,11 +18,7 @@ const UserProfile = () => {
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useQuery<userData, Error>(
-    'currentUser',
-    getCurrentUser,
-  );
-
+  const { error, data, status, isFetching } = useGetCurrentUser();
   return (
     <>
       <Header as="h3" content="User Profile" />

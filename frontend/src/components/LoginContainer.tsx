@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 
 // Imports for fetching data
 import { useQueryClient, useMutation } from 'react-query';
-import { loginUser } from '../shared/api';
-import type User from '../types/user';
+import { useLoginUser } from '../shared/api';
 import { useHistory } from 'react-router-dom';
 // Import
-import Login from './Login';
+import Login from '../Forms/LoginForm';
 
 const LoginContainer = () => {
   // email, setEmail, password, setPassword
@@ -19,18 +18,7 @@ const LoginContainer = () => {
 
   // React Query Mutation
   const queryClient = useQueryClient();
-  const mutation = useMutation(loginUser, {
-    onSuccess: (res) => {
-      // Invalidate and refetch
-      const { user, token }: { user: User; token: string } = res.data;
-      // TODO Set user query data from here
-      localStorage.token = token;
-      queryClient.invalidateQueries('currentUser');
-      // Go to next page or show error
-      history.push('/projects');
-    },
-  });
-
+  const { apiError, mutation } = useLoginUser();
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const user = { email, password };
@@ -44,6 +32,8 @@ const LoginContainer = () => {
       setPassword={setPassword}
       password={password}
       onSubmit={onSubmit}
+      // TODO Add Error To All Forms
+      apiError={apiError}
     />
   );
 };

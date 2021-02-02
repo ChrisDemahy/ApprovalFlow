@@ -20,7 +20,7 @@ class WorkflowRunsController < ApplicationController
     #   authorizations, etc...
 
     # Submit for approval saves the workflow_run
-    if @workflow_run.submit_for_approval
+    if @workflow_run.submit_for_approval(current_user)
       render :show, status: :created, location: @workflow_run
     else
       # TODO Show errors from submit_for_approval

@@ -1,9 +1,9 @@
 import React, { SyntheticEvent, useState } from 'react';
 import { Dropdown, DropdownProps, Loader } from 'semantic-ui-react';
-import type Project from 'src/types/project';
+import type Project from '../types/project';
 import { useQuery } from 'react-query';
-import { getAllOrganizations } from '../shared/api';
-import type { Organization } from 'src/types/organization';
+import { useGetOrganizations } from '../shared/api';
+import type { Organization } from '../types/organization';
 
 type projectData = Organization[];
 
@@ -18,10 +18,7 @@ const OrganizationOptions = ({
   supervisor: number;
   setSupervisor: any;
 }) => {
-  const { error, data, status, isFetching } = useQuery<projectData, Error>(
-    'organizations',
-    getAllOrganizations,
-  );
+  const { error, data, status, isFetching } = useGetOrganizations();
   const handleChange = (
     event: SyntheticEvent<HTMLElement, Event>,
     some_data: DropdownProps,

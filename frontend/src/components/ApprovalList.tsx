@@ -1,5 +1,5 @@
 import React from 'react';
-import type Authorization from 'src/types/authorization';
+import type Authorization from '../types/authorization';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 
 const ApprovalList = ({

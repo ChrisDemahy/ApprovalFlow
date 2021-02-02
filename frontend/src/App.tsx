@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoginContainer from './components/LoginContainer';
 import UserProfile from './components/UserProfile';
 import MainContainer from './containers/MainContainer';
-import ProjectListPage from './Pages/ProjectListPage';
+import ProjectListPage from './Pages/ProjectsPage';
 import UserProfileForm from './Forms/UserProfileForm';
 import logo from './logo.svg';
 import {

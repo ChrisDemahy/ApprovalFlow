@@ -1,71 +1,22 @@
 import React, { useState } from 'react';
 
 // Semantic UI Imports
-import {
-  Button,
-  Header,
-  Container,
-  Form,
-  Message,
-  Segment,
-} from 'semantic-ui-react';
+import { Button, Header, Form, Message } from 'semantic-ui-react';
 
 // Imports for interacting with api
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import type { AxiosError } from 'axios';
 
-import { getCurrentUser, putUser } from '../shared/api';
-import type User from '../types/user';
+import { useGetCurrentUser, usePutUser } from '../shared/api';
 
 const UserProfileForm = () => {
   // Setup state for the form
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
 
-  const [apiError, setApiError] = useState(['']);
-
-  // Setup React Query for fetching and posting data
-  const queryClient = useQueryClient();
-
-  // User type is returned under a user key in the response from the backend
-  interface userData {
-    user: User;
-  }
-  // TODO Refetch data on options:
-  //  staleTime, refetchOnMount, refetchOnWindowFocus,
-  //  refetchOnReconnect and refetchInterval.
-
   // Query to fetch the current user data.
-  const { data, error } = useQuery<userData, Error>(
-    'currentUser',
-    getCurrentUser,
-  );
+  const { data, error } = useGetCurrentUser();
 
   // React Query Mutation
-  const mutation = useMutation(putUser, {
-    onSuccess: (res) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries('user');
-      // Go to next page or show error
-    },
-    onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
-    },
-  });
+  const { mutation, apiError } = usePutUser();
 
   // When the user submits the form, assign the values to a user,
   // and mutate the user on the server with the new values
