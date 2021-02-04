@@ -22,6 +22,7 @@ import type Authorization from '../types/authorization';
 import { ModalContext } from '../components/ApprovalModal';
 import ApprovalList from '../components/ApprovalList';
 import TabContainer, { panes } from '../containers/TabContainer';
+import { NavLink, Route } from 'react-router-dom';
 
 const ApprovalsPage = () => {
   const { state, dispatch } = useContext(ModalContext);
@@ -43,27 +44,43 @@ const ApprovalsPage = () => {
     );
     const panes: panes = [
       {
-        menuItem: (
-          <Menu.Item key="active">
-            Active<Label>{data.length}</Label>
-          </Menu.Item>
-        ),
+        menuItem: {
+          as: NavLink,
+          content: (
+            <>
+              Active<Label>{pendingList.length}</Label>
+            </>
+          ),
+          to: '/approvals',
+          exact: true,
+          key: 'active-approvals',
+        },
         render: () => (
-          <Tab.Pane>
-            <ApprovalList data={pendingList} dispatchMethod={dispatch} />
-          </Tab.Pane>
+          <Route path="/approvals" exact>
+            <Tab.Pane>
+              <ApprovalList data={pendingList} dispatchMethod={dispatch} />
+            </Tab.Pane>
+          </Route>
         ),
       },
       {
-        menuItem: (
-          <Menu.Item key="finished">
-            Finished<Label>{finishedList.length}</Label>
-          </Menu.Item>
-        ),
+        menuItem: {
+          as: NavLink,
+          content: (
+            <>
+              Finished<Label>{finishedList.length}</Label>
+            </>
+          ),
+          to: '/approvals/finished',
+          exact: true,
+          key: 'finished-approvals',
+        },
         render: () => (
-          <Tab.Pane>
-            <ApprovalList data={finishedList} dispatchMethod={dispatch} />
-          </Tab.Pane>
+          <Route path="/approvals/finished" exact>
+            <Tab.Pane>
+              <ApprovalList data={finishedList} dispatchMethod={dispatch} />
+            </Tab.Pane>
+          </Route>
         ),
       },
     ];

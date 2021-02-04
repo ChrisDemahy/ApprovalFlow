@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,7 +18,7 @@ const DashboardSidebar = () => {
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
-        as={Link}
+        as={NavLink}
         to="/"
       >
         Home
@@ -29,7 +29,7 @@ const DashboardSidebar = () => {
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
-        as={Link}
+        as={NavLink}
         to="/projects/active"
       >
         Projects
@@ -40,7 +40,7 @@ const DashboardSidebar = () => {
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
-        as={Link}
+        as={NavLink}
         to="/approvals"
       >
         Approvals
@@ -51,7 +51,7 @@ const DashboardSidebar = () => {
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
-        as={Link}
+        as={NavLink}
         to="/workflow_runs"
       >
         Workflows
@@ -63,8 +63,8 @@ const DashboardSidebar = () => {
         onClick={(e, { name }) => {
           name && setActiveItem(name);
         }}
-        as={Link}
-        to="/organization/users "
+        as={NavLink}
+        to="/organization "
       >
         Organization
       </Menu.Item>

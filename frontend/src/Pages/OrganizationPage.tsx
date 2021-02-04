@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardList, { itemArray } from '../components/CardList';
 
-import { Link, Redirect, Route } from 'react-router-dom';
+import { Link, NavLink, Redirect, Route } from 'react-router-dom';
 import {
   Button,
   Divider,
@@ -34,36 +34,47 @@ const OrganizationPage = () => {
   }
   const userQuery = useGetCurrentUser();
   console.log(userQuery.data);
-  const id = userQuery.data ? userQuery.data.user.organization_id : 0;
+  const id = userQuery.data?.user ? userQuery.data.user.organization_id : 0;
   const orgQuery = useGetOrganization(id, { enabled: !!userQuery.data });
   const orgData = orgQuery.data;
 
-  if (!orgData || !id) {
-    return <Loader />;
-  } else {
+  if (!!orgData && !!id) {
+    console.log('hello');
     const panes: panes = [
       {
-        menuItem: (
-          <Menu.Item as={Link} to="/organization/users" key="users">
-            Users<Label>{orgData.users.length}</Label>
-          </Menu.Item>
-        ),
+        menuItem: {
+          as: NavLink,
+          content: (
+            <>
+              Users<Label>{orgData.users.length}</Label>
+            </>
+          ),
+          to: '/organization',
+          exact: true,
+          key: 'organization-users',
+        },
         render: () => (
-          <Tab.Pane as={Route} path="/organization/users">
-            <OrganizationList data={orgData.users} />
-          </Tab.Pane>
+          <Route path="/organization" exact>
+            <Tab.Pane>
+              <OrganizationList data={orgData.users} />
+            </Tab.Pane>
+          </Route>
         ),
       },
       {
-        menuItem: (
-          <Menu.Item as={Link} to="/organization/details" key="active">
-            Details
-          </Menu.Item>
-        ),
+        menuItem: {
+          as: NavLink,
+          content: <>Details</>,
+          to: '/organization/details',
+          exact: true,
+          key: 'organization-details',
+        },
         render: () => (
-          <Tab.Pane as={Route} path="/organization/details">
-            <h2>Name</h2> <h3>{orgData.name}</h3>
-          </Tab.Pane>
+          <Route path="/organization/details" exact>
+            <Tab.Pane>
+              <h2>Name</h2> <h3>{orgData.name}</h3>
+            </Tab.Pane>
+          </Route>
         ),
       },
     ];
@@ -78,10 +89,10 @@ const OrganizationPage = () => {
               'See details as well as users part of your organization.',
           }}
         />
-        {/* Redirect to defualt route */}
-        <Redirect from="/organization/" strict exact to="/organization/users" />
       </>
     );
+  } else {
+    return <Loader />;
   }
 };
 
