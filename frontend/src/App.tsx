@@ -33,7 +33,6 @@ function App({}: AppProps) {
         <Route path="/login" children={<LoginContainer />} />
         <Route path="/signUp" children={<SignUpContainer />} />
         {/* Everything Below this line requires the user to be logged in */}
-        {!localStorage.token && <Redirect to="/login" />}
 
         <MainContainer>
           <>
@@ -42,8 +41,8 @@ function App({}: AppProps) {
             <Route path="/account" children={<UserProfile />} />
             <Route path="/projectForm" children={<NewProjectForm />} />
 
-            <Route exact path="/projects" children={<ProjectListPage />} />
-            <Route exact path="/projects/:id" children={<ProjectPage />} />
+            <Route path="/projects" children={<ProjectListPage />} />
+            <Route exact path="/project/:id" children={<ProjectPage />} />
             <Route
               exact
               path="/workflow_runs/:id"
@@ -57,6 +56,7 @@ function App({}: AppProps) {
           </>
         </MainContainer>
       </Switch>
+      {!localStorage.token && <Redirect to="/login" />}
 
       {/* <LoginContainer /> */}
     </Router>

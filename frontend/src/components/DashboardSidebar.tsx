@@ -30,7 +30,7 @@ const DashboardSidebar = () => {
           name && setActiveItem(name);
         }}
         as={Link}
-        to="/projects"
+        to="/projects/active"
       >
         Projects
       </Menu.Item>
@@ -64,7 +64,7 @@ const DashboardSidebar = () => {
           name && setActiveItem(name);
         }}
         as={Link}
-        to="/organization"
+        to="/organization/users "
       >
         Organization
       </Menu.Item>

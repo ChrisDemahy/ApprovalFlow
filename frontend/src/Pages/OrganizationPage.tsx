@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardList, { itemArray } from '../components/CardList';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect, Route } from 'react-router-dom';
 import {
   Button,
   Divider,
@@ -33,6 +33,7 @@ const OrganizationPage = () => {
     user: User;
   }
   const userQuery = useGetCurrentUser();
+  console.log(userQuery.data);
   const id = userQuery.data ? userQuery.data.user.organization_id : 0;
   const orgQuery = useGetOrganization(id, { enabled: !!userQuery.data });
   const orgData = orgQuery.data;
@@ -43,33 +44,43 @@ const OrganizationPage = () => {
     const panes: panes = [
       {
         menuItem: (
-          <Menu.Item key="users">
-            Users<Label>{orgData.organization.users.length}</Label>
+          <Menu.Item as={Link} to="/organization/users" key="users">
+            Users<Label>{orgData.users.length}</Label>
           </Menu.Item>
         ),
         render: () => (
-          <Tab.Pane>
-            <OrganizationList data={orgData.organization.users} />
+          <Tab.Pane as={Route} path="/organization/users">
+            <OrganizationList data={orgData.users} />
           </Tab.Pane>
         ),
       },
       {
-        menuItem: <Menu.Item key="active">Details</Menu.Item>,
+        menuItem: (
+          <Menu.Item as={Link} to="/organization/details" key="active">
+            Details
+          </Menu.Item>
+        ),
         render: () => (
-          <Tab.Pane>
-            <h2>Name</h2> <h3>{orgData.organization.name}</h3>
+          <Tab.Pane as={Route} path="/organization/details">
+            <h2>Name</h2> <h3>{orgData.name}</h3>
           </Tab.Pane>
         ),
       },
     ];
     return (
-      <TabContainer
-        panes={panes}
-        head={{
-          content: `Organization`,
-          subHeader1: 'See details as well as users part of your organization.',
-        }}
-      />
+      <>
+        {/* Tabs */}
+        <TabContainer
+          panes={panes}
+          head={{
+            content: `Organization`,
+            subHeader1:
+              'See details as well as users part of your organization.',
+          }}
+        />
+        {/* Redirect to defualt route */}
+        <Redirect from="/organization/" strict exact to="/organization/users" />
+      </>
     );
   }
 };

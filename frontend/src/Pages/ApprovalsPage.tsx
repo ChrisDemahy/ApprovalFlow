@@ -34,9 +34,7 @@ const ApprovalsPage = () => {
 
   // Helper Methods
 
-  if (!data) {
-    return <Loader />;
-  } else {
+  if (!!data) {
     const pendingList = data.filter(
       (auth: Authorization) => auth.status === 'pending',
     );
@@ -79,6 +77,8 @@ const ApprovalsPage = () => {
         }}
       />
     );
+  } else {
+    return <Loader />;
   }
 };
 

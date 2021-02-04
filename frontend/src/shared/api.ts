@@ -420,19 +420,17 @@ export function useGetProject(
 }
 
 // **** Single Organization **** //
-export function useGetOrganization<TData = OrganizationData>(
+export function useGetOrganization<TData = Organization>(
   id: number,
-  options?: UseQueryOptions<OrganizationData, Error, OrganizationData>,
+  options?: UseQueryOptions<Organization, Error, Organization>,
 ) {
   // Get Organization Axios Function
-  const getOrganization = (
-    id: number,
-  ) => async (): Promise<OrganizationData> => {
+  const getOrganization = (id: number) => async (): Promise<Organization> => {
     const { data } = await client().get(`/organizations/${id}`);
     return data;
   };
   // Get Organization React Query Hook
-  return useQuery<OrganizationData, Error>(
+  return useQuery<Organization, Error>(
     ['project', +id],
     getOrganization(+id),
     options,

@@ -30,7 +30,7 @@ const ProjectList = ({ data }: { data: Project[] }) => {
         {data.map((project) => (
           <Table.Row
             onClick={(e: any) => {
-              history.push(`/projects/${project.id}`);
+              history.push(`/project/${project.id}`);
             }}
             key={project.id}
           >
