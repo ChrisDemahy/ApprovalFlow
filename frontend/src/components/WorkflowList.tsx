@@ -5,9 +5,9 @@ import type Workflowrun from '../types/workflowrun';
 import { Link } from 'react-router-dom';
 import { useGetWorkflowRuns } from '../shared/api';
 
-const WorkflowList = () => {
+const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
   // Data Fetcher
-  const { error, data, status, isFetching } = useGetWorkflowRuns();
+
   // Helper Methods
   const formatDate = (date_string: string) => {
     const d = Date.parse(date_string);
@@ -22,11 +22,6 @@ const WorkflowList = () => {
   } else {
     return (
       <>
-        <Header
-          as="h2"
-          content={'Workflows'}
-          subheader={['See all the workflows that are currently active.']}
-        />
         <Table basic="very">
           <Table.Header>
             <Table.Row>
@@ -47,11 +42,7 @@ const WorkflowList = () => {
                 <Table.Cell>{formatDate(workflow_run.created_at)}</Table.Cell>
                 {/* <Table.Cell>{formatDate(workflow_run.updated_at)}</Table.Cell> */}
                 <Table.Cell>
-                  <Button
-                    as={Link}
-                    to={`/workflow_runs/${workflow_run.id}`}
-                    basic
-                  >
+                  <Button as={Link} to={`/workflows/${workflow_run.id}`} basic>
                     Open
                   </Button>
                 </Table.Cell>

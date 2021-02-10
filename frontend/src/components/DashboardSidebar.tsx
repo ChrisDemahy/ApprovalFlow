@@ -30,7 +30,7 @@ const DashboardSidebar = () => {
           name && setActiveItem(name);
         }}
         as={NavLink}
-        to="/projects/active"
+        to="/projects"
       >
         Projects
       </Menu.Item>
@@ -52,7 +52,7 @@ const DashboardSidebar = () => {
           name && setActiveItem(name);
         }}
         as={NavLink}
-        to="/workflow_runs"
+        to="/workflows"
       >
         Workflows
       </Menu.Item>
@@ -64,7 +64,7 @@ const DashboardSidebar = () => {
           name && setActiveItem(name);
         }}
         as={NavLink}
-        to="/organization "
+        to="/organization"
       >
         Organization
       </Menu.Item>

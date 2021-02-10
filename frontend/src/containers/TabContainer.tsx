@@ -14,19 +14,31 @@ export interface header {
   subHeader1: string;
   subHeader2?: string;
 }
-const TabContainer = ({ panes, head }: { panes: panes; head: header }) => (
+const TabContainer = ({
+  panes,
+  head,
+  activeIndex,
+}: {
+  panes: panes;
+  head: header;
+  activeIndex?: number;
+}) => (
   <>
     <Header
       as="h2"
       content={head.content}
       subheader={[
-        head.subHeader1,
-        <br />,
-        head.subHeader2 ? head.subHeader2 : '',
+        <div key={head.subHeader1}>{head.subHeader1}</div>,
+        <br key={`${head.subHeader1} break`} />,
+        <div key={head.subHeader2}>{head.subHeader2 ?? ''}</div>,
       ]}
     />
 
-    <Tab panes={[...panes]} />
+    {activeIndex ? (
+      <Tab activeIndex={activeIndex} panes={[...panes]} />
+    ) : (
+      <Tab panes={[...panes]} />
+    )}
   </>
 );
 

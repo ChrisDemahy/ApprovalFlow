@@ -376,7 +376,7 @@ export const usePostWorkflowRun = () => {
 
       // Get The id of the new workflow_run
       // Go to next page or show error
-      history.push(`/workflow_runs/${data.workflow_run.id}`);
+      history.push(`/workflow/${data.workflow_run.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
@@ -461,6 +461,7 @@ export function useGetProjects(
   //  refetchOnReconnect and refetchInterval.
   const getAllProjects = async (): Promise<allProjects> => {
     const { data } = await client().get('/projects');
+    console.log(data);
     return data;
   };
   // Get Project React Query Hook

@@ -14,7 +14,7 @@ import {
 import { useQuery, useQueryClient } from 'react-query';
 import type User from '../types/user';
 
-import { useGetAuthorizations } from '../shared/api';
+import { useGetAuthorizations, useGetWorkflowRuns } from '../shared/api';
 
 import type Workflowrun from '../types/workflowrun';
 
@@ -23,23 +23,22 @@ import { ModalContext } from '../components/ApprovalModal';
 import ApprovalList from '../components/ApprovalList';
 import TabContainer, { panes } from '../containers/TabContainer';
 import { NavLink, Route } from 'react-router-dom';
+import WorkflowList from '../components/WorkflowList';
 
-const ApprovalsPage = () => {
+const WorkflowsPage = () => {
   const { state, dispatch } = useContext(ModalContext);
 
   const queryClient = useQueryClient();
   const id = '5';
   type WorkflowRuns = Workflowrun[];
   type Authorizations = Authorization[];
-  const { error, data, status, isFetching } = useGetAuthorizations();
+  const { error, data, status, isFetching } = useGetWorkflowRuns();
 
   // Helper Methods
 
-  const pendingList = data?.filter(
-    (auth: Authorization) => auth.status === 'pending',
-  );
+  const pendingList = data?.filter((workflow) => workflow.status === 'pending');
   const finishedList = data?.filter(
-    (auth: Authorization) => auth.status !== 'pending',
+    (workflow) => workflow.status !== 'pending',
   );
   const panes: panes = [
     {
@@ -50,18 +49,14 @@ const ApprovalsPage = () => {
             Active<Label>{pendingList?.length ?? 0}</Label>
           </>
         ),
-        to: '/approvals',
+        to: '/workflows',
         exact: true,
-        key: 'active-approvals',
+        key: 'active-workflows',
       },
       render: () => (
-        <Route path="/approvals" exact>
+        <Route path="/workflows" exact>
           <Tab.Pane>
-            {!!pendingList ? (
-              <ApprovalList data={pendingList} dispatchMethod={dispatch} />
-            ) : (
-              <Loader />
-            )}
+            {!!pendingList ? <WorkflowList data={pendingList} /> : <Loader />}
           </Tab.Pane>
         </Route>
       ),
@@ -74,18 +69,14 @@ const ApprovalsPage = () => {
             Finished<Label>{finishedList?.length ?? 0}</Label>
           </>
         ),
-        to: '/approvals/finished',
+        to: '/workflows/finished',
         exact: true,
-        key: 'finished-approvals',
+        key: 'finished-workflows',
       },
       render: () => (
-        <Route path="/approvals/finished" exact>
+        <Route path="/workflows/finished" exact>
           <Tab.Pane>
-            {!!finishedList ? (
-              <ApprovalList data={finishedList} dispatchMethod={dispatch} />
-            ) : (
-              <Loader />
-            )}
+            {!!finishedList ? <WorkflowList data={finishedList} /> : <Loader />}
           </Tab.Pane>
         </Route>
       ),
@@ -95,12 +86,12 @@ const ApprovalsPage = () => {
     <TabContainer
       panes={panes}
       head={{
-        content: `Approvals`,
+        content: `Workflows`,
         subHeader1:
-          'See workflows that need your approval as well as workflows you have approved in the past',
+          'See all the workflows that are currently active in your organization',
       }}
     />
   );
 };
 
-export default ApprovalsPage;
+export default WorkflowsPage;

@@ -17,11 +17,25 @@ import ProjectList from '../components/ProjectList';
 import TabContainer, { panes } from '../containers/TabContainer';
 import NewProjectForm from '../Forms/NewProjectForm';
 import { useGetProjects } from '../shared/api';
-import { Link, Redirect, Route, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Redirect,
+  Route,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom';
 
 const ProjectsPage = () => {
   // React Router
-  let { url, path } = useRouteMatch();
+
+  // Ensures that if the user loads up the details it resets to the main tab
+  // TODO Make it so when a user navigates to /projects/details it renders correctly
+  const history = useHistory();
+  useEffect(() => {
+    history.push('/projects');
+  }, []);
+
+  let index: number = 0;
 
   // Projects are returned under and array
   type projectData = Project[];
@@ -30,71 +44,95 @@ const ProjectsPage = () => {
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
   //  refetchOnReconnect and refetchInterval.
-  const { error, data, status, isFetching } = useGetProjects();
-  if (data && typeof data === typeof Array) {
-    const pendingList = data.filter(
-      (project) =>
-        project.status === 'pending_approval' || project.status === 'created',
-    );
-    const finishedList = data.filter(
-      (project) =>
-        project.status !== 'pending_approval' && project.status !== 'created',
-    );
-    const panes: panes = [
-      {
-        menuItem: (
-          <Menu.Item as={Link} to={`${path}/active/`} key="active">
-            Active<Label>{pendingList.length}</Label>
-          </Menu.Item>
-        ),
-        render: () => (
-          <Tab.Pane as={Route} path={`${path}/active/`}>
-            <ProjectList data={pendingList} />
-          </Tab.Pane>
-        ),
+  const queryInfo = useGetProjects();
+  const { error, data, status, isFetching } = queryInfo;
+
+  const panes: panes = [
+    {
+      menuItem: {
+        as: Link,
+        content: 'Active',
+        to: '/projects',
+        exact: true,
+        key: 'active-projects',
       },
-      {
-        menuItem: (
-          <Menu.Item as={Link} to={`${path}/finished`} key="finished">
-            Finished<Label>{finishedList.length}</Label>
-          </Menu.Item>
-        ),
-        render: () => (
-          <Tab.Pane as={Route} path={`${path}/finished`}>
-            <ProjectList data={finishedList} />
+      render: () => (
+        <Route path="/projects" exact key="active-projects-pane">
+          <Tab.Pane>
+            {data !== undefined ? (
+              <ProjectList
+                data={data.filter(
+                  (project) =>
+                    project.status === 'pending_approval' ||
+                    project.status === 'created',
+                )}
+              />
+            ) : (
+              <Loader />
+            )}
           </Tab.Pane>
-        ),
+        </Route>
+      ),
+    },
+    {
+      menuItem: {
+        as: Link,
+        content: 'Finished',
+        to: '/projects/finished',
+        exact: true,
+        key: 'finished-projects',
       },
-      {
-        menuItem: (
-          <Menu.Item as={Link} to={`${path}/new`} key="new">
-            New Project
-          </Menu.Item>
-        ),
-        render: () => (
-          <Tab.Pane as={Route} path={`${path}/new`}>
+
+      render: () => (
+        <Route path="/projects/finished" exact key="finished-projects-pane">
+          <Tab.Pane>
+            {data !== undefined ? (
+              <ProjectList
+                data={data.filter(
+                  (project) =>
+                    project.status !== 'pending_approval' &&
+                    project.status !== 'created',
+                )}
+              />
+            ) : (
+              <Loader />
+            )}
+          </Tab.Pane>
+        </Route>
+      ),
+    },
+    {
+      menuItem: {
+        as: Link,
+        content: 'New Project',
+        to: '/projects/new',
+        exact: true,
+        key: 'new-projects',
+      },
+
+      render: () => (
+        <Route path="/projects/new" exact key="new-projects-pane">
+          <Tab.Pane>
             <NewProjectForm />
           </Tab.Pane>
-        ),
-      },
-    ];
-    return (
-      <>
-        {/* Tabs */}
-        <TabContainer
-          panes={panes}
-          head={{
-            content: `Projects`,
-            subHeader1: 'See outstanding projects',
-          }}
-        />
-        {/* Redirect to defualt route */}
-        <Redirect from="/projects" to="/projects/active" />
-      </>
-    );
-  } else {
-    return <Loader />;
-  }
+        </Route>
+      ),
+    },
+  ];
+  return (
+    <>
+      {/* Tabs */}
+
+      <TabContainer
+        panes={panes}
+        activeIndex={index}
+        head={{
+          content: `Projects`,
+          subHeader1: 'See outstanding projects',
+        }}
+      />
+    </>
+  );
 };
 
 export default ProjectsPage;

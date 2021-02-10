@@ -32,16 +32,11 @@ const OrganizationList = ({ data }: { data: User[] }) => {
             <Table.Cell>
               <Header as="h4">{user.name}</Header>
             </Table.Cell>
-            <Table.Cell>{user.doa ? user.doa : ''}</Table.Cell>
+            <Table.Cell>{user.doa ?? ''}</Table.Cell>
             <Table.Cell>{formatDate(user.created_at)}</Table.Cell>
 
             <Table.Cell>
-              {() => {
-                const item = data.find(
-                  (item) => item.id === user.supervisor_id,
-                );
-                !!item ? item.name : '';
-              }}
+              {data.find((item) => item.id === user.supervisor_id)?.name ?? ''}
             </Table.Cell>
           </Table.Row>
         ))}

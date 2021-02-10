@@ -21,6 +21,7 @@ import WorkflowList from './components/WorkflowList';
 import ApprovalsPage from './Pages/ApprovalsPage';
 import OrganizationPage from './Pages/OrganizationPage';
 import SignUpContainer from './components/SignUpContainer';
+import WorkflowsPage from './Pages/WorkflowsPage';
 
 interface AppProps {}
 
@@ -39,19 +40,18 @@ function App({}: AppProps) {
             {/* <IndexRoute exact component={AsyncDashboard} /> */}
             <Route path="/accountForm" children={<UserProfileForm />} />
             <Route path="/account" children={<UserProfile />} />
-            <Route path="/projectForm" children={<NewProjectForm />} />
 
             <Route path="/projects" children={<ProjectListPage />} />
-            <Route exact path="/project/:id" children={<ProjectPage />} />
-            <Route
-              exact
-              path="/workflow_runs/:id"
-              children={<WorkflowPage />}
-            />
-            <Route exact path="/workflow_runs/" children={<WorkflowList />} />
+            <Route path="/project/:id" children={<ProjectPage />} />
+
+            <Route path="/workflow/:id" children={<WorkflowPage />} />
+            <Route path="/workflows/" children={<WorkflowsPage />} />
+
             <Route path="/projectForm/:id" children={<ProjectForm />} />
             <Route path="/newProjectForm" children={<NewProjectForm />} />
+
             <Route path="/approvals" children={<ApprovalsPage />} />
+
             <Route path="/organization" children={<OrganizationPage />} />
           </>
         </MainContainer>

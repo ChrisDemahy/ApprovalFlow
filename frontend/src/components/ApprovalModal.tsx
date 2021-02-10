@@ -60,9 +60,6 @@ function ApprovalModal({ children }: Props) {
     modalReducer,
     default_global_state,
   );
-  useEffect(() => {
-    console.log('rendered Modal');
-  }, []);
 
   // Default state provided in the context provider
   const default_state = { state, dispatch };
@@ -111,7 +108,7 @@ function ApprovalModal({ children }: Props) {
                   e.preventDefault();
 
                   dispatch({ type: 'CLOSE' });
-                  history.push(`/projects/${data?.project.id}`);
+                  history.push(`/project/${data?.project.id}`);
                 }}
               >
                 Open Project
@@ -128,7 +125,7 @@ function ApprovalModal({ children }: Props) {
                   };
                   mutation.mutate(authorization);
                   dispatch({ type: 'CLOSE' });
-                  history.push(`/projects/${data?.project.id}`);
+                  history.push(`/project/${data?.project.id}`);
                 }}
               >
                 Approve
@@ -145,7 +142,7 @@ function ApprovalModal({ children }: Props) {
                   };
                   mutation.mutate(authorization);
                   dispatch({ type: 'CLOSE' });
-                  history.push(`/projects/${data?.project.id}`);
+                  history.push(`/project/${data?.project.id}`);
                 }}
               >
                 Deny

@@ -24,52 +24,57 @@ const ProjectPage = () => {
   //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useGetProject(+id);
 
-  if (!data) {
-    return <Loader />;
-  } else {
-    const panes: panes = [
-      {
-        menuItem: 'Details',
-        render: () => (
-          <Tab.Pane>
-            <ProjectDetail project={data.project} />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: (
-          <Menu.Item key="messages">
-            Previous Workflows<Label>{data.project.previous_runs.length}</Label>
-          </Menu.Item>
-        ),
-        render: () => (
-          <Tab.Pane>
+  const panes: panes = [
+    {
+      menuItem: 'Details',
+      render: () => (
+        <Tab.Pane>
+          {!!data ? <ProjectDetail project={data.project} /> : <Loader />}
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: (
+        <Menu.Item key="messages">
+          Previous Workflows
+          <Label>{data?.project.previous_runs.length ?? 0}</Label>
+        </Menu.Item>
+      ),
+      render: () => (
+        <Tab.Pane>
+          {!!data ? (
             <WorkflowRunList workflows={data.project.previous_runs} />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Submit For Approval',
-        render: () => (
-          <Tab.Pane>
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: 'Submit For Approval',
+      render: () => (
+        <Tab.Pane>
+          {!!data ? (
             <ProjectSubmissionForm project={data.project} />
-          </Tab.Pane>
-        ),
-      },
-    ];
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
+      ),
+    },
+  ];
 
-    return (
-      <>
-        <TabContainer
-          panes={panes}
-          head={{
-            content: `Project ${data.project.name}`,
-            subHeader1:
-              'Manage details about your project and see previous workflows.',
-          }}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <TabContainer
+        panes={panes}
+        head={{
+          content: `Project ${data?.project.name ?? ''}`,
+          subHeader1:
+            'Manage details about your project and see previous workflows.',
+        }}
+      />
+    </>
+  );
 };
 export default ProjectPage;
