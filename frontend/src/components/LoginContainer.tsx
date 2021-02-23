@@ -19,9 +19,27 @@ const LoginContainer = () => {
   // React Query Mutation
   const queryClient = useQueryClient();
   const { apiError, mutation } = useLoginUser();
+
+  const onSignUpSubmit = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+    history.push('/signUp');
+  };
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const user = { email, password };
+    mutation.mutate(user);
+  };
+
+  const onGuestSubmit = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    setEmail('guest@awesomecompany.com');
+    setPassword('abc123');
+    event.preventDefault();
+    const user = { email: 'guest@awesomecompany.com', password: 'abc123' };
     mutation.mutate(user);
   };
 
@@ -32,6 +50,8 @@ const LoginContainer = () => {
       setPassword={setPassword}
       password={password}
       onSubmit={onSubmit}
+      onGuestSubmit={onGuestSubmit}
+      onSignUpSubmit={onSignUpSubmit}
       // TODO Add Error To All Forms
       apiError={apiError}
     />

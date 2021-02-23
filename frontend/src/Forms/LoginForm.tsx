@@ -21,6 +21,12 @@ interface loginProps {
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onGuestSubmit: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void;
+  onSignUpSubmit: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void;
   apiError: string[];
 }
 const Login = ({
@@ -29,6 +35,8 @@ const Login = ({
   password,
   setPassword,
   onSubmit,
+  onGuestSubmit,
+  onSignUpSubmit,
   apiError, // FIXME User this
 }: loginProps) => {
   return (
@@ -74,11 +82,13 @@ const Login = ({
                     setPassword(e.target.value);
                   }}
                 />
-                <Button.Group widths="2">
-                  <Button as={Link} to="/signUp" color="green">
+                <Button.Group widths="3">
+                  <Button onClick={onSignUpSubmit} color="green">
                     New Here?
                   </Button>
-
+                  <Button onClick={onGuestSubmit} color="red" size="large">
+                    Guest Login
+                  </Button>
                   <Button color="blue" size="large">
                     Login
                   </Button>

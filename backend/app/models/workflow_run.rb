@@ -17,7 +17,7 @@ class WorkflowRun < ApplicationRecord
     cs.update!(status: status) if !!cs
     return cs.status
   end
-  ####### Method to 'Submit' Project for approval #######
+  ####### Method to 'submit' project for approval #######
   # Creates the steps associated with the workflow.
 
   def submit_for_approval(project_submitter)
