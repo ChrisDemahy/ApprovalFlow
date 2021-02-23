@@ -214,7 +214,7 @@ export const usePostProject = () => {
       queryClient.invalidateQueries('projects');
       // Go to next page or show error
       console.log(res.data.project);
-      history.push(`/projects/${res.data.project.id}`);
+      history.push(`/project/${res.data.project.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
