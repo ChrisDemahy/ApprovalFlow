@@ -79,8 +79,9 @@ export const usePutUser = () => {
     email: string;
   }
 
+  const client = useClient();
   const putUser = (user: userData) => {
-    return client().put('/user', {
+    return client.put('/user', {
       user: user,
     });
   };
@@ -191,8 +192,9 @@ export const usePostProject = () => {
     total_cost: number;
     description: string;
   }
+  const client = useClient();
   const postProject = (project: ProjectData) => {
-    return client().post('/projects', {
+    return client.post('/projects', {
       project: project,
     });
   };
@@ -242,8 +244,9 @@ export const usePutAuthorization = () => {
     id: number;
     auth_status: string;
   }
+  const client = useClient();
   const putAuthorization = (authorization: authData) => {
-    return client().put(`/authorizations/${authorization.id}`, {
+    return client.put(`/authorizations/${authorization.id}`, {
       authorization: { status: authorization.auth_status },
     });
   };
@@ -295,8 +298,9 @@ export const usePutProject = () => {
     description: string;
   }
 
+  const client = useClient();
   const putProject = (project: projectData) => {
-    return client().put(`/projects/${project.id}`, {
+    return client.put(`/projects/${project.id}`, {
       project: project,
     });
   };
@@ -347,13 +351,14 @@ export const usePostWorkflowRun = () => {
     id: number;
   }
   // Axios Function
+  const client = useClient();
   const postWorkflowRun = ({
     name,
     description,
     id, // Project ID
   }: postData) => {
     const project_id = id;
-    return client().post(`/workflow_runs/`, {
+    return client.post(`/workflow_runs/`, {
       workflow_run: { name, description, project_id },
     });
   };
@@ -407,8 +412,9 @@ export function useGetProject(
   options?: UseQueryOptions<ProjectData, Error, ProjectData>,
 ) {
   // Get Project Axios Function
+  const client = useClient();
   const getProject = (id: number) => async (): Promise<ProjectData> => {
-    const { data } = await client().get(`/projects/${id}`);
+    const { data } = await client.get(`/projects/${id}`);
     return data;
   };
   // React Query Hook
@@ -425,8 +431,9 @@ export function useGetOrganization<TData = Organization>(
   options?: UseQueryOptions<Organization, Error, Organization>,
 ) {
   // Get Organization Axios Function
+  const client = useClient();
   const getOrganization = (id: number) => async (): Promise<Organization> => {
-    const { data } = await client().get(`/organizations/${id}`);
+    const { data } = await client.get(`/organizations/${id}`);
     return data;
   };
   // Get Organization React Query Hook
@@ -442,12 +449,13 @@ export function useGetCurrentUser(
   options?: UseQueryOptions<UserData, Error, UserData>,
 ) {
   // Axios Function
+  const client = useClient();
   const getCurrentUser = async (): Promise<UserData> => {
-    const { data } = await client().get('/user');
+    const { data } = await client.get('/user');
     return data;
   };
   // React Query Hook
-  return useQuery<UserData, Error>(['projects'], getCurrentUser, options);
+  return useQuery<UserData, Error>(['currentUser'], getCurrentUser, options);
 }
 
 // **** All Projects **** //
@@ -458,9 +466,10 @@ export function useGetProjects(
   // Get all projects Axios Function
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
+  const client = useClient();
   //  refetchOnReconnect and refetchInterval.
   const getAllProjects = async (): Promise<allProjects> => {
-    const { data } = await client().get('/projects');
+    const { data } = await client.get('/projects');
     console.log(data);
     return data;
   };
@@ -488,8 +497,9 @@ export function useGetAuthorizations(
   options?: UseQueryOptions<allAuthorizations, Error, allAuthorizations>,
 ) {
   // Axios Function
+  const client = useClient();
   const getAllAuthorizations = async (): Promise<allAuthorizations> => {
-    const { data } = await client().get('/authorizations');
+    const { data } = await client.get('/authorizations');
     return data;
   };
   // React Query
@@ -506,8 +516,9 @@ export function useGetWorkflowRuns(
   options?: UseQueryOptions<allWorkflowRuns, Error, allWorkflowRuns>,
 ) {
   // Axios Function
+  const client = useClient();
   const getAllWorkflowRuns = async (): Promise<allWorkflowRuns> => {
-    const { data } = await client().get('/workflow_runs/');
+    const { data } = await client.get('/workflow_runs/');
     return data;
   };
   // React Query Hook
@@ -524,8 +535,9 @@ export function useGetWorkflowRun<TData = WorkflowRunData>(
   options?: UseQueryOptions<WorkflowRunData, AxiosError, TData>,
 ) {
   // Axios Function
+  const client = useClient();
   const getWorkflowRun = (id: number) => async (): Promise<WorkflowRunData> => {
-    const { data } = await client().get(`/workflow_runs/${id}`);
+    const { data } = await client.get(`/workflow_runs/${id}`);
     return data;
   };
   // React Query Hook
@@ -534,12 +546,26 @@ export function useGetWorkflowRun<TData = WorkflowRunData>(
 
 // create axios object with propper settings
 
-const client = () => {
-  return axios.create({
+const useClient = () => {
+  const history = useHistory();
+  const newClient = axios.create({
     baseURL: `${BASE_URL}/`,
     // timeout: 1000,
     headers: {
       Authorization: `Token ${localStorage.token ? localStorage.token : ''}`,
     },
   });
+  newClient.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        localStorage.removeItem('token');
+        history.push('/login');
+      }
+      return error;
+    },
+  );
+  return newClient;
 };

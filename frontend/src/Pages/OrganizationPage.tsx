@@ -33,7 +33,7 @@ const OrganizationPage = () => {
     user: User;
   }
   const userQuery = useGetCurrentUser();
-  // console.log(userQuery.data);
+
   const id = userQuery.data?.user ? userQuery.data.user.organization_id : 0;
   const orgQuery = useGetOrganization(id, { enabled: !!userQuery.data });
   const orgData = orgQuery.data;
