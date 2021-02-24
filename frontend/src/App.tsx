@@ -58,7 +58,7 @@ function App({}: AppProps) {
       </Switch>
       {!localStorage.token && <Redirect to="/login" />}
 
-      {/* <LoginContainer /> */}
+      <Redirect exact from="/" to="/login" />
     </Router>
   );
 }

@@ -92,7 +92,7 @@ project_names = [
 ]
 
 # Project 1
-project1 =
+oasis_project =
   Project.create!(
     name: 'Oasis of the Seas Rudder Replacement',
     description:
@@ -102,71 +102,125 @@ project1 =
   )
 
 # Create the first workflow, to be denied and resubmitted
-workflow_run1 =
+oasis_workflow =
   WorkflowRun.create!(
     name: 'Oasis of the Seas Rudder Replacement',
     description: 'First submission',
-    project_id: project1.id
+    project_id: oasis_project.id,
+    status: 'created'
   )
 
-# To setup a workflow, call the method that creates all the steps,
-#   authorizations, etc...
+# Submit for approval also saves the workflow_run
+oasis_workflow.submit_for_approval(@fourth_user)
+
+# Approve the first step and deny the second
+
+oasis_step1 = Step.find_by id: oasis_workflow.current_step_id
+oasis_step1.authorization.update! status: 'approved'
+
+oasis_step2 = Step.find_by id: oasis_step1.next_step_id
+oasis_step2.authorization.update! status: 'denied'
+
+# Now create a second workflow not to be denied
+oasis_workflow =
+  WorkflowRun.create!(
+    name: 'Oasis of the Seas Rudder Replacement',
+    description: 'Changed dates to accomodate the july 4th holidy.',
+    project_id: oasis_project.id,
+    status: 'created'
+  )
 
 # Submit for approval also saves the workflow_run
-workflow_run1.submit_for_approval(@fourth_user)
-byebug
+oasis_workflow.submit_for_approval(@fourth_user)
 
-# first Authorization
-Authorization.create!(
-  user_id: @fourth_user.id,
-  step_id: workflow_run1.current_step_id,
-  status: 'approved',
-  description: 'Looks good!'
-)
-# second Authorization
-Authorization.create!(
-  user_id: @third_user.id,
-  step_id: workflow_run1.current_step_id,
-  status: 'denied',
-  description: 'Dates need to be adjusted to account for the july 4th holidy.'
-)
+# Approve the first step and leave the second
+
+oasis_step1 = Step.find_by id: oasis_workflow.current_step_id
+oasis_step1.authorization.update! status: 'approved'
 
 # Project 2
+majesty_project =
+  Project.create!(
+    name: 'Majesty of the Seas Bi-Yearly Mainenace',
+    description:
+      'Majesty of the Seas requires maintenance in july. The maintanene will be done in the Port of Galveston and commence on the 3rd through the 29th.',
+    user_id: @third_user.id,
+    total_cost: 72_000
+  )
 
-Project.create!(
-  name: 'Majesty of the Seas Bi-Yearly Mainenace',
-  description:
-    'Majesty of the Seas requires maintenance in july. The maintanene will be done in the Port of Galveston and commence on the 3rd through the 29th.',
-  user_id: @third_user.id,
-  total_cost: 72_000
-)
+# Create the first workflow, to be assigned for approval by the guest
+majesty_workflow =
+  WorkflowRun.create!(
+    name: 'Majesty of the Seas Bi-Yearly Mainenace',
+    description: 'First submission',
+    project_id: majesty_project.id,
+    status: 'created'
+  )
+
+# Submit for approval also saves the workflow_run
+majesty_workflow.submit_for_approval(@third_user)
 
 # Project 3
 
-Project.create!(
-  name: '2021 Port of Galveston Terminal Rennovation',
-  description:
-    '2021 will see the rennovation of the Royal Carribean facilities in Galveston. These will include a replacement of existing docks as well as refreshing the corporate branch office.',
-  user_id: @fourth_user.id,
-  total_cost: 105_000
-)
+port_project =
+  Project.create!(
+    name: '2021 Port of Galveston Terminal Rennovation',
+    description:
+      '2021 will see the rennovation of the Royal Carribean facilities in Galveston. These will include a replacement of existing docks as well as refreshing the corporate branch office.',
+    user_id: @fourth_user.id,
+    total_cost: 105_000
+  )
+
+# Create the first workflow, to be denied and resubmitted
+port_workflow =
+  WorkflowRun.create!(
+    name: '2021 Port of Galveston Terminal Rennovation',
+    description: 'First submission',
+    project_id: port_project.id,
+    status: 'created'
+  )
+
+# Submit for approval also saves the workflow_run
+port_workflow.submit_for_approval(@fourth_user)
+
+# Approve the first step and deny the second
+
+port_step1 = Step.find_by id: port_workflow.current_step_id
+port_step1.authorization.update! status: 'approved'
 
 # Project 4
 
-Project.create!(
-  name: 'Independence of the Seas Cabin Rennovation',
-  description:
-    '2022 will see the rennovation of the residential cabins on the Independence of the Seas. These will include updating furniture and bathroom fixtures, as well as supporting new technology services such as app integration.',
-  user_id: @third_user.id,
-  total_cost: 175_000
-)
+independence_project =
+  Project.create!(
+    name: 'Independence of the Seas Cabin Rennovation',
+    description:
+      '2022 will see the rennovation of the residential cabins on the Independence of the Seas. These will include updating furniture and bathroom fixtures, as well as supporting new technology services such as app integration.',
+    user_id: @third_user.id,
+    total_cost: 175_000
+  )
+# Create the first workflow, to be denied and resubmitted
+independence_workflow =
+  WorkflowRun.create!(
+    name: 'Independence of the Seas Cabin Rennovation',
+    description: 'First submission',
+    project_id: independence_project.id,
+    status: 'created'
+  )
+
+# Submit for approval also saves the workflow_run
+independence_workflow.submit_for_approval(@third_user)
+
+# Approve the first step and deny the second
+
+independence_step1 = Step.find_by id: independence_workflow.current_step_id
+independence_step1.authorization.update! status: 'approved'
 
 # Project 5
 
 Project.create!(
-  name: '2022 Fiscal Year Marketing Budget',
+  name: '2022 Fiscal Year Spring Marketing Plan',
   description:
-    'Annual budget summarizing the planned spending accross different teams under marketing.',
+    'Marketing report summarizing the planned spending accross departments during the 2022 spring season.',
   user_id: @guest_user.id,
   total_cost: 90_000
 )

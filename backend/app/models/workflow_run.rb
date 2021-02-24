@@ -5,18 +5,16 @@ class WorkflowRun < ApplicationRecord
   belongs_to :project
   has_many :steps
 
-  ####### Workflow Run Status ######
-  def status
-    cs = Step.find_by id: self.current_step_id
-    return cs.status
-  end
+  # Project can be either created, pending, finshed
+  # pending_approval
+  validates :status,
+            inclusion: {
+              in: %w[created pending_approval approved denied],
+              message: '%{value} is not a valid status'
+            }
 
-  def status=(status)
-    cs = Step.find_by id: self.current_step_id
+  after_save :update_on_save
 
-    cs.update!(status: status) if !!cs
-    return cs.status
-  end
   ####### Method to 'submit' project for approval #######
   # Creates the steps associated with the workflow.
 
@@ -89,9 +87,6 @@ class WorkflowRun < ApplicationRecord
 
       self.last_step_id = @previous_step.id
 
-      # update the project as pending approval
-      project.update!(status: 'pending_approval')
-
       # Return not nil, so controller knows it passed. Otherwise
       # errors are raised...
       self.save!
@@ -119,5 +114,9 @@ class WorkflowRun < ApplicationRecord
       raise Exceptions::CreateStepError
     end
     # workflow_run: workflow_run
+  end
+
+  def update_on_save
+    project.update!(status: self.status) if self.status
   end
 end
