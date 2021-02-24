@@ -39,6 +39,7 @@ class WorkflowRun < ApplicationRecord
     self.first_step_id = first_step.id
 
     # and current_step
+    byebug
     self.current_step_id = first_step.id
 
     # Store this step so it can later be assigned a next_step_id
@@ -83,7 +84,6 @@ class WorkflowRun < ApplicationRecord
 
   def create_step(supervisor, project, status)
     # Create the step from given information
-    byebug
     step =
       Step.new(
         name: "#{project.name}",

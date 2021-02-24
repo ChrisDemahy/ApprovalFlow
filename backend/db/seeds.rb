@@ -23,7 +23,8 @@ organization = Organization.create! name: 'Royal Carribean'
 
 #=> "kirsten.greenholt@corkeryfisher.info"
 
-# Create the final user in the approval chain
+# Create the users
+
 @first_user =
   User.create!(
     name: 'Chris Demahy',
@@ -33,32 +34,9 @@ organization = Organization.create! name: 'Royal Carribean'
     organization_id: organization.id,
     doa: 700_000
   )
-
 @first_user.update! supervisor_id: @first_user.id
 
 @second_user =
-  User.create!(
-    name: 'Mike Smith',
-    password: 'abc123',
-    password_confirmation: 'abc123',
-    email: 'mike@gmail.com',
-    organization_id: organization.id,
-    doa: 40_000,
-    supervisor_id: @first_user.id
-  )
-
-@third_user =
-  User.create!(
-    name: 'Jack Deaton',
-    password: 'abc123',
-    password_confirmation: 'abc123',
-    email: 'jack@gmail.com',
-    organization_id: organization.id,
-    doa: 26_500,
-    supervisor_id: @second_user.id
-  )
-
-@fourth_user =
   User.create!(
     name: 'Marry Horton',
     password: 'abc123',
@@ -66,7 +44,40 @@ organization = Organization.create! name: 'Royal Carribean'
     email: 'Marry@gmail.com',
     organization_id: organization.id,
     doa: 86_500,
+    supervisor_id: @first_user.id
+  )
+
+@guest_user =
+  User.create!(
+    name: 'Recruiter',
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: 'guest@awesomecompany.com',
+    organization_id: organization.id,
+    doa: 50_000,
     supervisor_id: @second_user.id
+  )
+
+@third_user =
+  User.create!(
+    name: 'Mike Smith',
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: 'mike@gmail.com',
+    organization_id: organization.id,
+    doa: 40_000,
+    supervisor_id: @guest_user.id
+  )
+
+@fourth_user =
+  User.create!(
+    name: 'Jack Deaton',
+    password: 'abc123',
+    password_confirmation: 'abc123',
+    email: 'jack@gmail.com',
+    organization_id: organization.id,
+    doa: 26_500,
+    supervisor_id: @third_user.id
   )
 
 @projects = []
@@ -80,18 +91,85 @@ project_names = [
   '2020 Fiscal Year Annual Customer Experience Report'
 ]
 
-project_names.each do |name|
-  @projects <<
-    Project.create!(
-      name: name,
-      description:
-        Faker::Lorem.sentence(
-          word_count: 3, supplemental: false, random_words_to_add: 15
-        ),
-      user_id: @third_user.id,
-      total_cost: cost
-    )
-  cost = cost * 2
-end
+# Project 1
+project1 =
+  Project.create!(
+    name: 'Oasis of the Seas Rudder Replacement',
+    description:
+      'Maintenance showed damage to the main rudder of the Oasis of the Seas. Initial reports show arrangements should be made for full replacement of the rudder and will require the ship to be out of commision for many months. ',
+    user_id: @fourth_user.id,
+    total_cost: 65_000
+  )
+# Create the first workflow
+workflow_run1 =
+  WorkflowRun.create!(
+    name: 'Oasis of the Seas Rudder Replacement',
+    description: 'First submission',
+    project_id: project1.id
+  )
+
+workflow_run1.submit_for_approval(@fourth_user)
+
+# first Authorization
+Authorization.create!(
+  user_id: @fourth_user.id,
+  step_id: workflow_run1.current_step_id,
+  status: 'approved',
+  description: 'Looks good!'
+)
+# second Authorization
+Authorization.create!(
+  user_id: @third_user.id,
+  step_id: workflow_run1.current_step_id,
+  status: 'denied',
+  description: 'Dates need to be adjusted to account for the july 4th holidy.'
+)
+
+# The create a workflow, call the method that creates all the steps,
+#   authorizations, etc...
+
+# Submit for approval saves the workflow_run
+workflow_run1.submit_for_approval(@fourth_user)
+byebug
+
+# Project 2
+
+Project.create!(
+  name: 'Majesty of the Seas Bi-Yearly Mainenace',
+  description:
+    'Majesty of the Seas requires maintenance in july. The maintanene will be done in the Port of Galveston and commence on the 3rd through the 29th.',
+  user_id: @third_user.id,
+  total_cost: 72_000
+)
+
+# Project 3
+
+Project.create!(
+  name: '2021 Port of Galveston Terminal Rennovation',
+  description:
+    '2021 will see the rennovation of the Royal Carribean facilities in Galveston. These will include a replacement of existing docks as well as refreshing the corporate branch office.',
+  user_id: @fourth_user.id,
+  total_cost: 105_000
+)
+
+# Project 4
+
+Project.create!(
+  name: 'Independence of the Seas Cabin Rennovation',
+  description:
+    '2022 will see the rennovation of the residential cabins on the Independence of the Seas. These will include updating furniture and bathroom fixtures, as well as supporting new technology services such as app integration.',
+  user_id: @third_user.id,
+  total_cost: 175_000
+)
+
+# Project 5
+
+Project.create!(
+  name: '2022 Fiscal Year Marketing Budget',
+  description:
+    'Annual budget summarizing the planned spending accross different teams under marketing.',
+  user_id: @guest_user.id,
+  total_cost: 90_000
+)
 
 @workflow_template = WorkflowTemplate.create(name: 'doa Approval')
