@@ -42,7 +42,7 @@ const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
                 <Table.Cell>{formatDate(workflow_run.created_at)}</Table.Cell>
                 {/* <Table.Cell>{formatDate(workflow_run.updated_at)}</Table.Cell> */}
                 <Table.Cell>
-                  <Button as={Link} to={`/workflows/${workflow_run.id}`} basic>
+                  <Button as={Link} to={`/workflow/${workflow_run.id}`} basic>
                     Open
                   </Button>
                 </Table.Cell>
