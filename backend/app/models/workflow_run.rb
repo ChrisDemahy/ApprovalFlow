@@ -22,6 +22,7 @@ class WorkflowRun < ApplicationRecord
 
   def submit_for_approval(project_submitter)
     # Set the project
+
     project = self.project
 
     # Get the project submitter from arguments
@@ -31,52 +32,70 @@ class WorkflowRun < ApplicationRecord
     raise Exceptions::NoSubmitterSupervisor if !project_submitter.supervisor_id?
     @supervisor = project_submitter.supervisor
 
-    #### First Step ####
-    # Create the step and store it. First step is always pending.
-    first_step = create_step(@supervisor, project, 'pending')
+    # Project total cost is under current users DOA.
 
-    # Assign that step as the workflow_run's first_step
-    self.first_step_id = first_step.id
+    # Create the only step
 
-    # and current_step
-    byebug
-    self.current_step_id = first_step.id
+    # update the project as approved
 
-    # Store this step so it can later be assigned a next_step_id
-    @previous_step = first_step
+    if (project.total_cost < project_submitter.doa)
+      only_step = create_step(project_submitter, project, 'approved')
 
-    ###### doa Loop ######
+      self.last_step_id = only_step.id
 
-    # While loop to find the supervisor that meets the project total_cost
-    while @supervisor.doa < project.total_cost
-      if !project_submitter.supervisor_id?
-        raise Exceptions::NoSubmitterSupervisor
+      project.update!(status: 'approved')
+
+      self.save!
+    else
+      #### First Step ####
+      # Create the step and store it. First step is always pending.
+      first_step = create_step(@supervisor, project, 'pending')
+
+      # Assign that step as the workflow_run's first_step
+      self.first_step_id = first_step.id
+
+      # and current_step
+
+      self.current_step_id = first_step.id
+
+      # Store this step so it can later be assigned a next_step_id
+      @previous_step = first_step
+
+      ###### doa Loop ######
+
+      # While loop to find the supervisor that meets the project total_cost
+      while @supervisor.doa < project.total_cost
+        if !project_submitter.supervisor_id?
+          raise Exceptions::NoSubmitterSupervisor
+        end
+        @supervisor = @supervisor.supervisor
+
+        ###### Intermediary Step ######
+
+        # Create the new step
+        new_step = create_step(@supervisor, project, 'created')
+
+        # Assign this newly created step as the previous-step-in-the-loop's,
+        # next step, like from line:65
+        @previous_step.update!(next_step_id: new_step.id)
+
+        # Set previous_step as as this step to later assign this steps next_step
+        @previous_step = new_step
+        # Break if the supervisor id is equal to itself. OrganizationOwner/SuperUser
+        break if @supervisor = @supervisor.supervisor
       end
-      @supervisor = @supervisor.supervisor
 
-      ###### Intermediary Step ######
+      # Set the last step on the workflow to the final step.
 
-      # Create the new step
-      new_step = create_step(@supervisor, project, 'created')
+      self.last_step_id = @previous_step.id
 
-      # Assign this newly created step as the previous-step-in-the-loop's,
-      # next step, like from line:65
-      @previous_step.update!(next_step_id: new_step.id)
+      # update the project as pending approval
+      project.update!(status: 'pending_approval')
 
-      # Set previous_step as as this step to later assign this steps next_step
-      @previous_step = new_step
-      # Break if the supervisor id is equal to itself. OrganizationOwner/SuperUser
-      break if @supervisor = @supervisor.supervisor
+      # Return not nil, so controller knows it passed. Otherwise
+      # errors are raised...
+      self.save!
     end
-
-    # Set the last step on the workflow to the final step.
-    self.last_step_id = @previous_step.id
-
-    # update the project as pending approval
-    project.update!(status: 'pending_approval')
-
-    # Return not nil, so controller knows it passed. Otherwise
-    # errors are raised...
     true
   end
 
@@ -84,6 +103,7 @@ class WorkflowRun < ApplicationRecord
 
   def create_step(supervisor, project, status)
     # Create the step from given information
+
     step =
       Step.new(
         name: "#{project.name}",

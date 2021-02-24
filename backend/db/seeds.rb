@@ -100,7 +100,8 @@ project1 =
     user_id: @fourth_user.id,
     total_cost: 65_000
   )
-# Create the first workflow
+
+# Create the first workflow, to be denied and resubmitted
 workflow_run1 =
   WorkflowRun.create!(
     name: 'Oasis of the Seas Rudder Replacement',
@@ -108,7 +109,12 @@ workflow_run1 =
     project_id: project1.id
   )
 
+# To setup a workflow, call the method that creates all the steps,
+#   authorizations, etc...
+
+# Submit for approval also saves the workflow_run
 workflow_run1.submit_for_approval(@fourth_user)
+byebug
 
 # first Authorization
 Authorization.create!(
@@ -124,13 +130,6 @@ Authorization.create!(
   status: 'denied',
   description: 'Dates need to be adjusted to account for the july 4th holidy.'
 )
-
-# The create a workflow, call the method that creates all the steps,
-#   authorizations, etc...
-
-# Submit for approval saves the workflow_run
-workflow_run1.submit_for_approval(@fourth_user)
-byebug
 
 # Project 2
 

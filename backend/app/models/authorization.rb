@@ -15,7 +15,6 @@ class Authorization < ApplicationRecord
   private
 
   def create_notification
-    # byebug
     # notification =
     #   Notification.create! user_id: self.user_id,
     #                        name: self.step.name,

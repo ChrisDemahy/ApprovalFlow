@@ -59,7 +59,6 @@ class ProjectsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def project_params
-    # byebug
     params.require(:project).permit(
       :description,
       :total_cost,

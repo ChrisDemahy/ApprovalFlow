@@ -7,7 +7,7 @@ class AuthorizationsController < ApplicationController
   def index
     @auths = Authorization.includes(:step)
     @authorizations = @auths.filter { |auth| auth.user_id === current_user.id }
-    # byebug
+
     # puts ''
   end
 

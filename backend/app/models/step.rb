@@ -19,7 +19,6 @@ class Step < ApplicationRecord
 
   def update_on_save
     if self.status == 'pending' && self.user_id? && !self.authorization
-      # byebug
       auth =
         Authorization.create!(
           step: self, status: 'pending', user_id: self.user_id
@@ -29,12 +28,14 @@ class Step < ApplicationRecord
     elsif self.status == 'approved' && self.next_step_id?
       self.workflow_run.update current_step_id: self.next_step_id
       self.next_step.update status: 'pending'
-    elsif self.status == 'denied' || self.status == 'approved'
-      # Else set the workflow as finished
-      # notification =
-      #   Notification.create! user_id: self.user_id,
-      #                        name: self.name,
-      #                        project_id: self.workflow_run.project_id
+
+      # Else this is the last step and update the workflow
+    elsif self.status == 'approved'
+      # Approved
+      self.workflow_run.update!(status: 'approved')
+    elsif self.status == 'denied'
+      # Denied
+      self.workflow_run.update!(status: 'denied')
     end
   end
 end
