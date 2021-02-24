@@ -82,14 +82,13 @@ organization = Organization.create! name: 'Royal Carribean'
 
 @projects = []
 cost = 17_000
-project_names = [
-  'Oasis of the Seas Rudder Replacement',
-  'Majesty of the Seas Bi-Yearly Mainenace',
-  '2021 Port of Galveston Terminal Rennovation',
-  'Independence of the Seas Cabin Rennovation',
-  'Enchantment of the Seas Quadrennial Hull Inspection',
-  '2020 Fiscal Year Annual Customer Experience Report'
-]
+# project_names
+#   'Oasis of the Seas Rudder Replacement',
+#   'Majesty of the Seas Bi-Yearly Mainenace',
+#   '2021 Port of Galveston Terminal Rennovation',
+#   'Independence of the Seas Cabin Rennovation',
+#   'Enchantment of the Seas Quadrennial Hull Inspection',
+#   '2020 Fiscal Year Annual Customer Experience Report'
 
 # Project 1
 oasis_project =
@@ -118,9 +117,6 @@ oasis_workflow.submit_for_approval(@fourth_user)
 oasis_step1 = Step.find_by id: oasis_workflow.current_step_id
 oasis_step1.authorization.update! status: 'approved'
 
-oasis_step2 = Step.find_by id: oasis_step1.next_step_id
-oasis_step2.authorization.update! status: 'denied'
-
 # Now create a second workflow not to be denied
 oasis_workflow =
   WorkflowRun.create!(
@@ -134,9 +130,6 @@ oasis_workflow =
 oasis_workflow.submit_for_approval(@fourth_user)
 
 # Approve the first step and leave the second
-
-oasis_step1 = Step.find_by id: oasis_workflow.current_step_id
-oasis_step1.authorization.update! status: 'approved'
 
 # Project 2
 majesty_project =

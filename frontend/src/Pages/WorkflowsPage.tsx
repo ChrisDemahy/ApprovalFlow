@@ -36,9 +36,11 @@ const WorkflowsPage = () => {
 
   // Helper Methods
 
-  const pendingList = data?.filter((workflow) => workflow.status === 'pending');
+  const pendingList = data?.filter((workflow) =>
+    workflow.status.includes('pending'),
+  );
   const finishedList = data?.filter(
-    (workflow) => workflow.status !== 'pending',
+    (workflow) => workflow.status.includes('pending') !== true,
   );
   const panes: panes = [
     {

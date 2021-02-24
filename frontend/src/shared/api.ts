@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosError } from 'axios';
 import type User from '../types/user';
 import type { UserData } from '../types/user';
-import History, { useHistory, useLocation, useParams } from 'react-router-dom';
+import History, { useHistory, useLocation } from 'react-router-dom';
 import {
   useQuery,
   useMutation,
@@ -39,13 +39,12 @@ export const useLoginUser = () => {
   // To navigate to another page on finishing of request
   const history = useHistory();
   // Id of the workflow_run
-  const id = useParams();
 
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(loginUser, {
-    onSuccess: (res) => {
+    onSuccess: ({ data }: { data: { user: User; token: string } }) => {
       // Invalidate and refetch
-      const { user, token }: { user: User; token: string } = res.data;
+      const { user, token } = data;
       // TODO Set user query data from here
       localStorage.token = token;
       queryClient.invalidateQueries('currentUser');
@@ -91,13 +90,12 @@ export const usePutUser = () => {
   // To navigate to another page on finishing of request
   const history = useHistory();
   // Id of the workflow_run
-  const id = useParams();
 
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(putUser, {
-    onSuccess: (res) => {
+    onSuccess: ({ data }: { data: { user: User } }) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries('user');
+      queryClient.invalidateQueries('currentUser');
       // Go to next page or show error
     },
     onError: (error: AxiosError, variables, context) => {
@@ -150,13 +148,12 @@ export const usePostUser = () => {
   // To navigate to another page on finishing of request
   const history = useHistory();
   // Id of the workflow_run
-  const id = useParams();
 
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(postUser, {
-    onSuccess: (res) => {
+    onSuccess: ({ data }: { data: { user: User; token: string } }) => {
       // Invalidate and refetch
-      const { user, token }: { user: User; token: string } = res.data;
+      const { user, token } = data;
       // TODO Set user query data from here
       localStorage.token = token;
       queryClient.invalidateQueries('currentUser');
@@ -204,17 +201,18 @@ export const usePostProject = () => {
   // To navigate to another page on finishing of request
   const history = useHistory();
   // Id of the workflow_run
-  const id = useParams();
+
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(postProject, {
-    onSuccess: (res) => {
+    onSuccess: ({ data }: { data: { project: Project } }) => {
       // const project = data.project;
 
       // Invalidate and refetch
       queryClient.invalidateQueries('projects');
+      queryClient.invalidateQueries(['project', data.project.id]);
       // Go to next page or show error
-      console.log(res.data.project);
-      history.push(`/project/${res.data.project.id}`);
+      debugger;
+      history.push(`/project/${data.project.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
@@ -256,13 +254,13 @@ export const usePutAuthorization = () => {
   // To navigate to another page on finishing of request
   const history = useHistory();
   // Id of the workflow_run
-  const id = useParams();
+
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(putAuthorization, {
     onSuccess: ({ data }: { data: AuthorizationData }) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries(['notifications']);
-
+      queryClient.invalidateQueries(['authorizations']);
+      queryClient.invalidateQueries(['authorization', data.authorization.id]);
       // Get The id of the new workflow_run
       // Go to next page or show error
       // history.push(`/workflow_runs/${data.workflow_run.id}`);
@@ -309,13 +307,12 @@ export const usePutProject = () => {
   const queryClient = useQueryClient();
   // To navigate to another page on finishing of request
   const history = useHistory();
-  // Id of the workflow_run
-  const id = useParams();
+
   const [apiError, setApiError] = useState(['']);
   const mutation = useMutation(putProject, {
     onSuccess: ({ data }: { data: ProjectData }) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries(['project', +id]);
+      queryClient.invalidateQueries(['project', data.project.id]);
 
       // Get The id of the new workflow_run
       // Go to next page or show error
@@ -370,14 +367,14 @@ export const usePostWorkflowRun = () => {
   const history = useHistory();
 
   // Id of the workflow_run
-  const id = useParams();
+
   // Api Error State
   const [apiError, setApiError] = useState(['']);
 
   const mutation = useMutation(postWorkflowRun, {
     onSuccess: ({ data }: { data: WorkflowRunData }) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries(['workflow_run', +id]);
+      queryClient.invalidateQueries(['workflow_run', data.workflow_run.id]);
 
       // Get The id of the new workflow_run
       // Go to next page or show error
@@ -418,11 +415,7 @@ export function useGetProject(
     return data;
   };
   // React Query Hook
-  return useQuery<ProjectData, Error>(
-    ['project', +id],
-    getProject(+id),
-    options,
-  );
+  return useQuery<ProjectData, Error>(['project', id], getProject(id), options);
 }
 
 // **** Single Organization **** //
@@ -438,8 +431,8 @@ export function useGetOrganization<TData = Organization>(
   };
   // Get Organization React Query Hook
   return useQuery<Organization, Error>(
-    ['project', +id],
-    getOrganization(+id),
+    ['organization', id],
+    getOrganization(id),
     options,
   );
 }
@@ -488,7 +481,10 @@ export function useGetOrganizations<TData = allOrganizations>(
     return data;
   };
   // React Query Hook
-  return useQuery<allOrganizations, Error>(['projects'], getAllOrganizations);
+  return useQuery<allOrganizations, Error>(
+    ['organizations'],
+    getAllOrganizations,
+  );
 }
 
 // **** All Authorizations **** //
@@ -504,7 +500,7 @@ export function useGetAuthorizations(
   };
   // React Query
   return useQuery<allAuthorizations, Error>(
-    ['projects'],
+    ['authorizations'],
     getAllAuthorizations,
     options,
   );
@@ -523,7 +519,7 @@ export function useGetWorkflowRuns(
   };
   // React Query Hook
   return useQuery<allWorkflowRuns, Error>(
-    ['projects'],
+    ['workflows'],
     getAllWorkflowRuns,
     options,
   );
@@ -541,7 +537,7 @@ export function useGetWorkflowRun<TData = WorkflowRunData>(
     return data;
   };
   // React Query Hook
-  return useQuery<WorkflowRunData, Error>(['projects'], getWorkflowRun(id));
+  return useQuery<WorkflowRunData, Error>(['workflow', id], getWorkflowRun(id));
 }
 
 // create axios object with propper settings
