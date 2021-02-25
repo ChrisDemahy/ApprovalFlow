@@ -27,10 +27,6 @@ import { NavLink, Route } from 'react-router-dom';
 const ApprovalsPage = () => {
   const { state, dispatch } = useContext(ModalContext);
 
-  const queryClient = useQueryClient();
-  const id = '5';
-  type WorkflowRuns = Workflowrun[];
-  type Authorizations = Authorization[];
   const { error, data, status, isFetching } = useGetAuthorizations();
 
   // Helper Methods
@@ -44,50 +40,42 @@ const ApprovalsPage = () => {
   const panes: panes = [
     {
       menuItem: {
-        as: NavLink,
         content: (
           <>
             Active<Label>{pendingList?.length ?? 0}</Label>
           </>
         ),
-        to: '/approvals',
-        exact: true,
+
         key: 'active-approvals',
       },
       render: () => (
-        <Route path="/approvals" exact>
-          <Tab.Pane>
-            {!!pendingList ? (
-              <ApprovalList data={pendingList} dispatchMethod={dispatch} />
-            ) : (
-              <Loader />
-            )}
-          </Tab.Pane>
-        </Route>
+        <Tab.Pane>
+          {!!pendingList ? (
+            <ApprovalList data={pendingList} dispatchMethod={dispatch} />
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
       ),
     },
     {
       menuItem: {
-        as: NavLink,
         content: (
           <>
             Finished<Label>{finishedList?.length ?? 0}</Label>
           </>
         ),
-        to: '/approvals/finished',
-        exact: true,
+
         key: 'finished-approvals',
       },
       render: () => (
-        <Route path="/approvals/finished" exact>
-          <Tab.Pane>
-            {!!finishedList ? (
-              <ApprovalList data={finishedList} dispatchMethod={dispatch} />
-            ) : (
-              <Loader />
-            )}
-          </Tab.Pane>
-        </Route>
+        <Tab.Pane>
+          {!!finishedList ? (
+            <ApprovalList data={finishedList} dispatchMethod={dispatch} />
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
       ),
     },
   ];

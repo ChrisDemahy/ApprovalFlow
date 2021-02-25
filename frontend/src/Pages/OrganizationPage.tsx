@@ -22,9 +22,6 @@ import { useGetCurrentUser, useGetOrganization } from '../shared/api';
 const OrganizationPage = () => {
   // React Query
 
-  // Projects are returned under and array
-  type OrganizationData = Organization;
-
   // Query to fetch the current projects data.
   // TODO Refetch data on options:
   //  staleTime, refetchOnMount, refetchOnWindowFocus,
@@ -33,71 +30,58 @@ const OrganizationPage = () => {
     user: User;
   }
   const userQuery = useGetCurrentUser();
-
-  const id = userQuery.data?.user ? userQuery.data.user.organization_id : 0;
-  const orgQuery = useGetOrganization(id, { enabled: !!userQuery.data });
+  const userData = userQuery.data;
+  const id = userData?.user ? userData.user.organization_id : 0;
+  const orgQuery = useGetOrganization(id, { enabled: !!userData });
   const orgData = orgQuery.data;
   // Ensures that if the user loads up the details it resets to the main tab
   // TODO Make it so when a user navigates to /projects/details it renders correctly
-  const history = useHistory();
-  useEffect(() => {
-    history.push('/organization');
-  }, []);
 
-  const panes: panes = [
-    {
-      menuItem: {
-        as: NavLink,
-        content: (
-          <>
-            Users<Label>{!!orgData ? orgData.users.length : 0}</Label>
-          </>
+  if (!userData || !orgData) {
+    return <Loader />;
+  } else {
+    const panes: panes = [
+      {
+        menuItem: {
+          content: (
+            <>
+              Users<Label>{orgData.users.length}</Label>
+            </>
+          ),
+          key: 'organization-users',
+        },
+        render: () => (
+          <Tab.Pane>
+            <OrganizationList data={orgData.users} />
+          </Tab.Pane>
         ),
-        to: '/organization',
-        exact: true,
-        key: 'organization-users',
       },
-      render: () => (
-        <Route path="/organization" exact key="organization-users-pane">
+      {
+        menuItem: {
+          content: <>Details</>,
+          key: 'organization-details',
+        },
+        render: () => (
           <Tab.Pane>
-            {!!orgData ? <OrganizationList data={orgData.users} /> : <Loader />}
+            <h2>Name</h2> <h3>{orgData.name}</h3>
           </Tab.Pane>
-        </Route>
-      ),
-    },
-    {
-      menuItem: {
-        as: NavLink,
-        content: <>Details</>,
-        to: '/organization/details',
-        exact: true,
-        key: 'organization-details',
+        ),
       },
-      render: () => (
-        <Route
-          path="/organization/details"
-          exact
-          key="organization-details-pane"
-        >
-          <Tab.Pane>
-            <h2>Name</h2> <h3>{orgData?.name ?? ''}</h3>
-          </Tab.Pane>
-        </Route>
-      ),
-    },
-  ];
-  return (
-    <>
-      {/* Tabs */}
-      <TabContainer
-        panes={panes}
-        head={{
-          content: `Organization`,
-          subHeader1: 'See details as well as users part of your organization.',
-        }}
-      />
-    </>
-  );
+    ];
+    return (
+      <>
+        {/* Tabs */}
+        <TabContainer
+          panes={panes}
+          head={{
+            content: `Organization`,
+            subHeader1:
+              'See details as well as users part of your organization.',
+          }}
+        />
+      </>
+    );
+  }
 };
 
 export default OrganizationPage;

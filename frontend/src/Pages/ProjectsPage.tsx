@@ -29,23 +29,6 @@ const ProjectsPage = () => {
   // React Router
   // Ensures that if the user loads up the details it resets to the main tab
   // TODO Make it so when a user navigates to /projects/details it renders correctly
-  const history = useHistory();
-
-  const match = useRouteMatch('/projects/:slug');
-  const [index, setIndex] = useState(0);
-  useEffect(() => {
-    switch (match?.url) {
-      case '/projects/finished':
-        setIndex(1);
-        break;
-      case '/projects/new':
-        setIndex(2);
-        break;
-    }
-  }, [match]);
-
-  // Projects are returned under and array
-  type projectData = Project[];
 
   // Query to fetch the current projects data.
   // TODO Refetch data on options:
@@ -57,72 +40,58 @@ const ProjectsPage = () => {
   const panes: panes = [
     {
       menuItem: {
-        as: Link,
         content: 'Active',
-        to: '/projects',
-        exact: true,
         key: 'active-projects',
       },
       render: () => (
-        <Route path="/projects" exact key="active-projects-pane">
-          <Tab.Pane>
-            {data !== undefined ? (
-              <ProjectList
-                data={data.filter(
-                  (project) =>
-                    project.status === 'pending_approval' ||
-                    project.status === 'created',
-                )}
-              />
-            ) : (
-              <Loader />
-            )}
-          </Tab.Pane>
-        </Route>
+        <Tab.Pane>
+          {data !== undefined ? (
+            <ProjectList
+              data={data.filter(
+                (project) =>
+                  project.status === 'pending_approval' ||
+                  project.status === 'created',
+              )}
+            />
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
       ),
     },
     {
       menuItem: {
-        as: Link,
         content: 'Finished',
-        to: '/projects/finished',
-        exact: true,
+
         key: 'finished-projects',
       },
 
       render: () => (
-        <Route path="/projects/finished" exact key="finished-projects-pane">
-          <Tab.Pane>
-            {data !== undefined ? (
-              <ProjectList
-                data={data.filter(
-                  (project) =>
-                    project.status !== 'pending_approval' &&
-                    project.status !== 'created',
-                )}
-              />
-            ) : (
-              <Loader />
-            )}
-          </Tab.Pane>
-        </Route>
+        <Tab.Pane>
+          {data !== undefined ? (
+            <ProjectList
+              data={data.filter(
+                (project) =>
+                  project.status !== 'pending_approval' &&
+                  project.status !== 'created',
+              )}
+            />
+          ) : (
+            <Loader />
+          )}
+        </Tab.Pane>
       ),
     },
     {
       menuItem: {
-        as: Link,
         content: 'New Project',
-        to: '/projects/new',
-        exact: true,
         key: 'new-projects',
       },
 
       render: () => (
-        <Route path="/projects/new" exact key="new-projects-pane">
-          <Tab.Pane>
-            <NewProjectForm />
-          </Tab.Pane>
-        </Route>
+        <Tab.Pane>
+          <NewProjectForm />
+        </Tab.Pane>
       ),
     },
   ];
@@ -132,7 +101,6 @@ const ProjectsPage = () => {
 
       <TabContainer
         panes={panes}
-        activeIndex={index}
         head={{
           content: `Projects`,
           subHeader1: 'See outstanding projects',

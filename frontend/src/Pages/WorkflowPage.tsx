@@ -49,17 +49,6 @@ const WorkflowPage = () => {
   //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useGetWorkflowRun(+id);
 
-  //  Make it so when a user navigates to /projects/details it renders correctly
-  const match = useRouteMatch(`/workflow/${+id}/:slug`);
-  const [index, setIndex] = useState(0);
-  useEffect(() => {
-    switch (match?.url) {
-      case `/workflow/${+id}/steps`:
-        setIndex(1);
-        break;
-    }
-  }, [match]);
-
   if (!data) {
     return <Loader />;
   } else {
@@ -67,50 +56,25 @@ const WorkflowPage = () => {
     const panes: panes = [
       {
         menuItem: {
-          as: Link,
           content: <>Details</>,
-          to: `/workflow/${+id}`,
-          exact: true,
           key: 'workflow-details',
         },
         render: () => (
-          <Route path={`/workflow/${+id}`} exact key="workflow-details-pane">
-            <Tab.Pane>
-              {<WorkflowDetails workflow_run={data.workflow_run} />}
-            </Tab.Pane>
-          </Route>
+          <Tab.Pane>
+            {<WorkflowDetails workflow_run={data.workflow_run} />}
+          </Tab.Pane>
         ),
       },
-      // {
-      //   menuItem: (
-      //     <Menu.Item key="messages">
-      //       {/* Previous Workflows<Label>{data.project.previous_runs.length}</Label> */}
-      //     </Menu.Item>
-      //   ),
-      //   render: () => (
-      //     <Tab.Pane>
-      //       {/* <WorkflowRunList workflows={data.project.previous_runs} /> */}
-      //     </Tab.Pane>
-      //   ),
-      // },
+
       {
         menuItem: {
-          as: Link,
           content: <>Steps</>,
-          to: `/workflow/${+id}/steps`,
-          exact: true,
           key: 'workflow-steps',
         },
         render: () => (
-          <Route
-            path={`/workflow/${+id}/steps`}
-            exact
-            key="workflow-steps-pane"
-          >
-            <Tab.Pane>
-              <StepTable steps={the_steps} />
-            </Tab.Pane>
-          </Route>
+          <Tab.Pane>
+            <StepTable steps={the_steps} />
+          </Tab.Pane>
         ),
       },
     ];
@@ -118,7 +82,6 @@ const WorkflowPage = () => {
     return (
       <TabContainer
         panes={panes}
-        activeIndex={index}
         head={{
           content: `Workflow ${data.workflow_run.name}`,
           subHeader1:

@@ -34,66 +34,58 @@ const WorkflowsPage = () => {
   type Authorizations = Authorization[];
   const { error, data, status, isFetching } = useGetWorkflowRuns();
 
-  // Helper Methods
-
-  const pendingList = data?.filter((workflow) =>
-    workflow.status.includes('pending'),
-  );
-  const finishedList = data?.filter(
-    (workflow) => workflow.status.includes('pending') !== true,
-  );
-  const panes: panes = [
-    {
-      menuItem: {
-        as: NavLink,
-        content: (
-          <>
-            Active<Label>{pendingList?.length ?? 0}</Label>
-          </>
-        ),
-        to: '/workflows',
-        exact: true,
-        key: 'active-workflows',
-      },
-      render: () => (
-        <Route path="/workflows" exact>
+  if (!data) {
+    return <Loader />;
+  } else {
+    const pendingList = data.filter((workflow) =>
+      workflow.status.includes('pending'),
+    );
+    const finishedList = data.filter(
+      (workflow) => workflow.status.includes('pending') !== true,
+    );
+    const panes: panes = [
+      {
+        menuItem: {
+          content: (
+            <>
+              Active<Label>{pendingList.length}</Label>
+            </>
+          ),
+          key: 'active-workflows',
+        },
+        render: () => (
           <Tab.Pane>
-            {!!pendingList ? <WorkflowList data={pendingList} /> : <Loader />}
+            <WorkflowList data={pendingList} />
           </Tab.Pane>
-        </Route>
-      ),
-    },
-    {
-      menuItem: {
-        as: NavLink,
-        content: (
-          <>
-            Finished<Label>{finishedList?.length ?? 0}</Label>
-          </>
         ),
-        to: '/workflows/finished',
-        exact: true,
-        key: 'finished-workflows',
       },
-      render: () => (
-        <Route path="/workflows/finished" exact>
+      {
+        menuItem: {
+          content: (
+            <>
+              Finished<Label>{finishedList?.length ?? 0}</Label>
+            </>
+          ),
+          key: 'finished-workflows',
+        },
+        render: () => (
           <Tab.Pane>
-            {!!finishedList ? <WorkflowList data={finishedList} /> : <Loader />}
+            <WorkflowList data={finishedList} />
           </Tab.Pane>
-        </Route>
-      ),
-    },
-  ];
-  return (
-    <TabContainer
-      panes={panes}
-      head={{
-        content: `Workflows`,
-        subHeader1:
-          'See all the workflows that are currently active in your organization',
-      }}
-    />
-  );
+        ),
+      },
+    ];
+    return (
+      <TabContainer
+        panes={panes}
+        head={{
+          content: `Workflows`,
+          subHeader1:
+            'See all the workflows that are currently active in your organization',
+        }}
+      />
+    );
+  }
 };
 
 export default WorkflowsPage;
