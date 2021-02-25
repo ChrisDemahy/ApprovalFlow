@@ -12,27 +12,20 @@ export type panes = pane[];
 export interface header {
   content: string;
   subHeader1: string;
-  subHeader2?: string;
 }
 const TabContainer = ({
   panes,
   head,
   activeIndex,
+  defaultActiveIndex,
 }: {
   panes: panes;
   head: header;
   activeIndex?: number;
+  defaultActiveIndex?: number;
 }) => (
   <>
-    <Header
-      as="h2"
-      content={head.content}
-      subheader={[
-        <div key={head.subHeader1}>{head.subHeader1}</div>,
-        <br key={`${head.subHeader1} break`} />,
-        <div key={head.subHeader2}>{head.subHeader2 ?? ''}</div>,
-      ]}
-    />
+    <Header as="h2" content={head.content} subheader={head.subHeader1} />
 
     {activeIndex ? (
       <Tab activeIndex={activeIndex} panes={[...panes]} />

@@ -49,12 +49,16 @@ const WorkflowPage = () => {
   //  refetchOnReconnect and refetchInterval.
   const { error, data, status, isFetching } = useGetWorkflowRun(+id);
 
-  // Ensures that if the user loads up the details it resets to the main tab
-  // TODO Make it so when a user navigates to /projects/details it renders correctly
-  const history = useHistory();
+  //  Make it so when a user navigates to /projects/details it renders correctly
+  const match = useRouteMatch(`/workflow/${+id}/:slug`);
+  const [index, setIndex] = useState(0);
   useEffect(() => {
-    history.push(`/workflow/${+id}`);
-  }, []);
+    switch (match?.url) {
+      case `/workflow/${+id}/steps`:
+        setIndex(1);
+        break;
+    }
+  }, [match]);
 
   if (!data) {
     return <Loader />;
@@ -114,6 +118,7 @@ const WorkflowPage = () => {
     return (
       <TabContainer
         panes={panes}
+        activeIndex={index}
         head={{
           content: `Workflow ${data.workflow_run.name}`,
           subHeader1:

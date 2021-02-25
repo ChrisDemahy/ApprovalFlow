@@ -27,15 +27,22 @@ import {
 
 const ProjectsPage = () => {
   // React Router
-
   // Ensures that if the user loads up the details it resets to the main tab
   // TODO Make it so when a user navigates to /projects/details it renders correctly
   const history = useHistory();
-  useEffect(() => {
-    history.push('/projects');
-  }, []);
 
-  let index: number = 0;
+  const match = useRouteMatch('/projects/:slug');
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    switch (match?.url) {
+      case '/projects/finished':
+        setIndex(1);
+        break;
+      case '/projects/new':
+        setIndex(2);
+        break;
+    }
+  }, [match]);
 
   // Projects are returned under and array
   type projectData = Project[];

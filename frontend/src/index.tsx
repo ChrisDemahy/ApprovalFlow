@@ -9,14 +9,14 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import 'semantic-ui-css/semantic.min.css';
 
 const queryClient = new QueryClient();
-
+// Semantic Ui is using stuff not compatible with strict mode it seems
 ReactDOM.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      <ReactQueryDevtools initialIsOpen />
-    </QueryClientProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <App />
+    <ReactQueryDevtools initialIsOpen />
+  </QueryClientProvider>,
+  // </React.StrictMode>,
   document.getElementById('root'),
 );
 

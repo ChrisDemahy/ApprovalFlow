@@ -29,7 +29,7 @@ const WorkflowsPage = () => {
   const { state, dispatch } = useContext(ModalContext);
 
   const queryClient = useQueryClient();
-  const id = '5';
+
   type WorkflowRuns = Workflowrun[];
   type Authorizations = Authorization[];
   const { error, data, status, isFetching } = useGetWorkflowRuns();

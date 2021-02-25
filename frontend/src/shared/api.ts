@@ -463,7 +463,6 @@ export function useGetProjects(
   //  refetchOnReconnect and refetchInterval.
   const getAllProjects = async (): Promise<allProjects> => {
     const { data } = await client.get('/projects');
-    console.log(data);
     return data;
   };
   // Get Project React Query Hook
