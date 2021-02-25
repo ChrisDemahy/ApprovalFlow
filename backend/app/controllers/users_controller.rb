@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
 
-  def show; end
+  def show
+    @user = current_user
+  rescue ActiveRecord::RecordNotFound
+    render json: 'Access Denied', status: :unauthorized
+  end
 
   def update
     if current_user.update_attributes(user_params)

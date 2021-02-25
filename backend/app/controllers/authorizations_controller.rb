@@ -6,9 +6,12 @@ class AuthorizationsController < ApplicationController
   # GET /authorizations.json
   def index
     @auths = Authorization.includes(:step)
-    @authorizations = @auths.filter { |auth| auth.user_id === current_user.id }
-
-    # puts ''
+    begin
+      @authorizations =
+        @auths.filter { |auth| auth.user_id === current_user.id }
+    rescue ActiveRecord::RecordNotFound
+      render json: 'Access Denied', status: :unauthorized
+    end
   end
 
   # GET /authorizations/1

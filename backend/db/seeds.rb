@@ -116,6 +116,8 @@ oasis_workflow.submit_for_approval(@fourth_user)
 
 oasis_step1 = Step.find_by id: oasis_workflow.current_step_id
 oasis_step1.authorization.update! status: 'approved'
+oasis_step2 = Step.find_by id: oasis_step1.next_step_id
+oasis_step2.authorization.update! status: 'denied'
 
 # Now create a second workflow not to be denied
 oasis_workflow =
