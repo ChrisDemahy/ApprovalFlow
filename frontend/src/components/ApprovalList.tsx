@@ -16,6 +16,16 @@ const ApprovalList = ({
     const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
     return `${da} ${mo} ${ye}`;
   };
+
+  const handleButton = (e: any, auth: Authorization) => {
+    if (!!auth.step) {
+      return dispatchMethod({
+        type: 'OPEN',
+        project_id: auth.step.project_id,
+        authorization_id: auth.id,
+      });
+    }
+  };
   return (
     <Table basic="very">
       <Table.Header>
@@ -30,25 +40,23 @@ const ApprovalList = ({
       <Table.Body>
         {data.map((auth) =>
           auth.step ? (
-            <Table.Row
-              onClick={(e: any) => {
-                if (!!auth.step) {
-                  return dispatchMethod({
-                    type: 'OPEN',
-                    project_id: auth.step.project_id,
-                    authorization_id: auth.id,
-                  });
-                }
-              }}
-              key={auth.id}
-            >
+            <Table.Row key={auth.id}>
               <Table.Cell>
                 <Header as="h4">{auth.step ? auth.step.name : ''}</Header>
               </Table.Cell>
               <Table.Cell>{auth.status}</Table.Cell>
               <Table.Cell>{formatDate(auth.created_at)}</Table.Cell>
               <Table.Cell>
-                <Button basic>Approve / Deny</Button>
+                <Button
+                  style={{
+                    visibility:
+                      auth.status === 'pending' ? 'visible' : 'hidden',
+                  }}
+                  onClick={(e) => handleButton(e, auth)}
+                  basic
+                >
+                  Approve / Deny
+                </Button>
               </Table.Cell>
             </Table.Row>
           ) : (
