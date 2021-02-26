@@ -23,7 +23,12 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import OrganizationOptions from '../components/OrganizationOptions';
-
+import type { UseMutationResult } from 'react-query';
+import type { AxiosError } from 'axios';
+import type User from '../types/user';
+interface userData {
+  user: User;
+}
 interface loginProps {
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -38,6 +43,10 @@ interface loginProps {
   setSupervisor: React.Dispatch<React.SetStateAction<number>>;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  apiError: string[];
 }
 
 const SignUp = ({
@@ -54,6 +63,10 @@ const SignUp = ({
   setName,
   supervisor,
   setSupervisor,
+  apiError,
+  isSuccess,
+  isError,
+  isLoading,
 }: loginProps) => {
   return (
     <>
@@ -77,8 +90,20 @@ const SignUp = ({
                 Approval Flow
               </span>
             </Header>
-            <Form onSubmit={onSubmit} size="large">
+            <Form
+              onSubmit={onSubmit}
+              size="large"
+              error={isError}
+              success={isSuccess}
+              loading={isLoading}
+            >
               <Segment stacked>
+                <Message
+                  success
+                  header="Form Completed"
+                  content="The Form was Successfully Submitted"
+                />
+                <Message error header="Action Forbidden" content={apiError} />
                 <Form.Input
                   fluid
                   labelPosition="left"

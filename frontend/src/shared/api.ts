@@ -452,18 +452,30 @@ const handleError = (
   setApiError: (value: React.SetStateAction<string[]>) => void,
   error: AxiosError,
 ) => {
+  console.dir(error);
   if (error.response) {
     // Each key is the field where the error occured
     //  and the value is the error message
     const errorObject = error.response.data;
-
-    const errorArray = Object.keys(errorObject).map(
-      (key, index) => `${key} ${errorObject[key][0]} `,
-    );
+    if (!!errorObject.errors) {
+      const errorArray = Object.keys(errorObject.errors).map(
+        (key, index) =>
+          `${key.charAt(0).toUpperCase() + key.slice(1)} ${
+            errorObject.errors[key][0]
+          } `,
+      );
+      setApiError(errorArray);
+    } else {
+      const errorArray = Object.keys(errorObject).map(
+        (key, index) =>
+          `${key.charAt(0).toUpperCase() + key.slice(1)} ${
+            errorObject[key][0]
+          } `,
+      );
+      setApiError(errorArray);
+    }
 
     // TODO Show proper error message for internal server error
-
-    setApiError(errorArray);
   } else {
     setApiError(['Internal Error']);
   }

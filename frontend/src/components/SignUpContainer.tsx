@@ -17,7 +17,7 @@ const SignUpContainer = () => {
   const [organization, setOrganization] = useState(0);
 
   // React Query Mutation
-  const { mutation } = usePostUser();
+  const { mutation, apiError } = usePostUser();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -42,6 +42,10 @@ const SignUpContainer = () => {
       setDoa={setDoa}
       supervisor={supervisor}
       setSupervisor={setSupervisor}
+      isSuccess={mutation.isSuccess}
+      isLoading={mutation.isLoading}
+      isError={mutation.isError}
+      apiError={apiError}
     />
   );
 };
