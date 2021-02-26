@@ -8,12 +8,20 @@ import {
   Grid,
   Header,
   Image,
+  Label,
   Message,
   Segment,
 } from 'semantic-ui-react';
 // Font Awesome Imports
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStream, faLock } from '@fortawesome/free-solid-svg-icons';
+
+import {
+  faStream,
+  faLock,
+  faDollarSign,
+  faEnvelope,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import OrganizationOptions from '../components/OrganizationOptions';
 
 interface loginProps {
@@ -73,43 +81,93 @@ const SignUp = ({
               <Segment stacked>
                 <Form.Input
                   fluid
-                  iconPosition="left"
+                  labelPosition="left"
                   placeholder="name"
                   type="name"
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
-                />
+                >
+                  <Label basic>
+                    <FontAwesomeIcon
+                      style={{
+                        height: '20px',
+                        width: '20px',
+                      }}
+                      icon={faUser}
+                    />
+                  </Label>
+                  <input />
+                </Form.Input>
                 <Form.Input
                   fluid
-                  iconPosition="left"
+                  labelPosition="left"
                   placeholder="E-mail address"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
-                />
+                >
+                  <Label basic>
+                    <FontAwesomeIcon
+                      style={{
+                        height: '20px',
+                        width: '20px',
+                      }}
+                      icon={faEnvelope}
+                    />
+                  </Label>
+                  <input />
+                </Form.Input>
                 <Form.Input
                   fluid
-                  iconPosition="left"
+                  labelPosition="left"
                   placeholder="Password"
                   type="password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
                   }}
-                />
+                >
+                  <Label basic>
+                    <FontAwesomeIcon
+                      style={{
+                        height: '20px',
+                        width: '20px',
+                      }}
+                      icon={faLock}
+                    />
+                  </Label>
+                  <input />
+                </Form.Input>
                 <Form.Input
-                  fluid
-                  iconPosition="left"
+                  // fluid
+                  // iconPosition="left"
+                  labelPosition="right"
                   placeholder="doa"
-                  type="doa"
-                  value={doa}
+                  type="text"
+                  value={doa === 0 ? '' : doa}
                   onChange={(e) => {
-                    setDoa(+e.target.value);
+                    if (Number(e.target.value)) {
+                      setDoa(+e.target.value);
+                    } else if (e.target.value === '') {
+                      setDoa(0);
+                    }
                   }}
-                />
+                >
+                  <Label basic>
+                    <FontAwesomeIcon
+                      style={{
+                        height: '20px',
+                        width: '20px',
+                      }}
+                      icon={faDollarSign}
+                    />
+                  </Label>
+                  <input />
+                  <Label>.00</Label>
+                </Form.Input>
                 <OrganizationOptions
                   organization={organization}
                   setOrganization={setOrganization}
