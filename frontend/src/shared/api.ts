@@ -21,6 +21,33 @@ import type { AuthorizationData } from 'src/types/authorization';
 
 const BASE_URL = 'http://localhost:3000/api';
 
+// **** Authenticate User **** //
+export const useAuthenticateUser = () => {
+  const client = useClient();
+
+  // React Query Hook
+  const getCurrentUser = () => {
+    return client.get('/user');
+  };
+
+  // To navigate to another page on finishing of request
+  const history = useHistory();
+
+  const mutation = useMutation(getCurrentUser, {
+    onError: (error: AxiosError, variables, context) => {
+      let queryError: any = {};
+      queryError.data = error;
+      const queryStatus: number = queryError?.data?.response['status'];
+      if (queryStatus === 401) {
+        console.log('nigger');
+        localStorage.removeItem('token');
+        history.push('/login');
+      }
+    },
+  });
+  return { mutation };
+};
+
 // **** Put User **** //
 export const useLoginUser = () => {
   interface userData {

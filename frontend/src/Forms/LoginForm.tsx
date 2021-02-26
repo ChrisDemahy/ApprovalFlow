@@ -28,6 +28,9 @@ interface loginProps {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   apiError: string[];
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
 }
 const Login = ({
   email,
@@ -37,6 +40,10 @@ const Login = ({
   onSubmit,
   onGuestSubmit,
   onSignUpSubmit,
+  isSuccess,
+  isError,
+  isLoading,
+
   apiError, // FIXME User this
 }: loginProps) => {
   return (
@@ -61,8 +68,20 @@ const Login = ({
                 Approval Flow
               </span>
             </Header>
-            <Form onSubmit={onSubmit} size="large">
+            <Form
+              onSubmit={onSubmit}
+              size="large"
+              error={isError}
+              success={isSuccess}
+              loading={isLoading}
+            >
               <Segment stacked>
+                <Message
+                  success
+                  header="Form Completed"
+                  content="The Form was Successfully Submitted"
+                />
+                <Message error header="Action Forbidden" content={apiError} />
                 <Form.Input
                   fluid
                   iconPosition="left"

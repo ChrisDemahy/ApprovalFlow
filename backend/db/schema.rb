@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_195042) do
     t.bigint "current_step_id"
     t.bigint "last_step_id"
     t.bigint "project_id", null: false
-    t.string "status"
+    t.string "status", default: "created"
     t.index ["current_step_id"], name: "index_workflow_runs_on_current_step_id"
     t.index ["first_step_id"], name: "index_workflow_runs_on_first_step_id"
     t.index ["last_step_id"], name: "index_workflow_runs_on_last_step_id"

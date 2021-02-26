@@ -16,6 +16,11 @@ class WorkflowRunsController < ApplicationController
   # POST /workflow_runs.json
   def create
     @workflow_run = WorkflowRun.new(workflow_run_params)
+    @workflow_run.status = 'created'
+
+    unless @workflow_run.save!
+      render json: @workflow_run.errors, status: :unprocessable_entity
+    end
     # The create a workflow, call the method that creates all the steps,
     #   authorizations, etc...
 

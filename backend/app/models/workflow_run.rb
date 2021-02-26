@@ -108,6 +108,7 @@ class WorkflowRun < ApplicationRecord
         workflow_run_id: self.id
       )
     # if it saves properly, return it. Otherwise error.
+
     if step.save!
       return step
     else

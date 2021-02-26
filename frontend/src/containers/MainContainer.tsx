@@ -13,7 +13,7 @@ import {
 import NavBar from '../components/NavBar';
 import DashboardSidebar from '../components/DashboardSidebar';
 import ApprovalModal from '../components/ApprovalModal';
-import { useGetCurrentUser } from '../shared/api';
+import { useAuthenticateUser, useGetCurrentUser } from '../shared/api';
 import type { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
 
@@ -22,18 +22,15 @@ type Props = {
 };
 
 const MainContainer = ({ children }: Props) => {
-  // Logout user if 411
-  const { data, error, isLoading } = useGetCurrentUser();
   const history = useHistory();
+  // Logout user if 411
+  const { mutation } = useAuthenticateUser();
   useEffect(() => {
-    let queryError: any = {};
-    queryError.data = error;
-    const queryStatus: number = queryError?.data?.response['status'];
-    if (queryStatus === 401) {
-      history.push('/login');
-    }
-  }, [error]);
-
+    mutation.mutate();
+    return () => {
+      mutation.reset();
+    };
+  }, [history]);
   return (
     <ApprovalModal>
       <div>

@@ -23,6 +23,7 @@ class Step < ApplicationRecord
         step: self, status: 'pending', user_id: self.user_id
       )
       # Update the workflow run with the status
+
       self.workflow_run.update!(status: 'pending_approval')
       # Move to next step if there is one
     elsif self.status == 'approved' && self.next_step_id?

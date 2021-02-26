@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import LoginContainer from './components/LoginContainer';
+import LoginContainer from './containers/LoginContainer';
 import UserProfile from './components/UserProfile';
 import MainContainer from './containers/MainContainer';
 import ProjectListPage from './Pages/ProjectsPage';
@@ -20,7 +20,7 @@ import WorkflowPage from './Pages/WorkflowPage';
 import WorkflowList from './components/WorkflowList';
 import ApprovalsPage from './Pages/ApprovalsPage';
 import OrganizationPage from './Pages/OrganizationPage';
-import SignUpContainer from './components/SignUpContainer';
+import SignUpContainer from './containers/SignUpContainer';
 import WorkflowsPage from './Pages/WorkflowsPage';
 
 interface AppProps {}
@@ -56,11 +56,11 @@ function App({}: AppProps) {
           </>
         </MainContainer>
       </Switch>
-      {/* {localStorage.token ? (
+      {localStorage.token ? (
         <Redirect exact from="/" to="/projects" />
       ) : (
         <Redirect to="/login" />
-      )} */}
+      )}
     </Router>
   );
 }
