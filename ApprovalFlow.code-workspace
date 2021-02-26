@@ -17,7 +17,7 @@
         "port": 8080,
         "request": "attach",
         "type": "pwa-chrome",
-        "webRoot": "${workspaceFolder}/frontend"
+        "webRoot": "${workspaceFolder}/frontend/public"
       },
       {
         "name": "Minitest - current line",

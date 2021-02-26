@@ -6,6 +6,7 @@ class Project < ApplicationRecord
   has_many :previous_runs, class_name: 'WorkflowRun', foreign_key: 'project_id'
   has_one :workflow_run
 
+  validates :name, :description, presence: true
   # Project can be either created, pending, finshed
   # pending_approval
   validates :status,

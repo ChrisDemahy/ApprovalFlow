@@ -52,21 +52,7 @@ export const useLoginUser = () => {
       history.push('/projects');
     },
     onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
   return { mutation, apiError };
@@ -101,19 +87,7 @@ export const usePutUser = () => {
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
       // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
   return { mutation, apiError };
@@ -161,21 +135,7 @@ export const usePostUser = () => {
       history.push('/login');
     },
     onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
 
@@ -211,25 +171,14 @@ export const usePostProject = () => {
       queryClient.invalidateQueries('projects');
       queryClient.invalidateQueries(['project', data.project.id]);
       // Go to next page or show error
-      debugger;
+
       history.push(`/project/${data.project.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
       // If the error is from the form, the server sent it in the response
       // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
 
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
 
@@ -266,21 +215,7 @@ export const usePutAuthorization = () => {
       // history.push(`/workflow_runs/${data.workflow_run.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
 
@@ -319,21 +254,7 @@ export const usePutProject = () => {
       // history.push(`/workflow_runs/${data.workflow_run.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
   return { mutation, apiError };
@@ -381,21 +302,7 @@ export const usePostWorkflowRun = () => {
       history.push(`/workflow/${data.workflow_run.id}`);
     },
     onError: (error: AxiosError, variables, context) => {
-      // If the error is from the form, the server sent it in the response
-      // Otherwise set a default error message (probably internal server error?)
-      if (error.response) {
-        // Each key is the field where the error occured
-        //  and the value is the error message
-        const errorObject = error.response.data.errors;
-        const errorArray = Object.keys(errorObject).map(function (key, index) {
-          return `${key}: ${errorObject[key][0]}`;
-        });
-
-        // TODO Show proper error message for internal server error
-        setApiError(errorArray);
-      } else {
-        setApiError(['Internal Error']);
-      }
+      handleError(setApiError, error);
     },
   });
   return { mutation, apiError };
@@ -541,6 +448,27 @@ export function useGetWorkflowRun<TData = WorkflowRunData>(
 
 // create axios object with propper settings
 
+const handleError = (
+  setApiError: (value: React.SetStateAction<string[]>) => void,
+  error: AxiosError,
+) => {
+  if (error.response) {
+    // Each key is the field where the error occured
+    //  and the value is the error message
+    const errorObject = error.response.data;
+
+    const errorArray = Object.keys(errorObject).map(
+      (key, index) => `${key} ${errorObject[key][0]} `,
+    );
+
+    // TODO Show proper error message for internal server error
+
+    setApiError(errorArray);
+  } else {
+    setApiError(['Internal Error']);
+  }
+};
+
 const useClient = () => {
   const history = useHistory();
   const newClient = axios.create({
@@ -550,17 +478,6 @@ const useClient = () => {
       Authorization: `Token ${localStorage.token ? localStorage.token : ''}`,
     },
   });
-  newClient.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.response.status === 401) {
-        localStorage.removeItem('token');
-        history.push('/login');
-      }
-      return error;
-    },
-  );
+
   return newClient;
 };
