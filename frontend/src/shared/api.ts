@@ -39,8 +39,8 @@ export const useAuthenticateUser = () => {
       queryError.data = error;
       const queryStatus: number = queryError?.data?.response['status'];
       if (queryStatus === 401) {
-        // localStorage.removeItem('token');
-        // history.push('/login');
+        localStorage.removeItem('token');
+        history.push('/login');
       }
     },
   });
