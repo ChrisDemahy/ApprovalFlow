@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
   # Shared logic to check if a user is logged in
   # and assign their id to an instance variable if so
   def authenticate_user
-    puts request.headers
+    pp request.headers
     if request.headers['Authorization'].present?
       authenticate_or_request_with_http_token do |token|
         begin
