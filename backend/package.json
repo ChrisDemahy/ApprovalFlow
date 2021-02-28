@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "rails s",
-    "test": "rails test"
+    "test": "rails test",
+    "deploy": "git subtree push --prefix backend heroku main"
   }
 }
