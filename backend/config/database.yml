@@ -76,9 +76,9 @@ test:
   # You can use this database configuration with:
   #
 production:
-  url: <%= ENV['DATABASE'] %>
+  url: <%= ENV['DATABASE_URL'] %>
 #
-# production:
+# prod uction:
 #   <<: *default
 #   database: backend_production
 #   username: backend
