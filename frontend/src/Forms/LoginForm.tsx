@@ -102,14 +102,14 @@ const Login = ({
                   }}
                 />
                 <Button.Group widths="3">
+                  <Button color="blue" size="large">
+                    Login
+                  </Button>
                   <Button onClick={onSignUpSubmit} color="green">
-                    New Here?
+                    Sign Up
                   </Button>
                   <Button onClick={onGuestSubmit} color="red" size="large">
                     Guest Login
-                  </Button>
-                  <Button color="blue" size="large">
-                    Login
                   </Button>
                 </Button.Group>
               </Segment>
