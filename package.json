@@ -12,7 +12,7 @@
   ],
   "private": true,
   "scripts": {
-    "whatever": "nodemon run-babel index.js",
+    "deploybackend": "git subtree push --prefix backend heroku main",
     "wp-server": "webpack-dev-server"
   }
 }
