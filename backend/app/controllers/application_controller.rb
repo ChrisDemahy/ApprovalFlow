@@ -16,6 +16,7 @@ class ApplicationController < ActionController::API
     pp request.headers['Authorization']
     if request.headers['Authorization'].present?
       authenticate_or_request_with_http_token do |token|
+        pp token
         begin
           jwt_payload =
             JWT.decode(token, Rails.application.secrets.secret_key_base).first
