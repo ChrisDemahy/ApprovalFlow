@@ -20,8 +20,9 @@ class ApplicationController < ActionController::API
         begin
           jwt_payload =
             JWT.decode(token, Rails.application.secrets.secret_key_base).first
-
+          pp jwt_payload
           @current_user_id = jwt_payload['id']
+          pp @current_user_id
         rescue JWT::ExpiredSignature, JWT::VerificationError, JWT::DecodeError
           head :unauthorized
         end
