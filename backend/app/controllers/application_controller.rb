@@ -18,8 +18,7 @@ class ApplicationController < ActionController::API
       authenticate_or_request_with_http_token do |token|
         pp token
         begin
-          jwt_payload =
-            JWT.decode(token, Rails.application.secrets.secret_key_base).first
+          jwt_payload = JWT.decode(token, 'my-secret').first
           pp jwt_payload
           @current_user_id = jwt_payload['id']
           pp @current_user_id

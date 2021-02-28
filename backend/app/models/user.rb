@@ -28,9 +28,6 @@ class User < ApplicationRecord
   # format: { with: /^(.+)@(.+)$/, message: 'Email invalid' } # TODO Add Truemail gem for email validation
 
   def generate_jwt
-    JWT.encode(
-      { id: id, exp: 60.days.from_now.to_i },
-      Rails.application.secrets.secret_key_base
-    )
+    JWT.encode({ id: id, exp: 60.days.from_now.to_i }, 'my-secret')
   end
 end
