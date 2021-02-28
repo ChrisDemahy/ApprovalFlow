@@ -14,6 +14,7 @@ class ApplicationController < ActionController::API
   # and assign their id to an instance variable if so
   def authenticate_user
     pp request.headers
+    pp request.headers['Authorization'].present?
     if request.headers['Authorization'].present?
       authenticate_or_request_with_http_token do |token|
         begin
