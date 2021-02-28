@@ -13,15 +13,11 @@ class ApplicationController < ActionController::API
   # Shared logic to check if a user is logged in
   # and assign their id to an instance variable if so
   def authenticate_user
-    pp request.headers['Authorization']
     if request.headers['Authorization'].present?
       authenticate_or_request_with_http_token do |token|
-        pp token
         begin
           jwt_payload = JWT.decode(token, 'my-secret').first
-          pp jwt_payload
           @current_user_id = jwt_payload['id']
-          pp @current_user_id
         rescue JWT::ExpiredSignature, JWT::VerificationError, JWT::DecodeError
           head :unauthorized
         end
