@@ -36,16 +36,17 @@ const ProjectsPage = () => {
   //  refetchOnReconnect and refetchInterval.
   const queryInfo = useGetProjects();
   const { error, data, status, isFetching } = queryInfo;
-
-  const panes: panes = [
-    {
-      menuItem: {
-        content: 'Active',
-        key: 'active-projects',
-      },
-      render: () => (
-        <Tab.Pane>
-          {data !== undefined ? (
+  if (!data) {
+    return <Loader />;
+  } else {
+    const panes: panes = [
+      {
+        menuItem: {
+          content: 'Active',
+          key: 'active-projects',
+        },
+        render: () => (
+          <Tab.Pane>
             <ProjectList
               data={data.filter(
                 (project) =>
@@ -53,22 +54,18 @@ const ProjectsPage = () => {
                   project.status === 'created',
               )}
             />
-          ) : (
-            <Loader />
-          )}
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: {
-        content: 'Finished',
-
-        key: 'finished-projects',
+          </Tab.Pane>
+        ),
       },
+      {
+        menuItem: {
+          content: 'Finished',
 
-      render: () => (
-        <Tab.Pane>
-          {data !== undefined ? (
+          key: 'finished-projects',
+        },
+
+        render: () => (
+          <Tab.Pane>
             <ProjectList
               data={data.filter(
                 (project) =>
@@ -76,38 +73,36 @@ const ProjectsPage = () => {
                   project.status !== 'created',
               )}
             />
-          ) : (
-            <Loader />
-          )}
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: {
-        content: 'New Project',
-        key: 'new-projects',
+          </Tab.Pane>
+        ),
       },
+      {
+        menuItem: {
+          content: 'New Project',
+          key: 'new-projects',
+        },
 
-      render: () => (
-        <Tab.Pane>
-          <NewProjectForm />
-        </Tab.Pane>
-      ),
-    },
-  ];
-  return (
-    <>
-      {/* Tabs */}
+        render: () => (
+          <Tab.Pane>
+            <NewProjectForm />
+          </Tab.Pane>
+        ),
+      },
+    ];
+    return (
+      <>
+        {/* Tabs */}
 
-      <TabContainer
-        panes={panes}
-        head={{
-          content: `Projects`,
-          subHeader1: 'See outstanding projects',
-        }}
-      />
-    </>
-  );
+        <TabContainer
+          panes={panes}
+          head={{
+            content: `Projects`,
+            subHeader1: 'See outstanding projects',
+          }}
+        />
+      </>
+    );
+  }
 };
 
 export default ProjectsPage;

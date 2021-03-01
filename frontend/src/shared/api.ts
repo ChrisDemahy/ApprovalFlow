@@ -19,7 +19,7 @@ import type { WorkflowRunData } from 'src/types/workflowrun';
 import { useState } from 'react';
 import type { AuthorizationData } from 'src/types/authorization';
 
-const BASE_URL = 'http://api.approvalflow.chrisd.xyz/api';
+const BASE_URL = 'https://api.chrisd.xyz/api';
 
 // **** Authenticate User **** //
 export const useAuthenticateUser = () => {
