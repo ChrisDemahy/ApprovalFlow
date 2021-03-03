@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 
 import type Workflowrun from '../types/workflowrun';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useGetWorkflowRuns } from '../shared/api';
+
+import '../shared/semantic_table.css';
 
 const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
   // Data Fetcher
@@ -16,7 +18,7 @@ const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
     const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
     return `${da} ${mo} ${ye}`;
   };
-
+  const history = useHistory();
   if (!data) {
     return <Loader />;
   } else {
@@ -25,7 +27,7 @@ const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
         <Table basic="very">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Project Name</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Date Started</Table.HeaderCell>
               <Table.HeaderCell></Table.HeaderCell>
@@ -34,11 +36,16 @@ const WorkflowList = ({ data }: { data: Workflowrun[] }) => {
 
           <Table.Body>
             {data.map((workflow_run) => (
-              <Table.Row key={workflow_run.id}>
+              <Table.Row
+                onClick={() => {
+                  history.push(`/workflow/${workflow_run.id}`);
+                }}
+                key={workflow_run.id}
+              >
                 <Table.Cell>
                   <Header as="h4">{workflow_run.name}</Header>
                 </Table.Cell>
-                <Table.Cell>{workflow_run.status}</Table.Cell>
+                <Table.Cell>{workflow_run.status.replace('_', ' ')}</Table.Cell>
                 <Table.Cell>{formatDate(workflow_run.created_at)}</Table.Cell>
                 {/* <Table.Cell>{formatDate(workflow_run.updated_at)}</Table.Cell> */}
                 <Table.Cell>

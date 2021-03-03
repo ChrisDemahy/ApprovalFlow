@@ -3,6 +3,7 @@ import React from 'react';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
 import type Project from '../types/project';
 import { useHistory } from 'react-router-dom';
+import '../shared/semantic_table.css';
 
 const ProjectList = ({ data }: { data: Project[] }) => {
   const history = useHistory();

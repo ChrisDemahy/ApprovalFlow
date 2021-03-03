@@ -1,6 +1,7 @@
 import React from 'react';
 import type Authorization from '../types/authorization';
 import { Loader, List, Image, Table, Header, Button } from 'semantic-ui-react';
+import '../shared/semantic_table.css';
 
 const ApprovalList = ({
   data,
@@ -17,7 +18,7 @@ const ApprovalList = ({
     return `${da} ${mo} ${ye}`;
   };
 
-  const handleButton = (e: any, auth: Authorization) => {
+  const handleButton = (auth: Authorization) => {
     if (!!auth.step) {
       return dispatchMethod({
         type: 'OPEN',
@@ -40,7 +41,7 @@ const ApprovalList = ({
       <Table.Body>
         {data.map((auth) =>
           auth.step ? (
-            <Table.Row key={auth.id}>
+            <Table.Row key={auth.id} onClick={() => handleButton(auth)}>
               <Table.Cell>
                 <Header as="h4">{auth.step ? auth.step.name : ''}</Header>
               </Table.Cell>
@@ -52,7 +53,6 @@ const ApprovalList = ({
                     visibility:
                       auth.status === 'pending' ? 'visible' : 'hidden',
                   }}
-                  onClick={(e) => handleButton(e, auth)}
                   basic
                 >
                   Approve / Deny

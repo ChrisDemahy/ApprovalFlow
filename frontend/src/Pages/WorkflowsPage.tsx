@@ -37,12 +37,16 @@ const WorkflowsPage = () => {
   if (!data) {
     return <Loader />;
   } else {
+    // List of pending workflows to show on the active tab
     const pendingList = data.filter((workflow) =>
       workflow.status.includes('pending'),
     );
+
+    // List of other workflows on the finished thab
     const finishedList = data.filter(
       (workflow) => workflow.status.includes('pending') !== true,
     );
+    // the panes the fill the tabs on the page.
     const panes: panes = [
       {
         menuItem: {
@@ -79,9 +83,9 @@ const WorkflowsPage = () => {
       <TabContainer
         panes={panes}
         head={{
-          content: `Workflows`,
+          content: `Open Commitments`,
           subHeader1:
-            'See all the workflows that are currently active in your organization',
+            'See all the projects that are currently out for approval in your organization',
         }}
       />
     );

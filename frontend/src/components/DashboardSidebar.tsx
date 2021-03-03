@@ -32,7 +32,7 @@ const DashboardSidebar = () => {
         as={NavLink}
         to="/projects"
       >
-        Projects
+        All Projects
       </Menu.Item>
       <Menu.Item
         name="approvals"
@@ -43,7 +43,7 @@ const DashboardSidebar = () => {
         as={NavLink}
         to="/approvals"
       >
-        Approvals
+        My Approvals
       </Menu.Item>
       <Menu.Item
         name="Workflows"
@@ -54,7 +54,7 @@ const DashboardSidebar = () => {
         as={NavLink}
         to="/workflows"
       >
-        Workflows
+        Open Commitments
       </Menu.Item>
 
       <Menu.Item
@@ -66,7 +66,7 @@ const DashboardSidebar = () => {
         as={NavLink}
         to="/organization"
       >
-        Organization
+        My Organization
       </Menu.Item>
     </Menu>
   );

@@ -97,7 +97,7 @@ const ProjectsPage = () => {
           panes={panes}
           head={{
             content: `Projects`,
-            subHeader1: 'See outstanding projects',
+            subHeader1: 'See all projects in your organization',
           }}
         />
       </>
